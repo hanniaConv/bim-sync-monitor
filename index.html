@@ -119,110 +119,193 @@
 
 <body>
 
-    <header>
-        <h1>BIM Sync Monitor</h1>
-        <p>Electrical Project</p>
-    </header>
+<header>
+    <h1>BIM Sync Monitor</h1>
+    <p>Electrical Project</p>
+</header>
 
-    <div class="container">
+<div class="container">
 
-        <div class="card">
+    <div class="card">
 
-            <div class="user-name">
-                👤 Hannia
-            </div>
-
-            <button class="sync-button" onclick="startSync()">
-                🟡 ESTOY SINCRONIZANDO
-            </button>
-
-            <button class="finish-button" onclick="finishSync()">
-                🟢 YA TERMINÉ
-            </button>
-
-            <div id="myStatus" class="status">
-                🟢 Disponible
-            </div>
-
+        <div class="user-name">
+            👤 Hannia
         </div>
 
-        <div class="card">
+        <button class="sync-button" onclick="startSync()">
+            🟡 ESTOY SINCRONIZANDO
+        </button>
 
-            <div class="team-title">
-                👥 Equipo
-            </div>
+        <button class="finish-button" onclick="finishSync()">
+            🟢 YA TERMINÉ
+        </button>
 
-            <div class="person">
-                <span class="person-name">Hannia</span>
-                <span id="hanniaStatus" class="available">
-                    🟢 Disponible
-                </span>
-            </div>
-
-            <div class="person">
-                <span class="person-name">Carlos</span>
-                <span class="syncing">
-                    🟡 Sincronizando
-                </span>
-            </div>
-
-            <div class="person">
-                <span class="person-name">Andrea</span>
-                <span class="available">
-                    🟢 Disponible
-                </span>
-            </div>
-
-            <div class="person">
-                <span class="person-name">Luis</span>
-                <span class="available">
-                    🟢 Disponible
-                </span>
-            </div>
-
+        <div id="myStatus" class="status">
+            🟢 Disponible
         </div>
 
     </div>
 
-    <script>
+    <div class="card">
 
-        function startSync() {
+        <div class="team-title">
+            👥 Equipo
+        </div>
 
-            document.getElementById("myStatus").innerHTML =
-                "🟡 Sincronizando...";
+        <div id="teamList">
+            Cargando equipo...
+        </div>
 
-            document.getElementById("myStatus").style.background =
-                "#fffbeb";
+    </div>
 
-            document.getElementById("myStatus").style.color =
-                "#d97706";
+</div>
 
-            document.getElementById("hanniaStatus").innerHTML =
-                "🟡 Sincronizando";
+<script type="module">
 
-            document.getElementById("hanniaStatus").className =
-                "syncing";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+    import {
+        getDatabase,
+        ref,
+        set,
+        onValue
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+
+    // CONFIGURACIÓN DE FIREBASE
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
+        authDomain: "bim-sync-monitor.firebaseapp.com",
+        databaseURL: "https://bim-sync-monitor-default-rtdb.firebaseio.com",
+        projectId: "bim-sync-monitor",
+        storageBucket: "bim-sync-monitor.firebasestorage.app",
+        messagingSenderId: "853443748101",
+        appId: "1:853443748101:web:c391d643ddd1916aaf176c"
+    };
+
+
+    // INICIAR FIREBASE
+
+    const app = initializeApp(firebaseConfig);
+
+    const database = getDatabase(app);
+
+
+    // USUARIO ACTUAL
+
+    const currentUser = "Hannia";
+
+
+    // REFERENCIA A NUESTRO EQUIPO
+
+    const teamRef = ref(database, "team");
+
+
+    // CUANDO ALGUIEN CAMBIA SU ESTADO
+
+    window.startSync = function() {
+
+        const userRef = ref(database, "team/" + currentUser);
+
+        set(userRef, {
+            name: currentUser,
+            status: "syncing",
+            syncStarted: new Date().toLocaleTimeString()
+        });
+
+        document.getElementById("myStatus").innerHTML =
+            "🟡 Sincronizando...";
+
+        document.getElementById("myStatus").style.background =
+            "#fffbeb";
+
+        document.getElementById("myStatus").style.color =
+            "#d97706";
+    };
+
+
+    // CUANDO TERMINA
+
+    window.finishSync = function() {
+
+        const userRef = ref(database, "team/" + currentUser);
+
+        set(userRef, {
+            name: currentUser,
+            status: "available",
+            syncStarted: ""
+        });
+
+        document.getElementById("myStatus").innerHTML =
+            "🟢 Disponible";
+
+        document.getElementById("myStatus").style.background =
+            "#ecfdf5";
+
+        document.getElementById("myStatus").style.color =
+            "#15803d";
+    };
+
+
+    // ESCUCHAR CAMBIOS EN TIEMPO REAL
+
+    onValue(teamRef, (snapshot) => {
+
+        const data = snapshot.val();
+
+        const teamList = document.getElementById("teamList");
+
+        teamList.innerHTML = "";
+
+        if (!data) {
+
+            teamList.innerHTML = "No hay integrantes todavía.";
+
+            return;
         }
 
-        function finishSync() {
 
-            document.getElementById("myStatus").innerHTML =
-                "🟢 Disponible";
+        Object.values(data).forEach(person => {
 
-            document.getElementById("myStatus").style.background =
-                "#ecfdf5";
+            const div = document.createElement("div");
 
-            document.getElementById("myStatus").style.color =
-                "#15803d";
+            div.className = "person";
 
-            document.getElementById("hanniaStatus").innerHTML =
-                "🟢 Disponible";
 
-            document.getElementById("hanniaStatus").className =
-                "available";
-        }
+            if (person.status === "syncing") {
 
-    </script>
+                div.innerHTML = `
+                    <span class="person-name">
+                        ${person.name}
+                    </span>
+
+                    <span class="syncing">
+                        🟡 Sincronizando
+                    </span>
+                `;
+
+            } else {
+
+                div.innerHTML = `
+                    <span class="person-name">
+                        ${person.name}
+                    </span>
+
+                    <span class="available">
+                        🟢 Disponible
+                    </span>
+                `;
+
+            }
+
+            teamList.appendChild(div);
+
+        });
+
+    });
+
+</script>
 
 </body>
 </html>
