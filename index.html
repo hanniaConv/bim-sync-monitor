@@ -38,17 +38,17 @@
     }
 
     .container {
-      max-width: 750px;
-      margin: 30px auto;
-      padding: 20px;
+      max-width: 800px;
+      margin: 25px auto;
+      padding: 15px;
     }
 
     .card {
       background: white;
       border-radius: 16px;
-      padding: 25px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      padding: 22px;
       margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
 
     h2 {
@@ -56,28 +56,25 @@
       text-align: center;
     }
 
-    /* =========================
-       SELECCIÓN DE USUARIO
-    ========================= */
-
+    button,
     select {
       width: 100%;
       padding: 14px;
       border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      margin-bottom: 15px;
+      font-size: 15px;
     }
 
     button {
-      width: 100%;
-      padding: 15px;
       border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
       cursor: pointer;
+      font-weight: bold;
       margin-top: 10px;
+    }
+
+    select {
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      background: white;
     }
 
     .sync-button {
@@ -90,15 +87,39 @@
       color: white;
     }
 
-    .change-button {
+    .change-button,
+    .back-button {
       background: #e5e7eb;
       color: #374151;
     }
 
-    .back-button {
-      background: #e5e7eb;
-      color: #374151;
-      margin-bottom: 15px;
+    /* =========================
+       RESUMEN
+    ========================= */
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .summary-box {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .summary-number {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 6px;
+    }
+
+    .summary-label {
+      font-size: 12px;
+      color: #6b7280;
     }
 
     /* =========================
@@ -109,10 +130,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px;
+      padding: 16px 10px;
       border-bottom: 1px solid #eee;
       cursor: pointer;
-      transition: background 0.2s;
       border-radius: 10px;
     }
 
@@ -151,7 +171,6 @@
       font-size: 12px;
       padding: 6px 10px;
       border-radius: 20px;
-      white-space: nowrap;
     }
 
     .available {
@@ -178,17 +197,12 @@
       margin-bottom: 20px;
     }
 
-    .history-header h2 {
-      margin-bottom: 8px;
-    }
-
     .total-syncs {
       display: inline-block;
       background: #f3f4f6;
       padding: 8px 14px;
       border-radius: 20px;
       font-size: 14px;
-      color: #374151;
     }
 
     .history-item {
@@ -201,7 +215,6 @@
 
     .history-date {
       font-weight: bold;
-      font-size: 16px;
       margin-bottom: 10px;
     }
 
@@ -228,15 +241,27 @@
       display: none;
     }
 
+    @media (max-width: 500px) {
+
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .summary-number {
+        font-size: 20px;
+      }
+
+      .history-row {
+        font-size: 13px;
+      }
+
+    }
+
   </style>
 </head>
 
 
 <body>
-
-  <!-- =========================
-       HEADER
-  ========================= -->
 
   <header>
 
@@ -329,14 +354,14 @@
 
 
     <!-- =========================
-         APLICACIÓN PRINCIPAL
+         APLICACIÓN
     ========================= -->
 
     <div id="app" class="hidden">
 
 
       <!-- =========================
-           CONTROLES DEL USUARIO
+           BOTONES DEL USUARIO
       ========================= -->
 
       <div class="card">
@@ -374,7 +399,91 @@
 
 
       <!-- =========================
-           LISTA DEL EQUIPO
+           RESUMEN GENERAL
+      ========================= -->
+
+      <div class="card">
+
+        <h2>📊 Resumen del equipo</h2>
+
+        <div class="summary-grid">
+
+
+          <div class="summary-box">
+
+            <div class="summary-label">
+              Sincronizaciones hoy
+            </div>
+
+            <div
+              id="todaySyncs"
+              class="summary-number">
+
+              0
+
+            </div>
+
+          </div>
+
+
+          <div class="summary-box">
+
+            <div class="summary-label">
+              Tiempo total hoy
+            </div>
+
+            <div
+              id="todayTime"
+              class="summary-number">
+
+              0 s
+
+            </div>
+
+          </div>
+
+
+          <div class="summary-box">
+
+            <div class="summary-label">
+              Sincronizaciones totales
+            </div>
+
+            <div
+              id="allSyncs"
+              class="summary-number">
+
+              0
+
+            </div>
+
+          </div>
+
+
+          <div class="summary-box">
+
+            <div class="summary-label">
+              Tiempo total acumulado
+            </div>
+
+            <div
+              id="allTime"
+              class="summary-number">
+
+              0 s
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           EQUIPO
       ========================= -->
 
       <div
@@ -390,8 +499,8 @@
             font-size:14px;
           ">
 
-          Toca el nombre de una persona
-          para ver su historial.
+          Toca una persona para ver
+          su historial.
 
         </p>
 
@@ -402,7 +511,7 @@
 
 
       <!-- =========================
-           HISTORIAL DE PERSONA
+           HISTORIAL INDIVIDUAL
       ========================= -->
 
       <div
@@ -422,7 +531,7 @@
         <div class="history-header">
 
           <h2 id="historyTitle">
-            Historial
+            📋 Historial
           </h2>
 
 
@@ -433,6 +542,18 @@
             Total de sincronizaciones: 0
 
           </div>
+
+
+          <p
+            id="personTotalTime"
+            style="
+              color:#6b7280;
+              font-size:14px;
+            ">
+
+            Tiempo total: 0 s
+
+          </p>
 
         </div>
 
@@ -477,7 +598,7 @@
 
 
     // ==========================================
-    // CONFIGURACIÓN DE FIREBASE
+    // FIREBASE CONFIG
     // ==========================================
 
     const firebaseConfig = {
@@ -506,10 +627,6 @@
     };
 
 
-    // ==========================================
-    // INICIALIZAR FIREBASE
-    // ==========================================
-
     const app =
       initializeApp(firebaseConfig);
 
@@ -517,10 +634,6 @@
     const database =
       getDatabase(app);
 
-
-    // ==========================================
-    // REFERENCIAS
-    // ==========================================
 
     const teamRef =
       ref(database, "Team");
@@ -581,102 +694,100 @@
 
     let selectedHistoryUserId = null;
 
+    let historyData = {};
+
 
     // ==========================================
     // SELECCIONAR USUARIO
     // ==========================================
 
-    window.selectUser = async function() {
+    window.selectUser =
+      async function() {
 
 
-      const select =
-        document.getElementById(
-          "userSelect"
-        );
+        const select =
+          document.getElementById(
+            "userSelect"
+          );
 
 
-      const userId =
-        select.value;
+        const userId =
+          select.value;
 
 
-      if (!userId) {
+        if (!userId) {
 
-        alert(
-          "Selecciona tu nombre."
-        );
+          alert(
+            "Selecciona tu nombre."
+          );
 
-        return;
-
-      }
-
-
-      currentUserId =
-        userId;
-
-
-      currentUserName =
-        members[userId];
-
-
-      localStorage.setItem(
-        "bimUser",
-        userId
-      );
-
-
-      const userRef =
-        ref(
-          database,
-          `Team/${userId}`
-        );
-
-
-      /*
-       * Creamos el usuario
-       * como disponible.
-       */
-
-      await set(
-        userRef,
-        {
-
-          name:
-            currentUserName,
-
-          status:
-            "available",
-
-          syncStarted:
-            null
+          return;
 
         }
-      );
 
 
-      document
-        .getElementById(
-          "userSelection"
-        )
-        .classList
-        .add("hidden");
+        currentUserId =
+          userId;
 
 
-      document
-        .getElementById(
-          "app"
-        )
-        .classList
-        .remove("hidden");
+        currentUserName =
+          members[userId];
 
 
-      document
-        .getElementById(
-          "welcome"
-        )
-        .textContent =
-        `Hola, ${currentUserName} 👋`;
+        localStorage.setItem(
+          "bimUser",
+          userId
+        );
 
-    };
+
+        const userRef =
+          ref(
+            database,
+            `Team/${userId}`
+          );
+
+
+        await set(
+          userRef,
+          {
+
+            name:
+              currentUserName,
+
+            status:
+              "available",
+
+            syncStarted:
+              null
+
+          }
+        );
+
+
+        document
+          .getElementById(
+            "userSelection"
+          )
+          .classList
+          .add("hidden");
+
+
+        document
+          .getElementById(
+            "app"
+          )
+          .classList
+          .remove("hidden");
+
+
+        document
+          .getElementById(
+            "welcome"
+          )
+          .textContent =
+          `Hola, ${currentUserName} 👋`;
+
+      };
 
 
     // ==========================================
@@ -772,21 +883,15 @@
         }
 
 
-        // Hora de inicio
-
         const startTime =
           Number(
             userData.syncStarted
           );
 
 
-        // Hora de finalización
-
         const finishTime =
           Date.now();
 
-
-        // Duración
 
         const durationSeconds =
           Math.max(
@@ -813,7 +918,7 @@
 
 
         // ======================================
-        // GUARDAR HISTORIAL
+        // GUARDAR REGISTRO
         // ======================================
 
         const newHistoryRef =
@@ -855,7 +960,7 @@
 
 
         // ======================================
-        // CAMBIAR A DISPONIBLE
+        // REGRESAR A DISPONIBLE
         // ======================================
 
         await set(
@@ -876,14 +981,14 @@
 
 
         alert(
-          "✅ Sincronización registrada."
+          `✅ Sincronización registrada.\n\nDuración: ${formatDuration(durationSeconds)}`
         );
 
       };
 
 
     // ==========================================
-    // FORMATO DE DURACIÓN
+    // FORMATO DE TIEMPO
     // ==========================================
 
     function formatDuration(
@@ -933,6 +1038,39 @@
 
 
     // ==========================================
+    // OBTENER FECHA DEL REGISTRO
+    // ==========================================
+
+    function getEntryDate(
+      entry
+    ) {
+
+
+      const parts =
+        String(
+          entry.date || ""
+        ).split("/");
+
+
+      if (
+        parts.length !== 3
+      ) {
+
+        return null;
+
+      }
+
+
+      return new Date(
+        Number(parts[2]),
+        Number(parts[1]) - 1,
+        Number(parts[0])
+      );
+
+    }
+
+
+    // ==========================================
     // MOSTRAR EQUIPO
     // ==========================================
 
@@ -953,6 +1091,12 @@
 
         teamList.innerHTML = "";
 
+
+        /*
+         * Object.keys(members) garantiza
+         * que cada persona aparezca
+         * exactamente una sola vez.
+         */
 
         Object.keys(
           members
@@ -985,11 +1129,6 @@
               "member";
 
 
-            /*
-             * Al hacer click,
-             * abrimos su historial.
-             */
-
             memberDiv.onclick =
               function() {
 
@@ -1000,9 +1139,7 @@
               };
 
 
-            // ==================================
-            // LADO IZQUIERDO
-            // ==================================
+            // IZQUIERDA
 
             const left =
               document.createElement(
@@ -1052,9 +1189,7 @@
             );
 
 
-            // ==================================
-            // LADO DERECHO
-            // ==================================
+            // DERECHA
 
             const right =
               document.createElement(
@@ -1098,9 +1233,7 @@
             );
 
 
-            // ==================================
             // TIMER
-            // ==================================
 
             if (
               member.status ===
@@ -1148,11 +1281,6 @@
               updateTimer();
 
 
-              /*
-               * Actualizamos el timer
-               * cada segundo.
-               */
-
               setInterval(
                 updateTimer,
                 1000
@@ -1185,6 +1313,161 @@
 
       }
     );
+
+
+    // ==========================================
+    // HISTORIAL EN TIEMPO REAL
+    // ==========================================
+
+    onValue(
+      historyRef,
+      (snapshot) => {
+
+
+        historyData =
+          snapshot.val() || {};
+
+
+        updateGeneralSummary();
+
+
+        if (
+          selectedHistoryUserId
+        ) {
+
+          renderUserHistory(
+            selectedHistoryUserId
+          );
+
+        }
+
+      }
+    );
+
+
+    // ==========================================
+    // RESUMEN GENERAL
+    // ==========================================
+
+    function updateGeneralSummary() {
+
+
+      const entries =
+        Object.values(
+          historyData
+        );
+
+
+      // TOTAL GENERAL
+
+      const allSyncs =
+        entries.length;
+
+
+      const allTime =
+        entries.reduce(
+          (
+            total,
+            entry
+          ) => {
+
+            return total +
+              (
+                Number(
+                  entry.durationSeconds
+                ) || 0
+              );
+
+          },
+          0
+        );
+
+
+      // ========================================
+      // SOLO HOY
+      // ========================================
+
+      const today =
+        new Date();
+
+
+      const todayString =
+        today.toLocaleDateString(
+          "es-MX"
+        );
+
+
+      const todayEntries =
+        entries.filter(
+          (entry) =>
+            entry.date ===
+            todayString
+        );
+
+
+      const todaySyncs =
+        todayEntries.length;
+
+
+      const todayTime =
+        todayEntries.reduce(
+          (
+            total,
+            entry
+          ) => {
+
+            return total +
+              (
+                Number(
+                  entry.durationSeconds
+                ) || 0
+              );
+
+          },
+          0
+        );
+
+
+      // ========================================
+      // ACTUALIZAR PANTALLA
+      // ========================================
+
+      document
+        .getElementById(
+          "todaySyncs"
+        )
+        .textContent =
+        todaySyncs;
+
+
+      document
+        .getElementById(
+          "todayTime"
+        )
+        .textContent =
+        formatDuration(
+          todayTime
+        );
+
+
+      document
+        .getElementById(
+          "allSyncs"
+        )
+        .textContent =
+        allSyncs;
+
+
+      document
+        .getElementById(
+          "allTime"
+        )
+        .textContent =
+        formatDuration(
+          allTime
+        );
+
+    }
 
 
     // ==========================================
@@ -1223,11 +1506,230 @@
           `📋 Historial — ${members[userId]}`;
 
 
-        loadUserHistory(
+        renderUserHistory(
           userId
         );
 
       };
+
+
+    // ==========================================
+    // MOSTRAR HISTORIAL INDIVIDUAL
+    // ==========================================
+
+    function renderUserHistory(
+      userId
+    ) {
+
+
+      const historyList =
+        document.getElementById(
+          "historyList"
+        );
+
+
+      historyList.innerHTML = "";
+
+
+      const userHistory =
+        Object.values(
+          historyData
+        ).filter(
+          (entry) =>
+            entry.userId ===
+            userId
+        );
+
+
+      // MÁS RECIENTE PRIMERO
+
+      userHistory.sort(
+        (a, b) => {
+
+          const aDate =
+            getEntryDate(a);
+
+
+          const bDate =
+            getEntryDate(b);
+
+
+          if (
+            !aDate ||
+            !bDate
+          ) {
+
+            return 0;
+
+          }
+
+
+          return (
+            bDate.getTime() -
+            aDate.getTime()
+          );
+
+        }
+      );
+
+
+      // ========================================
+      // TOTAL DE SINCRONIZACIONES
+      // ========================================
+
+      document
+        .getElementById(
+          "totalSyncs"
+        )
+        .textContent =
+        `Total de sincronizaciones: ${userHistory.length}`;
+
+
+      // ========================================
+      // TIEMPO TOTAL DE LA PERSONA
+      // ========================================
+
+      const personTotalTime =
+        userHistory.reduce(
+          (
+            total,
+            entry
+          ) => {
+
+            return total +
+              (
+                Number(
+                  entry.durationSeconds
+                ) || 0
+              );
+
+          },
+          0
+        );
+
+
+      document
+        .getElementById(
+          "personTotalTime"
+        )
+        .textContent =
+        `Tiempo total: ${formatDuration(
+          personTotalTime
+        )}`;
+
+
+      // ========================================
+      // SIN REGISTROS
+      // ========================================
+
+      if (
+        userHistory.length ===
+        0
+      ) {
+
+
+        historyList.innerHTML = `
+
+          <div class="no-history">
+
+            📭
+
+            <br><br>
+
+            Esta persona todavía
+            no tiene sincronizaciones.
+
+          </div>
+
+        `;
+
+
+        return;
+
+      }
+
+
+      // ========================================
+      // MOSTRAR CADA SINCRONIZACIÓN
+      // ========================================
+
+      userHistory.forEach(
+        (entry) => {
+
+
+          const item =
+            document.createElement(
+              "div"
+            );
+
+
+          item.className =
+            "history-item";
+
+
+          item.innerHTML = `
+
+            <div class="history-date">
+
+              📅 ${entry.date}
+
+            </div>
+
+
+            <div class="history-row">
+
+              <span>
+                🟡 Inicio
+              </span>
+
+              <span>
+                ${entry.startedAt}
+              </span>
+
+            </div>
+
+
+            <div class="history-row">
+
+              <span>
+                🟢 Final
+              </span>
+
+              <span>
+                ${entry.finishedAt}
+              </span>
+
+            </div>
+
+
+            <div class="history-row">
+
+              <span>
+                ⏱️ Duración
+              </span>
+
+              <span
+                class="history-duration">
+
+                ${formatDuration(
+                  entry.durationSeconds
+                )}
+
+              </span>
+
+            </div>
+
+          `;
+
+
+          historyList.appendChild(
+            item
+          );
+
+        }
+      );
+
+    }
 
 
     // ==========================================
@@ -1258,298 +1760,6 @@
           .remove("hidden");
 
       };
-
-
-    // ==========================================
-    // CARGAR HISTORIAL DE USUARIO
-    // ==========================================
-
-    function loadUserHistory(
-      userId
-    ) {
-
-
-      /*
-       * Escuchamos History
-       * en tiempo real.
-       */
-
-      onValue(
-        historyRef,
-        (snapshot) => {
-
-
-          const data =
-            snapshot.val() || {};
-
-
-          const historyList =
-            document.getElementById(
-              "historyList"
-            );
-
-
-          historyList.innerHTML = "";
-
-
-          // ====================================
-          // FILTRAR POR USUARIO
-          // ====================================
-
-          const userHistory =
-            Object.values(
-              data
-            ).filter(
-              (entry) =>
-                entry.userId ===
-                userId
-            );
-
-
-          // ====================================
-          // ORDENAR MÁS RECIENTE PRIMERO
-          // ====================================
-
-          userHistory.sort(
-            (a, b) => {
-
-
-              /*
-               * Convertimos la fecha
-               * y hora a timestamp
-               * para ordenar.
-               */
-
-              const aTime =
-                convertEntryToTimestamp(
-                  a
-                );
-
-
-              const bTime =
-                convertEntryToTimestamp(
-                  b
-                );
-
-
-              return bTime - aTime;
-
-            }
-          );
-
-
-          // ====================================
-          // TOTAL
-          // ====================================
-
-          document
-            .getElementById(
-              "totalSyncs"
-            )
-            .textContent =
-            `Total de sincronizaciones: ${userHistory.length}`;
-
-
-          // ====================================
-          // SIN HISTORIAL
-          // ====================================
-
-          if (
-            userHistory.length ===
-            0
-          ) {
-
-
-            historyList.innerHTML = `
-
-              <div class="no-history">
-
-                📭
-
-                <br><br>
-
-                Esta persona todavía
-                no tiene sincronizaciones
-                registradas.
-
-              </div>
-
-            `;
-
-
-            return;
-
-          }
-
-
-          // ====================================
-          // MOSTRAR REGISTROS
-          // ====================================
-
-          userHistory.forEach(
-            (entry) => {
-
-
-              const item =
-                document.createElement(
-                  "div"
-                );
-
-
-              item.className =
-                "history-item";
-
-
-              item.innerHTML = `
-
-                <div class="history-date">
-
-                  📅 ${entry.date}
-
-                </div>
-
-
-                <div class="history-row">
-
-                  <span>
-                    🟡 Inicio
-                  </span>
-
-                  <span>
-                    ${entry.startedAt}
-                  </span>
-
-                </div>
-
-
-                <div class="history-row">
-
-                  <span>
-                    🟢 Final
-                  </span>
-
-                  <span>
-                    ${entry.finishedAt}
-                  </span>
-
-                </div>
-
-
-                <div class="history-row">
-
-                  <span>
-                    ⏱️ Duración
-                  </span>
-
-                  <span
-                    class="history-duration">
-
-                    ${formatDuration(
-                      entry.durationSeconds
-                    )}
-
-                  </span>
-
-                </div>
-
-              `;
-
-
-              historyList.appendChild(
-                item
-              );
-
-            }
-          );
-
-        }
-      );
-
-    }
-
-
-    // ==========================================
-    // CONVERTIR REGISTRO A TIMESTAMP
-    // ==========================================
-
-    function convertEntryToTimestamp(
-      entry
-    ) {
-
-
-      /*
-       * Intentamos convertir
-       * la fecha y hora guardadas.
-       */
-
-      const parts =
-        entry.date.split("/");
-
-
-      if (
-        parts.length !== 3
-      ) {
-
-        return 0;
-
-      }
-
-
-      const day =
-        Number(parts[0]);
-
-
-      const month =
-        Number(parts[1]) - 1;
-
-
-      const year =
-        Number(parts[2]);
-
-
-      const timeParts =
-        entry.startedAt
-          .split(":");
-
-
-      let hour =
-        Number(
-          timeParts[0]
-        );
-
-
-      const minute =
-        Number(
-          timeParts[1] || 0
-        );
-
-
-      const second =
-        Number(
-          timeParts[2] || 0
-        );
-
-
-      /*
-       * Los navegadores pueden
-       * devolver AM/PM dependiendo
-       * de la configuración regional.
-       */
-
-      const date =
-        new Date(
-          year,
-          month,
-          day,
-          hour,
-          minute,
-          second
-        );
-
-
-      return date.getTime();
-
-    }
 
 
     // ==========================================
