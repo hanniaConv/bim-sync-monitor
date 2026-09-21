@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,23 +15,24 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f6f8;
+      background: #f3f4f6;
       color: #1f2937;
     }
 
     .container {
-      max-width: 500px;
+      width: 100%;
+      max-width: 600px;
       margin: auto;
-      padding: 25px 20px;
+      padding: 25px 18px;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     .header h1 {
-      margin-bottom: 8px;
+      margin: 0 0 8px;
       font-size: 28px;
     }
 
@@ -42,24 +44,26 @@
     .card {
       background: white;
       padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
     }
 
     .card h2 {
       text-align: center;
       margin-top: 0;
-      margin-bottom: 20px;
     }
+
+    /* USUARIOS */
 
     .user-button {
       width: 100%;
-      padding: 16px;
-      margin-bottom: 12px;
+      padding: 15px;
+      margin-bottom: 10px;
       border: none;
       border-radius: 10px;
       background: #e5e7eb;
-      font-size: 17px;
+      color: #111827;
+      font-size: 16px;
       cursor: pointer;
       transition: 0.2s;
     }
@@ -68,46 +72,58 @@
       background: #d1d5db;
     }
 
-    .hidden {
-      display: none;
-    }
+    /* USUARIO ACTUAL */
 
     .welcome {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 22px;
     }
 
     .welcome h2 {
       margin-bottom: 5px;
     }
 
-    .sync-button {
+    .welcome p {
+      color: #6b7280;
+      margin-top: 0;
+    }
+
+    /* BOTONES */
+
+    .sync-button,
+    .finish-button {
       width: 100%;
-      padding: 18px;
+      padding: 17px;
       border: none;
       border-radius: 12px;
-      background: #facc15;
-      color: #111827;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+    }
+
+    .sync-button {
+      background: #facc15;
+      color: #111827;
+    }
+
+    .sync-button:hover {
+      background: #eab308;
     }
 
     .finish-button {
-      width: 100%;
-      padding: 18px;
-      border: none;
-      border-radius: 12px;
       background: #22c55e;
       color: white;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
     }
 
+    .finish-button:hover {
+      background: #16a34a;
+    }
+
+    /* EQUIPO */
+
     .team {
-      margin-top: 30px;
+      margin-top: 28px;
     }
 
     .team h3 {
@@ -116,17 +132,27 @@
 
     .member {
       background: #f9fafb;
-      border-radius: 10px;
-      padding: 15px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px;
       margin-bottom: 10px;
+    }
+
+    .member-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
+    }
+
+    .member-name {
+      font-weight: bold;
     }
 
     .status {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
+      white-space: nowrap;
     }
 
     .available {
@@ -137,20 +163,79 @@
       color: #ca8a04;
     }
 
+    .sync-info {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .timer {
+      margin-top: 5px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #ca8a04;
+    }
+
+    /* CAMBIAR USUARIO */
+
     .change-user {
       display: block;
-      margin: 20px auto 0;
-      background: none;
+      margin: 22px auto 0;
       border: none;
+      background: none;
       color: #2563eb;
       cursor: pointer;
+      font-size: 14px;
+    }
+
+    .change-user:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* MENSAJE */
+
+    .message {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    /* CELULAR */
+
+    @media (max-width: 480px) {
+
+      .container {
+        padding: 18px 12px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .member-top {
+        align-items: flex-start;
+      }
+
     }
   </style>
 </head>
 
+
 <body>
 
-  <!-- PANTALLA DE SELECCIÓN -->
+  <!-- ========================= -->
+  <!-- PANTALLA DE USUARIO -->
+  <!-- ========================= -->
+
   <div id="loginScreen" class="container">
 
     <div class="header">
@@ -162,52 +247,52 @@
 
       <h2>¿Quién eres?</h2>
 
-      <button class="user-button" onclick="selectUser('Hannia Marquez')">
-        👩🏻 Hannia Márquez
+      <button class="user-button" onclick="selectUser('hannia', 'Hannia Márquez')">
+        Hannia Márquez
       </button>
 
-      <button class="user-button" onclick="selectUser('Ángel Cruz')">
-        👨🏻 Angel Cruz
+      <button class="user-button" onclick="selectUser('angel', 'Angel Cruz')">
+        Angel Cruz
       </button>
 
-      <button class="user-button" onclick="selectUser('Atonella Tarantini')">
-        👩🏻 Antonella Tarantini
+      <button class="user-button" onclick="selectUser('antonella', 'Antonella Tarantini')">
+        Antonella Tarantini
       </button>
 
-      <button class="user-button" onclick="selectUser('Carlos Ramirez')">
-        👨🏻 Carlos Ramírez
-      </button>
-        
-        <button class="user-button" onclick="selectUser('Arianna Nuñez')">
-        👩🏻 Arianna Nuñez
-      </button>
-        
-        <button class="user-button" onclick="selectUser('Grace Martinez')">
-        👩🏻 Grace Martínez
-      </button>
-        
-        <button class="user-button" onclick="selectUser('Cynthia Cortes')">
-        👩🏻 Cynthia Cortés
-      </button>
-        
-        <button class="user-button" onclick="selectUser('Ximena Arrambide')">
-        👩🏻 Ximena Arrambide
+      <button class="user-button" onclick="selectUser('carlos', 'Carlos Ramírez')">
+        Carlos Ramírez
       </button>
 
-        <button class="user-button" onclick="selectUser('Valeria Garza')">
-        👩🏻 Valeria Garza
+      <button class="user-button" onclick="selectUser('arianna', 'Arianna Nuñez')">
+        Arianna Nuñez
       </button>
 
-        <button class="user-button" onclick="selectUser('Alejandro Ulla')">
-        👨🏻 Alejandro Ulla
+      <button class="user-button" onclick="selectUser('grace', 'Grace Martínez')">
+        Grace Martínez
       </button>
 
-        <button class="user-button" onclick="selectUser('Gabriel Martinez')">
-        👨🏻 Gabriel Martínez
+      <button class="user-button" onclick="selectUser('cynthia', 'Cynthia Cortés')">
+        Cynthia Cortés
       </button>
 
-        <button class="user-button" onclick="selectUser('Mauricio Mireles')">
-        👨🏻 Mauricio Mireles
+      <button class="user-button" onclick="selectUser('ximena', 'Ximena Arrambide')">
+        Ximena Arrambide
+      </button>
+
+      <button class="user-button" onclick="selectUser('valeria', 'Valeria Garza')">
+        Valeria Garza
+      </button>
+
+      <button class="user-button" onclick="selectUser('alejandro', 'Alejandro Ulla')">
+        Alejandro Ulla
+      </button>
+
+      <button class="user-button" onclick="selectUser('gabriel', 'Gabriel Martínez')">
+        Gabriel Martínez
+      </button>
+
+      <button class="user-button" onclick="selectUser('mauricio', 'Mauricio Mireles')">
+        Mauricio Mireles
       </button>
 
     </div>
@@ -215,7 +300,10 @@
   </div>
 
 
+  <!-- ========================= -->
   <!-- APLICACIÓN -->
+  <!-- ========================= -->
+
   <div id="appScreen" class="container hidden">
 
     <div class="header">
@@ -226,46 +314,53 @@
     <div class="card">
 
       <div class="welcome">
+
         <h2 id="userName"></h2>
-        <p>Selecciona tu estado</p>
+
+        <p>¿Qué estás haciendo?</p>
+
       </div>
 
-      <button class="sync-button">
+
+      <!-- BOTÓN SINCRONIZANDO -->
+
+      <button
+        class="sync-button"
+        onclick="startSync()">
+
         🟡 ESTOY SINCRONIZANDO
+
       </button>
 
-      <button class="finish-button">
+
+      <!-- BOTÓN TERMINAR -->
+
+      <button
+        class="finish-button"
+        onclick="finishSync()">
+
         🟢 YA TERMINÉ
+
       </button>
+
+
+      <!-- EQUIPO -->
 
       <div class="team">
 
         <h3>Equipo</h3>
 
-        <div class="member">
-          <span>Hannia</span>
-          <span class="status available">Disponible</span>
-        </div>
-
-        <div class="member">
-          <span>Carlos</span>
-          <span class="status available">Disponible</span>
-        </div>
-
-        <div class="member">
-          <span>Andrea</span>
-          <span class="status available">Disponible</span>
-        </div>
-
-        <div class="member">
-          <span>Luis</span>
-          <span class="status available">Disponible</span>
-        </div>
+        <div id="teamList"></div>
 
       </div>
 
-      <button class="change-user" onclick="changeUser()">
+
+      <button
+        class="change-user"
+        onclick="changeUser()">
+
         Cambiar usuario
+
       </button>
 
     </div>
@@ -273,48 +368,597 @@
   </div>
 
 
-  <script>
+  <!-- ========================= -->
+  <!-- FIREBASE -->
+  <!-- ========================= -->
 
-    function selectUser(name) {
+  <script type="module">
 
-      localStorage.setItem("bimUser", name);
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-      document.getElementById("loginScreen").classList.add("hidden");
-
-      document.getElementById("appScreen").classList.remove("hidden");
-
-      document.getElementById("userName").textContent = "Hola, " + name;
+    import {
+      getDatabase,
+      ref,
+      set,
+      onValue,
+      serverTimestamp
     }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
-    function changeUser() {
+    /* =========================
+       CONFIGURACIÓN FIREBASE
+       ========================= */
 
-      localStorage.removeItem("bimUser");
+    const firebaseConfig = {
 
-      document.getElementById("appScreen").classList.add("hidden");
+      apiKey: "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
 
-      document.getElementById("loginScreen").classList.remove("hidden");
-    }
+      authDomain:
+        "bim-sync-monitor.firebaseapp.com",
 
+      databaseURL:
+        "https://bim-sync-monitor-default-rtdb.firebaseio.com",
 
-    // Mantener al usuario seleccionado
-    window.onload = function() {
+      projectId:
+        "bim-sync-monitor",
 
-      const savedUser = localStorage.getItem("bimUser");
+      storageBucket:
+        "bim-sync-monitor.firebasestorage.app",
 
-      if (savedUser) {
+      messagingSenderId:
+        "853443748101",
 
-        document.getElementById("loginScreen").classList.add("hidden");
-
-        document.getElementById("appScreen").classList.remove("hidden");
-
-        document.getElementById("userName").textContent =
-          "Hola, " + savedUser;
-      }
+      appId:
+        "1:853443748101:web:c391d643ddd1916aaf176c"
 
     };
+
+
+    /* =========================
+       INICIAR FIREBASE
+       ========================= */
+
+    const app = initializeApp(firebaseConfig);
+
+    const database = getDatabase(app);
+
+    const teamRef = ref(database, "Team");
+
+
+    /* =========================
+       LISTA DEL EQUIPO
+       ========================= */
+
+    const members = [
+
+      {
+        id: "hannia",
+        name: "Hannia Márquez"
+      },
+
+      {
+        id: "angel",
+        name: "Ángel Cruz"
+      },
+
+      {
+        id: "antonella",
+        name: "Antonella Tarantini"
+      },
+
+      {
+        id: "carlos",
+        name: "Carlos Ramírez"
+      },
+
+      {
+        id: "arianna",
+        name: "Arianna Nuñez"
+      },
+
+      {
+        id: "grace",
+        name: "Grace Martínez"
+      },
+
+      {
+        id: "cynthia",
+        name: "Cynthia Cortés"
+      },
+
+      {
+        id: "ximena",
+        name: "Ximena Arrambide"
+      },
+
+      {
+        id: "valeria",
+        name: "Valeria Garza"
+      },
+
+      {
+        id: "alejandro",
+        name: "Alejandro Ulla"
+      },
+
+      {
+        id: "gabriel",
+        name: "Gabriel Martínez"
+      },
+
+      {
+        id: "mauricio",
+        name: "Mauricio Mireles"
+      }
+
+    ];
+
+
+    /* =========================
+       USUARIO ACTUAL
+       ========================= */
+
+    let currentUserId =
+      localStorage.getItem("bimUserId");
+
+    let currentUserName =
+      localStorage.getItem("bimUserName");
+
+
+    /* =========================
+       SELECCIONAR USUARIO
+       ========================= */
+
+    window.selectUser = function(id, name) {
+
+      currentUserId = id;
+
+      currentUserName = name;
+
+      localStorage.setItem(
+        "bimUserId",
+        id
+      );
+
+      localStorage.setItem(
+        "bimUserName",
+        name
+      );
+
+
+      showApp();
+
+      setUserAvailable();
+
+    };
+
+
+    /* =========================
+       MOSTRAR APP
+       ========================= */
+
+    function showApp() {
+
+      document
+        .getElementById("loginScreen")
+        .classList
+        .add("hidden");
+
+      document
+        .getElementById("appScreen")
+        .classList
+        .remove("hidden");
+
+      document
+        .getElementById("userName")
+        .textContent =
+        "Hola, " + currentUserName;
+
+    }
+
+
+    /* =========================
+       USUARIO DISPONIBLE
+       ========================= */
+
+    async function setUserAvailable() {
+
+      if (!currentUserId) return;
+
+      const userRef =
+        ref(
+          database,
+          "Team/" + currentUserId
+        );
+
+
+      await set(userRef, {
+
+        name: currentUserName,
+
+        status: "available",
+
+        syncStarted: null
+
+      });
+
+    }
+
+
+    /* =========================
+       EMPEZAR SINCRONIZACIÓN
+       ========================= */
+
+    window.startSync = async function() {
+
+      if (!currentUserId) return;
+
+
+      const userRef =
+        ref(
+          database,
+          "Team/" + currentUserId
+        );
+
+
+      await set(userRef, {
+
+        name: currentUserName,
+
+        status: "syncing",
+
+        syncStarted: serverTimestamp()
+
+      });
+
+    };
+
+
+    /* =========================
+       TERMINAR SINCRONIZACIÓN
+       ========================= */
+
+    window.finishSync = async function() {
+
+      if (!currentUserId) return;
+
+
+      const userRef =
+        ref(
+          database,
+          "Team/" + currentUserId
+        );
+
+
+      await set(userRef, {
+
+        name: currentUserName,
+
+        status: "available",
+
+        syncStarted: null
+
+      });
+
+    };
+
+
+    /* =========================
+       CAMBIAR USUARIO
+       ========================= */
+
+    window.changeUser = function() {
+
+      localStorage.removeItem(
+        "bimUserId"
+      );
+
+      localStorage.removeItem(
+        "bimUserName"
+      );
+
+
+      currentUserId = null;
+
+      currentUserName = null;
+
+
+      document
+        .getElementById("appScreen")
+        .classList
+        .add("hidden");
+
+      document
+        .getElementById("loginScreen")
+        .classList
+        .remove("hidden");
+
+    };
+
+
+    /* =========================
+       MOSTRAR EQUIPO
+       ========================= */
+
+    onValue(teamRef, (snapshot) => {
+
+      const data =
+        snapshot.val() || {};
+
+
+      const teamList =
+        document.getElementById(
+          "teamList"
+        );
+
+
+      teamList.innerHTML = "";
+
+
+      members.forEach(member => {
+
+        const memberData =
+          data[member.id] || {
+
+            name: member.name,
+
+            status: "available",
+
+            syncStarted: null
+
+          };
+
+
+        const div =
+          document.createElement("div");
+
+        div.className = "member";
+
+
+        const top =
+          document.createElement("div");
+
+        top.className = "member-top";
+
+
+        const name =
+          document.createElement("span");
+
+        name.className = "member-name";
+
+        name.textContent =
+          member.name;
+
+
+        const status =
+          document.createElement("span");
+
+        status.className = "status";
+
+
+        if (
+          memberData.status ===
+          "syncing"
+        ) {
+
+          status.textContent =
+            "🟡 Sincronizando";
+
+          status.classList.add(
+            "syncing"
+          );
+
+        } else {
+
+          status.textContent =
+            "🟢 Disponible";
+
+          status.classList.add(
+            "available"
+          );
+
+        }
+
+
+        top.appendChild(name);
+
+        top.appendChild(status);
+
+
+        div.appendChild(top);
+
+
+        /* =====================
+           INFORMACIÓN SYNC
+           ===================== */
+
+        if (
+          memberData.status ===
+          "syncing"
+        ) {
+
+          const info =
+            document.createElement(
+              "div"
+            );
+
+          info.className =
+            "sync-info";
+
+
+          if (
+            memberData.syncStarted
+          ) {
+
+            const date =
+              new Date(
+                memberData.syncStarted
+              );
+
+
+            info.textContent =
+              "Inició a las " +
+              date.toLocaleTimeString(
+                "es-MX",
+                {
+                  hour: "2-digit",
+                  minute: "2-digit"
+                }
+              );
+
+
+            const timer =
+              document.createElement(
+                "div"
+              );
+
+            timer.className =
+              "timer";
+
+            timer.dataset.start =
+              memberData.syncStarted;
+
+
+            timer.textContent =
+              "⏱️ " +
+              formatElapsed(
+                memberData.syncStarted
+              );
+
+
+            div.appendChild(info);
+
+            div.appendChild(timer);
+
+          } else {
+
+            info.textContent =
+              "Iniciando...";
+
+            div.appendChild(info);
+
+          }
+
+        }
+
+
+        teamList.appendChild(div);
+
+      });
+
+    });
+
+
+    /* =========================
+       CONTADOR
+       ========================= */
+
+    function formatElapsed(
+      start
+    ) {
+
+      const now =
+        Date.now();
+
+      let seconds =
+        Math.floor(
+          (now - start) / 1000
+        );
+
+
+      if (seconds < 0) {
+        seconds = 0;
+      }
+
+
+      const hours =
+        Math.floor(
+          seconds / 3600
+        );
+
+
+      seconds %= 3600;
+
+
+      const minutes =
+        Math.floor(
+          seconds / 60
+        );
+
+
+      seconds %= 60;
+
+
+      return (
+
+        String(hours)
+          .padStart(2, "0")
+
+        + ":" +
+
+        String(minutes)
+          .padStart(2, "0")
+
+        + ":" +
+
+        String(seconds)
+          .padStart(2, "0")
+
+      );
+
+    }
+
+
+    /* =========================
+       ACTUALIZAR CONTADORES
+       ========================= */
+
+    setInterval(() => {
+
+      const timers =
+        document.querySelectorAll(
+          ".timer"
+        );
+
+
+      timers.forEach(timer => {
+
+        const start =
+          Number(
+            timer.dataset.start
+          );
+
+
+        if (start) {
+
+          timer.textContent =
+            "⏱️ " +
+            formatElapsed(start);
+
+        }
+
+      });
+
+    }, 1000);
+
+
+    /* =========================
+       CARGAR USUARIO GUARDADO
+       ========================= */
+
+    if (
+      currentUserId &&
+      currentUserName
+    ) {
+
+      showApp();
+
+    }
 
   </script>
 
 </body>
+
 </html>
