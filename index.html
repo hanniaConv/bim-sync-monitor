@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>BIM Sync Monitor</title>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -16,84 +14,65 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f3f4f6;
+      background: #f4f6f8;
       color: #1f2937;
     }
 
-    .container {
-      width: 100%;
-      max-width: 600px;
-      margin: auto;
-      padding: 25px 18px;
-    }
-
-    .header {
+    header {
+      background: #1f2937;
+      color: white;
+      padding: 20px;
       text-align: center;
-      margin-bottom: 25px;
     }
 
-    .header h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-    }
-
-    .header p {
+    header h1 {
       margin: 0;
-      color: #6b7280;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 20px;
     }
 
     .card {
       background: white;
+      border-radius: 16px;
       padding: 25px;
-      border-radius: 18px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
     }
 
-    .card h2 {
-      text-align: center;
+    h2 {
       margin-top: 0;
+      text-align: center;
     }
 
-    .user-button {
+    select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    button {
       width: 100%;
       padding: 15px;
-      margin-bottom: 10px;
       border: none;
       border-radius: 10px;
-      background: #e5e7eb;
-      color: #111827;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .user-button:hover {
-      background: #d1d5db;
-    }
-
-    .welcome {
-      text-align: center;
-      margin-bottom: 22px;
-    }
-
-    .welcome h2 {
-      margin-bottom: 5px;
-    }
-
-    .welcome p {
-      color: #6b7280;
-      margin-top: 0;
-    }
-
-    .sync-button,
-    .finish-button {
-      width: 100%;
-      padding: 17px;
-      border: none;
-      border-radius: 12px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
 
     .sync-button {
@@ -101,40 +80,26 @@
       color: #111827;
     }
 
-    .sync-button:hover {
-      background: #eab308;
-    }
-
     .finish-button {
       background: #22c55e;
       color: white;
     }
 
-    .finish-button:hover {
-      background: #16a34a;
-    }
-
-    .team {
-      margin-top: 28px;
-    }
-
-    .team h3 {
-      margin-bottom: 15px;
+    .change-button {
+      background: #e5e7eb;
+      color: #374151;
     }
 
     .member {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 10px;
-    }
-
-    .member-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .member:last-child {
+      border-bottom: none;
     }
 
     .member-name {
@@ -143,573 +108,383 @@
 
     .status {
       font-size: 13px;
-      font-weight: bold;
-      white-space: nowrap;
+      padding: 6px 10px;
+      border-radius: 20px;
     }
 
     .available {
-      color: #16a34a;
+      background: #dcfce7;
+      color: #166534;
     }
 
     .syncing {
-      color: #ca8a04;
-    }
-
-    .sync-info {
-      margin-top: 8px;
-      font-size: 13px;
-      color: #6b7280;
+      background: #fef3c7;
+      color: #92400e;
     }
 
     .timer {
-      margin-top: 5px;
-      font-size: 14px;
-      font-weight: bold;
-      color: #ca8a04;
-    }
-
-    .change-user {
-      display: block;
-      margin: 22px auto 0;
-      border: none;
-      background: none;
-      color: #2563eb;
-      cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
+      margin-top: 4px;
+      color: #6b7280;
     }
 
     .hidden {
       display: none;
     }
 
-    @media (max-width: 480px) {
-
-      .container {
-        padding: 18px 12px;
-      }
-
-      .card {
-        padding: 20px;
-      }
-
-      .header h1 {
-        font-size: 24px;
-      }
-
+    .history-item {
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
     }
 
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-user {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .history-info {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
   </style>
-
 </head>
-
 
 <body>
 
+  <header>
+    <h1>🔄 BIM Sync Monitor</h1>
+    <p>Monitor de sincronización del equipo</p>
+  </header>
 
-<!-- ================================= -->
-<!-- PANTALLA DE SELECCIÓN DE USUARIO -->
-<!-- ================================= -->
+  <div class="container">
 
-<div id="loginScreen" class="container">
+    <!-- SELECCIÓN DE USUARIO -->
+    <div id="userSelection" class="card">
 
-  <div class="header">
+      <h2>¿Quién eres?</h2>
 
-    <h1>BIM Sync Monitor</h1>
+      <select id="userSelect">
+        <option value="">Selecciona tu nombre</option>
 
-    <p>Electrical Project</p>
+        <option value="hannia">Hannia Márquez</option>
+        <option value="angel">Angel Cruz</option>
+        <option value="antonella">Antonella Tarantini</option>
+        <option value="carlos">Carlos Ramírez</option>
+        <option value="arianna">Arianna Nuñez</option>
+        <option value="grace">Grace Martínez</option>
+        <option value="cynthia">Cynthia Cortés</option>
+        <option value="ximena">Ximena Arrambide</option>
+        <option value="valeria">Valeria Garza</option>
+        <option value="alejandro">Alejandro Ulla</option>
+        <option value="gabriel">Gabriel Martínez</option>
+        <option value="mauricio">Mauricio Mireles</option>
 
-  </div>
+      </select>
 
-
-  <div class="card">
-
-    <h2>¿Quién eres?</h2>
-
-
-    <button class="user-button"
-      onclick="selectUser('hannia','Hannia Márquez')">
-      Hannia Márquez
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('angel','Angel Cruz')">
-      Angel Cruz
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('antonella','Antonella Tarantini')">
-      Antonella Tarantini
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('carlos','Carlos Ramírez')">
-      Carlos Ramírez
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('arianna','Arianna Nuñez')">
-      Arianna Nuñez
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('grace','Grace Martínez')">
-      Grace Martínez
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('cynthia','Cynthia Cortés')">
-      Cynthia Cortés
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('ximena','Ximena Arrambide')">
-      Ximena Arrambide
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('valeria','Valeria Garza')">
-      Valeria Garza
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('alejandro','Alejandro Ulla')">
-      Alejandro Ulla
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('gabriel','Gabriel Martínez')">
-      Gabriel Martínez
-    </button>
-
-
-    <button class="user-button"
-      onclick="selectUser('mauricio','Mauricio Mireles')">
-      Mauricio Mireles
-    </button>
-
-  </div>
-
-</div>
-
-
-
-<!-- ============================= -->
-<!-- APLICACIÓN -->
-<!-- ============================= -->
-
-<div id="appScreen" class="container hidden">
-
-  <div class="header">
-
-    <h1>BIM Sync Monitor</h1>
-
-    <p>Electrical Project</p>
-
-  </div>
-
-
-  <div class="card">
-
-    <div class="welcome">
-
-      <h2 id="userName"></h2>
-
-      <p>¿Qué estás haciendo?</p>
+      <button onclick="selectUser()" class="sync-button">
+        CONTINUAR
+      </button>
 
     </div>
 
 
-    <button
-      class="sync-button"
-      onclick="startSync()">
+    <!-- APLICACIÓN -->
+    <div id="app" class="hidden">
 
-      🟡 ESTOY SINCRONIZANDO
+      <div class="card">
 
-    </button>
+        <h2 id="welcome"></h2>
+
+        <button
+          onclick="startSync()"
+          id="startButton"
+          class="sync-button">
+          🟡 ESTOY SINCRONIZANDO
+        </button>
+
+        <button
+          onclick="finishSync()"
+          id="finishButton"
+          class="finish-button">
+          🟢 YA TERMINÉ
+        </button>
+
+        <button
+          onclick="changeUser()"
+          class="change-button">
+          Cambiar usuario
+        </button>
+
+      </div>
 
 
-    <button
-      class="finish-button"
-      onclick="finishSync()">
+      <!-- EQUIPO -->
+      <div class="card">
 
-      🟢 YA TERMINÉ
+        <h2>👥 Equipo</h2>
 
-    </button>
+        <div id="teamList"></div>
+
+      </div>
 
 
-    <div class="team">
+      <!-- HISTORIAL -->
+      <div class="card">
 
-      <h3>Equipo</h3>
+        <h2>📋 Historial</h2>
 
-      <div id="teamList"></div>
+        <div id="historyList">
+          <p style="text-align:center;color:#6b7280;">
+            Cargando historial...
+          </p>
+        </div>
+
+      </div>
 
     </div>
 
-
-    <button
-      class="change-user"
-      onclick="changeUser()">
-
-      Cambiar usuario
-
-    </button>
-
   </div>
 
-</div>
 
+  <!-- FIREBASE -->
+  <script type="module">
 
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-<!-- ============================= -->
-<!-- FIREBASE -->
-<!-- ============================= -->
+    import {
+      getDatabase,
+      ref,
+      set,
+      get,
+      push,
+      onValue,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
-<script type="module">
 
+    // ==========================================
+    // CONFIGURACIÓN DE FIREBASE
+    // ==========================================
 
-import { initializeApp }
+    const firebaseConfig = {
 
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+      apiKey: "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
 
+      authDomain:
+        "bim-sync-monitor.firebaseapp.com",
 
-import {
+      databaseURL:
+        "https://bim-sync-monitor-default-rtdb.firebaseio.com",
 
-  getDatabase,
+      projectId:
+        "bim-sync-monitor",
 
-  ref,
+      storageBucket:
+        "bim-sync-monitor.firebasestorage.app",
 
-  set,
+      messagingSenderId:
+        "853443748101",
 
-  get,
+      appId:
+        "1:853443748101:web:c391d643ddd1916aaf176c"
+    };
 
-  push,
 
-  onValue,
+    // ==========================================
+    // INICIALIZAR FIREBASE
+    // ==========================================
 
-  serverTimestamp
+    const app = initializeApp(firebaseConfig);
 
-}
+    const database = getDatabase(app);
 
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
+    // Referencias
 
+    const teamRef = ref(database, "Team");
 
-/* ================================
-   CONFIGURACIÓN FIREBASE
-   ================================= */
+    const historyRef = ref(database, "History");
 
-const firebaseConfig = {
 
-  apiKey: "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
+    // ==========================================
+    // DATOS DEL EQUIPO
+    // ==========================================
 
-  authDomain:
-    "bim-sync-monitor.firebaseapp.com",
+    const members = {
 
-  databaseURL:
-    "https://bim-sync-monitor-default-rtdb.firebaseio.com",
+      hannia: "Hannia Márquez",
+      angel: "Angel Cruz",
+      antonella: "Antonella Tarantini",
+      carlos: "Carlos Ramírez",
+      arianna: "Arianna Nuñez",
+      grace: "Grace Martínez",
+      cynthia: "Cynthia Cortés",
+      ximena: "Ximena Arrambide",
+      valeria: "Valeria Garza",
+      alejandro: "Alejandro Ulla",
+      gabriel: "Gabriel Martínez",
+      mauricio: "Mauricio Mireles"
 
-  projectId:
-    "bim-sync-monitor",
+    };
 
-  storageBucket:
-    "bim-sync-monitor.firebasestorage.app",
 
-  messagingSenderId:
-    "853443748101",
+    let currentUserId = null;
+    let currentUserName = null;
 
-  appId:
-    "1:853443748101:web:c391d643ddd1916aaf176c"
 
-};
+    // ==========================================
+    // SELECCIONAR USUARIO
+    // ==========================================
 
+    window.selectUser = async function() {
 
+      const select =
+        document.getElementById("userSelect");
 
-/* ================================
-   INICIAR FIREBASE
-   ================================= */
+      const userId = select.value;
 
-const app =
-  initializeApp(firebaseConfig);
+      if (!userId) {
 
+        alert("Selecciona tu nombre.");
 
-const database =
-  getDatabase(app);
+        return;
+      }
 
 
-const teamRef =
-  ref(database, "Team");
+      currentUserId = userId;
 
+      currentUserName = members[userId];
 
-const historyRef =
-  ref(database, "History");
 
-
-
-/* ================================
-   EQUIPO
-   ================================= */
-
-const members = [
-
-  {
-    id: "hannia",
-    name: "Hannia Márquez"
-  },
-
-  {
-    id: "angel",
-    name: "Angel Cruz"
-  },
-
-  {
-    id: "antonella",
-    name: "Antonella Tarantini"
-  },
-
-  {
-    id: "carlos",
-    name: "Carlos Ramírez"
-  },
-
-  {
-    id: "arianna",
-    name: "Arianna Nuñez"
-  },
-
-  {
-    id: "grace",
-    name: "Grace Martínez"
-  },
-
-  {
-    id: "cynthia",
-    name: "Cynthia Cortés"
-  },
-
-  {
-    id: "ximena",
-    name: "Ximena Arrambide"
-  },
-
-  {
-    id: "valeria",
-    name: "Valeria Garza"
-  },
-
-  {
-    id: "alejandro",
-    name: "Alejandro Ulla"
-  },
-
-  {
-    id: "gabriel",
-    name: "Gabriel Martínez"
-  },
-
-  {
-    id: "mauricio",
-    name: "Mauricio Mireles"
-  }
-
-];
-
-
-
-/* ================================
-   USUARIO ACTUAL
-   ================================= */
-
-let currentUserId =
-  localStorage.getItem("bimUserId");
-
-
-let currentUserName =
-  localStorage.getItem("bimUserName");
-
-
-
-/* ================================
-   SELECCIONAR USUARIO
-   ================================= */
-
-window.selectUser =
-  function(id, name) {
-
-    currentUserId = id;
-
-    currentUserName = name;
-
-
-    localStorage.setItem(
-      "bimUserId",
-      id
-    );
-
-
-    localStorage.setItem(
-      "bimUserName",
-      name
-    );
-
-
-    showApp();
-
-
-    setUserAvailable();
-
-  };
-
-
-
-/* ================================
-   MOSTRAR APP
-   ================================= */
-
-function showApp() {
-
-  document
-    .getElementById("loginScreen")
-    .classList
-    .add("hidden");
-
-
-  document
-    .getElementById("appScreen")
-    .classList
-    .remove("hidden");
-
-
-  document
-    .getElementById("userName")
-    .textContent =
-    "Hola, " + currentUserName;
-
-}
-
-
-
-/* ================================
-   USUARIO DISPONIBLE
-   ================================= */
-
-async function setUserAvailable() {
-
-  if (!currentUserId) return;
-
-
-  const userRef =
-    ref(
-      database,
-      "Team/" + currentUserId
-    );
-
-
-  await set(userRef, {
-
-    name: currentUserName,
-
-    status: "available",
-
-    syncStarted: null
-
-  });
-
-}
-
-
-
-/* ================================
-   INICIAR SINCRONIZACIÓN
-   ================================= */
-
-window.startSync =
-  async function() {
-
-    if (!currentUserId) return;
-
-
-    const userRef =
-      ref(
-        database,
-        "Team/" + currentUserId
+      localStorage.setItem(
+        "bimUser",
+        userId
       );
 
 
-    await set(userRef, {
+      // Crear usuario en Firebase
 
-      name: currentUserName,
-
-      status: "syncing",
-
-      syncStarted: serverTimestamp()
-
-    });
-
-  };
+      const userRef =
+        ref(database, `Team/${userId}`);
 
 
+      await set(userRef, {
 
-/* ================================
-   TERMINAR SINCRONIZACIÓN
-   ================================= */
+        name: currentUserName,
 
-window.finishSync =
-  async function() {
+        status: "available",
 
-    if (!currentUserId) return;
+        syncStarted: null
 
-
-    const userRef =
-      ref(
-        database,
-        "Team/" + currentUserId
-      );
+      });
 
 
-    /*
-      Primero obtenemos el estado
-      actual del usuario.
-    */
-
-    const snapshot =
-      await get(userRef);
+      document
+        .getElementById("userSelection")
+        .classList.add("hidden");
 
 
-    const userData =
-      snapshot.val();
+      document
+        .getElementById("app")
+        .classList.remove("hidden");
 
 
-    /*
-      Solo guardamos historial
-      si realmente estaba sincronizando.
-    */
+      document
+        .getElementById("welcome")
+        .textContent =
+        `Hola, ${currentUserName} 👋`;
 
-    if (
-      userData &&
-      userData.status === "syncing" &&
-      userData.syncStarted
-    ) {
+    };
 
 
-      const startTime =
-        Number(
-          userData.syncStarted
+    // ==========================================
+    // INICIAR SINCRONIZACIÓN
+    // ==========================================
+
+    window.startSync = async function() {
+
+      if (!currentUserId) return;
+
+
+      const userRef =
+        ref(database, `Team/${currentUserId}`);
+
+
+      await set(userRef, {
+
+        name: currentUserName,
+
+        status: "syncing",
+
+        syncStarted: serverTimestamp()
+
+      });
+
+    };
+
+
+    // ==========================================
+    // TERMINAR SINCRONIZACIÓN
+    // ==========================================
+
+    window.finishSync = async function() {
+
+      if (!currentUserId) return;
+
+
+      const userRef =
+        ref(database, `Team/${currentUserId}`);
+
+
+      const snapshot =
+        await get(userRef);
+
+
+      if (!snapshot.exists()) {
+
+        alert("No se encontró tu información.");
+
+        return;
+      }
+
+
+      const userData =
+        snapshot.val();
+
+
+      if (
+        userData.status !== "syncing" ||
+        !userData.syncStarted
+      ) {
+
+        alert(
+          "No tienes una sincronización activa."
         );
 
+        return;
+      }
+
+
+      // Hora de inicio
+
+      const startTime =
+        Number(userData.syncStarted);
+
+
+      // Hora de finalización
 
       const finishTime =
         Date.now();
 
+
+      // Duración en segundos
 
       const durationSeconds =
         Math.max(
@@ -728,57 +503,48 @@ window.finishSync =
         new Date(finishTime);
 
 
-      /*
-        Crear un nuevo registro
-        dentro de History.
-      */
+      // ==========================================
+      // GUARDAR EN HISTORY
+      // ==========================================
 
       const newHistoryRef =
         push(historyRef);
 
 
-      await set(
-        newHistoryRef,
-        {
+      await set(newHistoryRef, {
 
-          userId:
-            currentUserId,
+        userId:
+          currentUserId,
 
-          user:
-            currentUserName,
+        user:
+          currentUserName,
 
-          date:
-            startDate.toLocaleDateString(
-              "es-MX"
-            ),
+        date:
+          startDate.toLocaleDateString(
+            "es-MX"
+          ),
 
-          startedAt:
-            startDate.toLocaleTimeString(
-              "es-MX"
-            ),
+        startedAt:
+          startDate.toLocaleTimeString(
+            "es-MX"
+          ),
 
-          finishedAt:
-            finishDate.toLocaleTimeString(
-              "es-MX"
-            ),
+        finishedAt:
+          finishDate.toLocaleTimeString(
+            "es-MX"
+          ),
 
-          durationSeconds:
-            durationSeconds
+        durationSeconds:
+          durationSeconds
 
-        }
-      );
-
-    }
+      });
 
 
-    /*
-      Después de guardar el historial,
-      cambiamos al usuario a Disponible.
-    */
+      // ==========================================
+      // CAMBIAR ESTADO A DISPONIBLE
+      // ==========================================
 
-    await set(
-      userRef,
-      {
+      await set(userRef, {
 
         name:
           currentUserName,
@@ -789,224 +555,153 @@ window.finishSync =
         syncStarted:
           null
 
+      });
+
+
+      alert(
+        `Sincronización registrada.\n\nDuración: ${formatDuration(durationSeconds)}`
+      );
+
+    };
+
+
+    // ==========================================
+    // FORMATO DE DURACIÓN
+    // ==========================================
+
+    function formatDuration(seconds) {
+
+      const minutes =
+        Math.floor(seconds / 60);
+
+      const remainingSeconds =
+        seconds % 60;
+
+
+      if (minutes === 0) {
+
+        return `${remainingSeconds} segundos`;
+
       }
-    );
-
-  };
 
 
+      return `${minutes} min ${remainingSeconds} s`;
 
-/* ================================
-   CAMBIAR USUARIO
-   ================================= */
-
-window.changeUser =
-  function() {
-
-    localStorage.removeItem(
-      "bimUserId"
-    );
+    }
 
 
-    localStorage.removeItem(
-      "bimUserName"
-    );
+    // ==========================================
+    // CAMBIAR USUARIO
+    // ==========================================
 
+    window.changeUser = function() {
 
-    currentUserId = null;
-
-    currentUserName = null;
-
-
-    document
-      .getElementById("appScreen")
-      .classList
-      .add("hidden");
-
-
-    document
-      .getElementById("loginScreen")
-      .classList
-      .remove("hidden");
-
-  };
-
-
-
-/* ================================
-   MOSTRAR EQUIPO
-   ================================= */
-
-onValue(
-  teamRef,
-  (snapshot) => {
-
-    const data =
-      snapshot.val() || {};
-
-
-    const teamList =
-      document.getElementById(
-        "teamList"
+      localStorage.removeItem(
+        "bimUser"
       );
 
 
-    teamList.innerHTML = "";
+      currentUserId = null;
+
+      currentUserName = null;
 
 
-    members.forEach(
-      member => {
-
-        const memberData =
-          data[member.id] || {
-
-            name:
-              member.name,
-
-            status:
-              "available",
-
-            syncStarted:
-              null
-
-          };
+      document
+        .getElementById("app")
+        .classList.add("hidden");
 
 
-        const div =
-          document.createElement(
-            "div"
-          );
+      document
+        .getElementById("userSelection")
+        .classList.remove("hidden");
 
 
-        div.className =
-          "member";
+      document
+        .getElementById("userSelect")
+        .value = "";
+
+    };
 
 
-        const top =
-          document.createElement(
-            "div"
-          );
+    // ==========================================
+    // MOSTRAR EQUIPO EN TIEMPO REAL
+    // ==========================================
+
+    onValue(teamRef, (snapshot) => {
+
+      const data =
+        snapshot.val() || {};
 
 
-        top.className =
-          "member-top";
-
-
-        const name =
-          document.createElement(
-            "span"
-          );
-
-
-        name.className =
-          "member-name";
-
-
-        name.textContent =
-          member.name;
-
-
-        const status =
-          document.createElement(
-            "span"
-          );
-
-
-        status.className =
-          "status";
-
-
-        if (
-          memberData.status ===
-          "syncing"
-        ) {
-
-          status.textContent =
-            "🟡 Sincronizando";
-
-
-          status.classList.add(
-            "syncing"
-          );
-
-        }
-
-        else {
-
-          status.textContent =
-            "🟢 Disponible";
-
-
-          status.classList.add(
-            "available"
-          );
-
-        }
-
-
-        top.appendChild(
-          name
+      const teamList =
+        document.getElementById(
+          "teamList"
         );
 
 
-        top.appendChild(
-          status
-        );
+      teamList.innerHTML = "";
 
 
-        div.appendChild(
-          top
-        );
+      Object.keys(members).forEach(
+        (userId) => {
+
+          const member =
+            data[userId] || {
+
+              name:
+                members[userId],
+
+              status:
+                "available",
+
+              syncStarted:
+                null
+
+            };
 
 
-        /*
-          Mostrar información
-          de la sincronización.
-        */
-
-        if (
-          memberData.status ===
-          "syncing"
-        ) {
-
-          const info =
+          const div =
             document.createElement(
               "div"
             );
 
 
-          info.className =
-            "sync-info";
+          div.className =
+            "member";
 
+
+          const left =
+            document.createElement(
+              "div"
+            );
+
+
+          const name =
+            document.createElement(
+              "div"
+            );
+
+
+          name.className =
+            "member-name";
+
+
+          name.textContent =
+            member.name;
+
+
+          left.appendChild(name);
+
+
+          // ==================================
+          // TIMER
+          // ==================================
 
           if (
-            memberData.syncStarted
+            member.status ===
+              "syncing" &&
+            member.syncStarted
           ) {
-
-            const date =
-              new Date(
-                memberData.syncStarted
-              );
-
-
-            info.textContent =
-              "Inició a las " +
-              date.toLocaleTimeString(
-                "es-MX",
-                {
-
-                  hour:
-                    "2-digit",
-
-                  minute:
-                    "2-digit",
-
-                  second:
-                    "2-digit"
-
-                }
-              );
-
 
             const timer =
               document.createElement(
@@ -1018,177 +713,215 @@ onValue(
               "timer";
 
 
-            timer.dataset.start =
-              memberData.syncStarted;
+            const updateTimer =
+              () => {
+
+                const seconds =
+                  Math.floor(
+                    (
+                      Date.now() -
+                      Number(
+                        member.syncStarted
+                      )
+                    ) / 1000
+                  );
 
 
-            timer.textContent =
-              "⏱️ " +
-              formatElapsed(
-                memberData.syncStarted
-              );
+                timer.textContent =
+                  `⏱️ ${formatDuration(
+                    Math.max(
+                      0,
+                      seconds
+                    )
+                  )}`;
+
+              };
 
 
-            div.appendChild(
-              info
+            updateTimer();
+
+
+            setInterval(
+              updateTimer,
+              1000
             );
 
 
-            div.appendChild(
-              timer
-            );
+            left.appendChild(timer);
 
           }
 
-          else {
 
-            info.textContent =
-              "Iniciando...";
-
-
-            div.appendChild(
-              info
+          const status =
+            document.createElement(
+              "div"
             );
 
-          }
+
+          status.className =
+            "status " +
+            (
+              member.status ===
+              "syncing"
+                ? "syncing"
+                : "available"
+            );
+
+
+          status.textContent =
+            member.status ===
+            "syncing"
+
+              ? "🟡 Sincronizando"
+
+              : "🟢 Disponible";
+
+
+          div.appendChild(left);
+
+          div.appendChild(status);
+
+
+          teamList.appendChild(div);
 
         }
-
-
-        teamList.appendChild(
-          div
-        );
-
-      }
-
-    );
-
-  }
-
-);
-
-
-
-/* ================================
-   FORMATO DEL CONTADOR
-   ================================= */
-
-function formatElapsed(
-  start
-) {
-
-  const now =
-    Date.now();
-
-
-  let seconds =
-    Math.floor(
-      (now - start) / 1000
-    );
-
-
-  if (seconds < 0) {
-    seconds = 0;
-  }
-
-
-  const hours =
-    Math.floor(
-      seconds / 3600
-    );
-
-
-  seconds =
-    seconds % 3600;
-
-
-  const minutes =
-    Math.floor(
-      seconds / 60
-    );
-
-
-  seconds =
-    seconds % 60;
-
-
-  return (
-
-    String(hours)
-      .padStart(2, "0")
-
-    + ":" +
-
-    String(minutes)
-      .padStart(2, "0")
-
-    + ":" +
-
-    String(seconds)
-      .padStart(2, "0")
-
-  );
-
-}
-
-
-
-/* ================================
-   ACTUALIZAR CONTADORES
-   ================================= */
-
-setInterval(
-  () => {
-
-    const timers =
-      document.querySelectorAll(
-        ".timer"
       );
 
+    });
 
-    timers.forEach(
-      timer => {
 
-        const start =
-          Number(
-            timer.dataset.start
+    // ==========================================
+    // MOSTRAR HISTORY
+    // ==========================================
+
+    onValue(historyRef, (snapshot) => {
+
+      const data =
+        snapshot.val() || {};
+
+
+      const historyList =
+        document.getElementById(
+          "historyList"
+        );
+
+
+      historyList.innerHTML = "";
+
+
+      const entries =
+        Object.values(data);
+
+
+      // Mostrar los más recientes primero
+
+      entries.reverse();
+
+
+      if (entries.length === 0) {
+
+        historyList.innerHTML = `
+
+          <p style="
+            text-align:center;
+            color:#6b7280;
+          ">
+            Todavía no hay registros.
+          </p>
+
+        `;
+
+        return;
+      }
+
+
+      entries.forEach((entry) => {
+
+        const div =
+          document.createElement(
+            "div"
           );
 
 
-        if (start) {
-
-          timer.textContent =
-            "⏱️ " +
-            formatElapsed(
-              start
-            );
-
-        }
-
-      }
-    );
-
-  },
-  1000
-);
+        div.className =
+          "history-item";
 
 
+        div.innerHTML = `
 
-/* ================================
-   CARGAR USUARIO GUARDADO
-   ================================= */
+          <div class="history-user">
 
-if (
-  currentUserId &&
-  currentUserName
-) {
+            👤 ${entry.user}
 
-  showApp();
+          </div>
 
-}
+          <div class="history-info">
 
-</script>
+            📅 ${entry.date}<br>
+
+            🟡 Inicio:
+            ${entry.startedAt}<br>
+
+            🟢 Final:
+            ${entry.finishedAt}<br>
+
+            ⏱️ Duración:
+            ${formatDuration(
+              entry.durationSeconds
+            )}
+
+          </div>
+
+        `;
+
+
+        historyList.appendChild(div);
+
+      });
+
+    });
+
+
+    // ==========================================
+    // RECUPERAR USUARIO GUARDADO
+    // ==========================================
+
+    const savedUser =
+      localStorage.getItem(
+        "bimUser"
+      );
+
+
+    if (savedUser &&
+        members[savedUser]) {
+
+      currentUserId =
+        savedUser;
+
+      currentUserName =
+        members[savedUser];
+
+
+      document
+        .getElementById(
+          "userSelection"
+        )
+        .classList.add("hidden");
+
+
+      document
+        .getElementById("app")
+        .classList.remove("hidden");
+
+
+      document
+        .getElementById("welcome")
+        .textContent =
+        `Hola, ${currentUserName} 👋`;
+
+    }
+
+  </script>
 
 </body>
-
 </html>
