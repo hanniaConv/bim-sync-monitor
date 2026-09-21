@@ -48,10 +48,17 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
-        .user-name {
-            font-size: 22px;
-            font-weight: bold;
+        h2 {
             margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
         }
 
         button {
@@ -65,6 +72,11 @@
             margin-top: 10px;
         }
 
+        .enter-button {
+            background: #2563eb;
+            color: white;
+        }
+
         .sync-button {
             background: #f59e0b;
             color: white;
@@ -73,6 +85,11 @@
         .finish-button {
             background: #22c55e;
             color: white;
+        }
+
+        .logout-button {
+            background: #e5e7eb;
+            color: #374151;
         }
 
         .status {
@@ -97,6 +114,7 @@
             align-items: center;
             padding: 15px 0;
             border-bottom: 1px solid #e5e7eb;
+            gap: 10px;
         }
 
         .person:last-child {
@@ -114,6 +132,16 @@
         .syncing {
             color: #d97706;
         }
+
+        .hidden {
+            display: none;
+        }
+
+        .welcome {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 
@@ -124,12 +152,43 @@
     <p>Electrical Project</p>
 </header>
 
-<div class="container">
+
+<!-- PANTALLA PARA PONER EL NOMBRE -->
+
+<div id="loginScreen" class="container">
 
     <div class="card">
 
-        <div class="user-name">
-            👤 Hannia
+        <h2>👋 Bienvenido</h2>
+
+        <p style="margin-bottom: 15px;">
+            Escribe tu nombre para entrar al equipo.
+        </p>
+
+        <input
+            type="text"
+            id="nameInput"
+            placeholder="Tu nombre"
+            maxlength="30"
+        >
+
+        <button class="enter-button" onclick="enterTeam()">
+            ENTRAR
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- PANTALLA PRINCIPAL -->
+
+<div id="appScreen" class="container hidden">
+
+    <div class="card">
+
+        <div id="welcomeMessage" class="welcome">
+            Hola 👋
         </div>
 
         <button class="sync-button" onclick="startSync()">
@@ -144,7 +203,14 @@
             🟢 Disponible
         </div>
 
+        <button class="logout-button" onclick="logout()">
+            Cambiar nombre
+        </button>
+
     </div>
+
+
+    <!-- EQUIPO -->
 
     <div class="card">
 
@@ -160,19 +226,23 @@
 
 </div>
 
+
 <script type="module">
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
     import {
         getDatabase,
         ref,
         set,
-        onValue
-    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+        onValue,
+        remove
+    }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
-    // CONFIGURACIÓN DE FIREBASE
+    // FIREBASE
 
     const firebaseConfig = {
         apiKey: "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
@@ -185,8 +255,6 @@
     };
 
 
-    // INICIAR FIREBASE
-
     const app = initializeApp(firebaseConfig);
 
     const database = getDatabase(app);
@@ -194,81 +262,215 @@
 
     // USUARIO ACTUAL
 
-    const currentUser = "Hannia";
+    let currentUser = localStorage.getItem("bimUser");
 
 
-    // REFERENCIA A NUESTRO EQUIPO
+    // MOSTRAR PANTALLA CORRESPONDIENTE
 
-    const teamRef = ref(database, "team");
+    if (currentUser) {
 
+        showApp();
 
-    // CUANDO ALGUIEN CAMBIA SU ESTADO
-
-    window.startSync = function() {
-
-        const userRef = ref(database, "team/" + currentUser);
-
-        set(userRef, {
-            name: currentUser,
-            status: "syncing",
-            syncStarted: new Date().toLocaleTimeString()
-        });
-
-        document.getElementById("myStatus").innerHTML =
-            "🟡 Sincronizando...";
-
-        document.getElementById("myStatus").style.background =
-            "#fffbeb";
-
-        document.getElementById("myStatus").style.color =
-            "#d97706";
-    };
+    }
 
 
-    // CUANDO TERMINA
+    // ENTRAR AL EQUIPO
 
-    window.finishSync = function() {
+    window.enterTeam = function() {
 
-        const userRef = ref(database, "team/" + currentUser);
+        const input =
+            document.getElementById("nameInput");
 
-        set(userRef, {
-            name: currentUser,
-            status: "available",
-            syncStarted: ""
-        });
-
-        document.getElementById("myStatus").innerHTML =
-            "🟢 Disponible";
-
-        document.getElementById("myStatus").style.background =
-            "#ecfdf5";
-
-        document.getElementById("myStatus").style.color =
-            "#15803d";
-    };
+        const name =
+            input.value.trim();
 
 
-    // ESCUCHAR CAMBIOS EN TIEMPO REAL
+        if (!name) {
 
-    onValue(teamRef, (snapshot) => {
-
-        const data = snapshot.val();
-
-        const teamList = document.getElementById("teamList");
-
-        teamList.innerHTML = "";
-
-        if (!data) {
-
-            teamList.innerHTML = "No hay integrantes todavía.";
+            alert("Escribe tu nombre.");
 
             return;
         }
 
 
+        currentUser = name;
+
+        localStorage.setItem("bimUser", name);
+
+        showApp();
+
+    };
+
+
+    // MOSTRAR APP
+
+    function showApp() {
+
+        document
+            .getElementById("loginScreen")
+            .classList.add("hidden");
+
+        document
+            .getElementById("appScreen")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("welcomeMessage")
+            .innerHTML =
+            "Hola, " + currentUser + " 👋";
+
+
+        const userRef =
+            ref(database, "team/" + safeKey(currentUser));
+
+
+        set(userRef, {
+
+            name: currentUser,
+
+            status: "available",
+
+            syncStarted: ""
+
+        });
+
+    }
+
+
+    // CONVERTIR NOMBRE EN UNA CLAVE SEGURA
+
+    function safeKey(name) {
+
+        return name
+            .toLowerCase()
+            .replace(/[.#$[\]]/g, "")
+            .replace(/\s+/g, "_");
+
+    }
+
+
+    // COMENZAR SINCRONIZACIÓN
+
+    window.startSync = function() {
+
+        const userRef =
+            ref(database, "team/" + safeKey(currentUser));
+
+
+        set(userRef, {
+
+            name: currentUser,
+
+            status: "syncing",
+
+            syncStarted:
+                new Date().toLocaleTimeString()
+
+        });
+
+
+        document
+            .getElementById("myStatus")
+            .innerHTML =
+            "🟡 Sincronizando...";
+
+
+        document
+            .getElementById("myStatus")
+            .style.background =
+            "#fffbeb";
+
+
+        document
+            .getElementById("myStatus")
+            .style.color =
+            "#d97706";
+
+    };
+
+
+    // TERMINAR SINCRONIZACIÓN
+
+    window.finishSync = function() {
+
+        const userRef =
+            ref(database, "team/" + safeKey(currentUser));
+
+
+        set(userRef, {
+
+            name: currentUser,
+
+            status: "available",
+
+            syncStarted: ""
+
+        });
+
+
+        document
+            .getElementById("myStatus")
+            .innerHTML =
+            "🟢 Disponible";
+
+
+        document
+            .getElementById("myStatus")
+            .style.background =
+            "#ecfdf5";
+
+
+        document
+            .getElementById("myStatus")
+            .style.color =
+            "#15803d";
+
+    };
+
+
+    // CAMBIAR DE USUARIO
+
+    window.logout = function() {
+
+        localStorage.removeItem("bimUser");
+
+        location.reload();
+
+    };
+
+
+    // ESCUCHAR CAMBIOS DEL EQUIPO
+
+    const teamRef =
+        ref(database, "team");
+
+
+    onValue(teamRef, (snapshot) => {
+
+        const data = snapshot.val();
+
+        const teamList =
+            document.getElementById("teamList");
+
+
+        teamList.innerHTML = "";
+
+
+        if (!data) {
+
+            teamList.innerHTML =
+                "No hay integrantes todavía.";
+
+            return;
+
+        }
+
+
         Object.values(data).forEach(person => {
 
-            const div = document.createElement("div");
+            const div =
+                document.createElement("div");
+
 
             div.className = "person";
 
@@ -276,6 +478,7 @@
             if (person.status === "syncing") {
 
                 div.innerHTML = `
+
                     <span class="person-name">
                         ${person.name}
                     </span>
@@ -283,11 +486,13 @@
                     <span class="syncing">
                         🟡 Sincronizando
                     </span>
+
                 `;
 
             } else {
 
                 div.innerHTML = `
+
                     <span class="person-name">
                         ${person.name}
                     </span>
@@ -295,9 +500,11 @@
                     <span class="available">
                         🟢 Disponible
                     </span>
+
                 `;
 
             }
+
 
             teamList.appendChild(div);
 
