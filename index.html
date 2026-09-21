@@ -7,6 +7,7 @@
   <title>BIM Sync Monitor</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -37,7 +38,7 @@
     }
 
     .container {
-      max-width: 700px;
+      max-width: 750px;
       margin: 30px auto;
       padding: 20px;
     }
@@ -54,6 +55,10 @@
       margin-top: 0;
       text-align: center;
     }
+
+    /* =========================
+       SELECCIÓN DE USUARIO
+    ========================= */
 
     select {
       width: 100%;
@@ -90,26 +95,63 @@
       color: #374151;
     }
 
+    .back-button {
+      background: #e5e7eb;
+      color: #374151;
+      margin-bottom: 15px;
+    }
+
+    /* =========================
+       EQUIPO
+    ========================= */
+
     .member {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px;
+      padding: 16px;
       border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: background 0.2s;
+      border-radius: 10px;
+    }
+
+    .member:hover {
+      background: #f3f4f6;
     }
 
     .member:last-child {
       border-bottom: none;
     }
 
+    .member-left {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
     .member-name {
       font-weight: bold;
+      font-size: 16px;
+    }
+
+    .click-history {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .member-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
     }
 
     .status {
-      font-size: 13px;
+      font-size: 12px;
       padding: 6px 10px;
       border-radius: 20px;
+      white-space: nowrap;
     }
 
     .available {
@@ -123,140 +165,303 @@
     }
 
     .timer {
-      font-size: 13px;
-      margin-top: 4px;
+      font-size: 12px;
       color: #6b7280;
+    }
+
+    /* =========================
+       HISTORIAL
+    ========================= */
+
+    .history-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .history-header h2 {
+      margin-bottom: 8px;
+    }
+
+    .total-syncs {
+      display: inline-block;
+      background: #f3f4f6;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .history-item {
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .history-date {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .history-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      font-size: 14px;
+      color: #4b5563;
+    }
+
+    .history-duration {
+      font-weight: bold;
+      color: #111827;
+    }
+
+    .no-history {
+      text-align: center;
+      color: #6b7280;
+      padding: 30px 10px;
     }
 
     .hidden {
       display: none;
     }
 
-    .history-item {
-      padding: 15px 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .history-item:last-child {
-      border-bottom: none;
-    }
-
-    .history-user {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .history-info {
-      font-size: 14px;
-      color: #6b7280;
-      line-height: 1.6;
-    }
   </style>
 </head>
 
+
 <body>
 
+  <!-- =========================
+       HEADER
+  ========================= -->
+
   <header>
+
     <h1>🔄 BIM Sync Monitor</h1>
-    <p>Monitor de sincronización del equipo</p>
+
+    <p>
+      Monitor de sincronización del equipo
+    </p>
+
   </header>
+
 
   <div class="container">
 
-    <!-- SELECCIÓN DE USUARIO -->
+
+    <!-- =========================
+         SELECCIÓN DE USUARIO
+    ========================= -->
+
     <div id="userSelection" class="card">
 
       <h2>¿Quién eres?</h2>
 
       <select id="userSelect">
-        <option value="">Selecciona tu nombre</option>
 
-        <option value="hannia">Hannia Márquez</option>
-        <option value="angel">Angel Cruz</option>
-        <option value="antonella">Antonella Tarantini</option>
-        <option value="carlos">Carlos Ramírez</option>
-        <option value="arianna">Arianna Nuñez</option>
-        <option value="grace">Grace Martínez</option>
-        <option value="cynthia">Cynthia Cortés</option>
-        <option value="ximena">Ximena Arrambide</option>
-        <option value="valeria">Valeria Garza</option>
-        <option value="alejandro">Alejandro Ulla</option>
-        <option value="gabriel">Gabriel Martínez</option>
-        <option value="mauricio">Mauricio Mireles</option>
+        <option value="">
+          Selecciona tu nombre
+        </option>
+
+        <option value="hannia">
+          Hannia Márquez
+        </option>
+
+        <option value="angel">
+          Angel Cruz
+        </option>
+
+        <option value="antonella">
+          Antonella Tarantini
+        </option>
+
+        <option value="carlos">
+          Carlos Ramírez
+        </option>
+
+        <option value="arianna">
+          Arianna Nuñez
+        </option>
+
+        <option value="grace">
+          Grace Martínez
+        </option>
+
+        <option value="cynthia">
+          Cynthia Cortés
+        </option>
+
+        <option value="ximena">
+          Ximena Arrambide
+        </option>
+
+        <option value="valeria">
+          Valeria Garza
+        </option>
+
+        <option value="alejandro">
+          Alejandro Ulla
+        </option>
+
+        <option value="gabriel">
+          Gabriel Martínez
+        </option>
+
+        <option value="mauricio">
+          Mauricio Mireles
+        </option>
 
       </select>
 
-      <button onclick="selectUser()" class="sync-button">
+
+      <button
+        onclick="selectUser()"
+        class="sync-button">
+
         CONTINUAR
+
       </button>
 
     </div>
 
 
-    <!-- APLICACIÓN -->
+    <!-- =========================
+         APLICACIÓN PRINCIPAL
+    ========================= -->
+
     <div id="app" class="hidden">
+
+
+      <!-- =========================
+           CONTROLES DEL USUARIO
+      ========================= -->
 
       <div class="card">
 
         <h2 id="welcome"></h2>
 
+
         <button
           onclick="startSync()"
-          id="startButton"
           class="sync-button">
+
           🟡 ESTOY SINCRONIZANDO
+
         </button>
+
 
         <button
           onclick="finishSync()"
-          id="finishButton"
           class="finish-button">
+
           🟢 YA TERMINÉ
+
         </button>
+
 
         <button
           onclick="changeUser()"
           class="change-button">
+
           Cambiar usuario
+
         </button>
 
       </div>
 
 
-      <!-- EQUIPO -->
-      <div class="card">
+      <!-- =========================
+           LISTA DEL EQUIPO
+      ========================= -->
+
+      <div
+        id="teamCard"
+        class="card">
 
         <h2>👥 Equipo</h2>
+
+        <p
+          style="
+            text-align:center;
+            color:#6b7280;
+            font-size:14px;
+          ">
+
+          Toca el nombre de una persona
+          para ver su historial.
+
+        </p>
+
 
         <div id="teamList"></div>
 
       </div>
 
 
-      <!-- HISTORIAL -->
-      <div class="card">
+      <!-- =========================
+           HISTORIAL DE PERSONA
+      ========================= -->
 
-        <h2>📋 Historial</h2>
+      <div
+        id="historyCard"
+        class="card hidden">
 
-        <div id="historyList">
-          <p style="text-align:center;color:#6b7280;">
-            Cargando historial...
-          </p>
+
+        <button
+          onclick="showTeam()"
+          class="back-button">
+
+          ← Volver al equipo
+
+        </button>
+
+
+        <div class="history-header">
+
+          <h2 id="historyTitle">
+            Historial
+          </h2>
+
+
+          <div
+            id="totalSyncs"
+            class="total-syncs">
+
+            Total de sincronizaciones: 0
+
+          </div>
+
         </div>
 
+
+        <div id="historyList"></div>
+
+
       </div>
+
 
     </div>
 
   </div>
 
 
-  <!-- FIREBASE -->
+
+  <!-- =========================
+       FIREBASE
+  ========================= -->
+
   <script type="module">
+
 
     import {
       initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    }
+    from
+      "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 
     import {
       getDatabase,
@@ -266,7 +471,9 @@
       push,
       onValue,
       serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+    }
+    from
+      "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
     // ==========================================
@@ -275,7 +482,8 @@
 
     const firebaseConfig = {
 
-      apiKey: "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
+      apiKey:
+        "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
 
       authDomain:
         "bim-sync-monitor.firebaseapp.com",
@@ -294,6 +502,7 @@
 
       appId:
         "1:853443748101:web:c391d643ddd1916aaf176c"
+
     };
 
 
@@ -301,42 +510,76 @@
     // INICIALIZAR FIREBASE
     // ==========================================
 
-    const app = initializeApp(firebaseConfig);
+    const app =
+      initializeApp(firebaseConfig);
 
-    const database = getDatabase(app);
 
-
-    // Referencias
-
-    const teamRef = ref(database, "Team");
-
-    const historyRef = ref(database, "History");
+    const database =
+      getDatabase(app);
 
 
     // ==========================================
-    // DATOS DEL EQUIPO
+    // REFERENCIAS
+    // ==========================================
+
+    const teamRef =
+      ref(database, "Team");
+
+
+    const historyRef =
+      ref(database, "History");
+
+
+    // ==========================================
+    // EQUIPO
     // ==========================================
 
     const members = {
 
-      hannia: "Hannia Márquez",
-      angel: "Angel Cruz",
-      antonella: "Antonella Tarantini",
-      carlos: "Carlos Ramírez",
-      arianna: "Arianna Nuñez",
-      grace: "Grace Martínez",
-      cynthia: "Cynthia Cortés",
-      ximena: "Ximena Arrambide",
-      valeria: "Valeria Garza",
-      alejandro: "Alejandro Ulla",
-      gabriel: "Gabriel Martínez",
-      mauricio: "Mauricio Mireles"
+      hannia:
+        "Hannia Márquez",
+
+      angel:
+        "Angel Cruz",
+
+      antonella:
+        "Antonella Tarantini",
+
+      carlos:
+        "Carlos Ramírez",
+
+      arianna:
+        "Arianna Nuñez",
+
+      grace:
+        "Grace Martínez",
+
+      cynthia:
+        "Cynthia Cortés",
+
+      ximena:
+        "Ximena Arrambide",
+
+      valeria:
+        "Valeria Garza",
+
+      alejandro:
+        "Alejandro Ulla",
+
+      gabriel:
+        "Gabriel Martínez",
+
+      mauricio:
+        "Mauricio Mireles"
 
     };
 
 
     let currentUserId = null;
+
     let currentUserName = null;
+
+    let selectedHistoryUserId = null;
 
 
     // ==========================================
@@ -345,22 +588,34 @@
 
     window.selectUser = async function() {
 
-      const select =
-        document.getElementById("userSelect");
 
-      const userId = select.value;
+      const select =
+        document.getElementById(
+          "userSelect"
+        );
+
+
+      const userId =
+        select.value;
+
 
       if (!userId) {
 
-        alert("Selecciona tu nombre.");
+        alert(
+          "Selecciona tu nombre."
+        );
 
         return;
+
       }
 
 
-      currentUserId = userId;
+      currentUserId =
+        userId;
 
-      currentUserName = members[userId];
+
+      currentUserName =
+        members[userId];
 
 
       localStorage.setItem(
@@ -369,35 +624,55 @@
       );
 
 
-      // Crear usuario en Firebase
-
       const userRef =
-        ref(database, `Team/${userId}`);
+        ref(
+          database,
+          `Team/${userId}`
+        );
 
 
-      await set(userRef, {
+      /*
+       * Creamos el usuario
+       * como disponible.
+       */
 
-        name: currentUserName,
+      await set(
+        userRef,
+        {
 
-        status: "available",
+          name:
+            currentUserName,
 
-        syncStarted: null
+          status:
+            "available",
 
-      });
+          syncStarted:
+            null
+
+        }
+      );
 
 
       document
-        .getElementById("userSelection")
-        .classList.add("hidden");
+        .getElementById(
+          "userSelection"
+        )
+        .classList
+        .add("hidden");
 
 
       document
-        .getElementById("app")
-        .classList.remove("hidden");
+        .getElementById(
+          "app"
+        )
+        .classList
+        .remove("hidden");
 
 
       document
-        .getElementById("welcome")
+        .getElementById(
+          "welcome"
+        )
         .textContent =
         `Hola, ${currentUserName} 👋`;
 
@@ -408,184 +683,871 @@
     // INICIAR SINCRONIZACIÓN
     // ==========================================
 
-    window.startSync = async function() {
-
-      if (!currentUserId) return;
-
-
-      const userRef =
-        ref(database, `Team/${currentUserId}`);
+    window.startSync =
+      async function() {
 
 
-      await set(userRef, {
+        if (!currentUserId)
+          return;
 
-        name: currentUserName,
 
-        status: "syncing",
+        const userRef =
+          ref(
+            database,
+            `Team/${currentUserId}`
+          );
 
-        syncStarted: serverTimestamp()
 
-      });
+        await set(
+          userRef,
+          {
 
-    };
+            name:
+              currentUserName,
+
+            status:
+              "syncing",
+
+            syncStarted:
+              serverTimestamp()
+
+          }
+        );
+
+      };
 
 
     // ==========================================
     // TERMINAR SINCRONIZACIÓN
     // ==========================================
 
-    window.finishSync = async function() {
-
-      if (!currentUserId) return;
-
-
-      const userRef =
-        ref(database, `Team/${currentUserId}`);
+    window.finishSync =
+      async function() {
 
 
-      const snapshot =
-        await get(userRef);
+        if (!currentUserId)
+          return;
 
 
-      if (!snapshot.exists()) {
-
-        alert("No se encontró tu información.");
-
-        return;
-      }
-
-
-      const userData =
-        snapshot.val();
+        const userRef =
+          ref(
+            database,
+            `Team/${currentUserId}`
+          );
 
 
-      if (
-        userData.status !== "syncing" ||
-        !userData.syncStarted
-      ) {
+        const snapshot =
+          await get(
+            userRef
+          );
+
+
+        if (!snapshot.exists()) {
+
+          alert(
+            "No se encontró tu información."
+          );
+
+          return;
+
+        }
+
+
+        const userData =
+          snapshot.val();
+
+
+        if (
+          userData.status !==
+            "syncing" ||
+          !userData.syncStarted
+        ) {
+
+          alert(
+            "No tienes una sincronización activa."
+          );
+
+          return;
+
+        }
+
+
+        // Hora de inicio
+
+        const startTime =
+          Number(
+            userData.syncStarted
+          );
+
+
+        // Hora de finalización
+
+        const finishTime =
+          Date.now();
+
+
+        // Duración
+
+        const durationSeconds =
+          Math.max(
+            0,
+            Math.floor(
+              (
+                finishTime -
+                startTime
+              ) / 1000
+            )
+          );
+
+
+        const startDate =
+          new Date(
+            startTime
+          );
+
+
+        const finishDate =
+          new Date(
+            finishTime
+          );
+
+
+        // ======================================
+        // GUARDAR HISTORIAL
+        // ======================================
+
+        const newHistoryRef =
+          push(
+            historyRef
+          );
+
+
+        await set(
+          newHistoryRef,
+          {
+
+            userId:
+              currentUserId,
+
+            user:
+              currentUserName,
+
+            date:
+              startDate.toLocaleDateString(
+                "es-MX"
+              ),
+
+            startedAt:
+              startDate.toLocaleTimeString(
+                "es-MX"
+              ),
+
+            finishedAt:
+              finishDate.toLocaleTimeString(
+                "es-MX"
+              ),
+
+            durationSeconds:
+              durationSeconds
+
+          }
+        );
+
+
+        // ======================================
+        // CAMBIAR A DISPONIBLE
+        // ======================================
+
+        await set(
+          userRef,
+          {
+
+            name:
+              currentUserName,
+
+            status:
+              "available",
+
+            syncStarted:
+              null
+
+          }
+        );
+
 
         alert(
-          "No tienes una sincronización activa."
+          "✅ Sincronización registrada."
         );
 
-        return;
-      }
-
-
-      // Hora de inicio
-
-      const startTime =
-        Number(userData.syncStarted);
-
-
-      // Hora de finalización
-
-      const finishTime =
-        Date.now();
-
-
-      // Duración en segundos
-
-      const durationSeconds =
-        Math.max(
-          0,
-          Math.floor(
-            (finishTime - startTime) / 1000
-          )
-        );
-
-
-      const startDate =
-        new Date(startTime);
-
-
-      const finishDate =
-        new Date(finishTime);
-
-
-      // ==========================================
-      // GUARDAR EN HISTORY
-      // ==========================================
-
-      const newHistoryRef =
-        push(historyRef);
-
-
-      await set(newHistoryRef, {
-
-        userId:
-          currentUserId,
-
-        user:
-          currentUserName,
-
-        date:
-          startDate.toLocaleDateString(
-            "es-MX"
-          ),
-
-        startedAt:
-          startDate.toLocaleTimeString(
-            "es-MX"
-          ),
-
-        finishedAt:
-          finishDate.toLocaleTimeString(
-            "es-MX"
-          ),
-
-        durationSeconds:
-          durationSeconds
-
-      });
-
-
-      // ==========================================
-      // CAMBIAR ESTADO A DISPONIBLE
-      // ==========================================
-
-      await set(userRef, {
-
-        name:
-          currentUserName,
-
-        status:
-          "available",
-
-        syncStarted:
-          null
-
-      });
-
-
-      alert(
-        `Sincronización registrada.\n\nDuración: ${formatDuration(durationSeconds)}`
-      );
-
-    };
+      };
 
 
     // ==========================================
     // FORMATO DE DURACIÓN
     // ==========================================
 
-    function formatDuration(seconds) {
+    function formatDuration(
+      seconds
+    ) {
+
+
+      seconds =
+        Number(seconds) || 0;
+
+
+      const hours =
+        Math.floor(
+          seconds / 3600
+        );
+
 
       const minutes =
-        Math.floor(seconds / 60);
+        Math.floor(
+          (
+            seconds % 3600
+          ) / 60
+        );
+
 
       const remainingSeconds =
         seconds % 60;
 
 
-      if (minutes === 0) {
+      if (hours > 0) {
 
-        return `${remainingSeconds} segundos`;
+        return `${hours} h ${minutes} min ${remainingSeconds} s`;
 
       }
 
 
-      return `${minutes} min ${remainingSeconds} s`;
+      if (minutes > 0) {
+
+        return `${minutes} min ${remainingSeconds} s`;
+
+      }
+
+
+      return `${remainingSeconds} s`;
+
+    }
+
+
+    // ==========================================
+    // MOSTRAR EQUIPO
+    // ==========================================
+
+    onValue(
+      teamRef,
+      (snapshot) => {
+
+
+        const data =
+          snapshot.val() || {};
+
+
+        const teamList =
+          document.getElementById(
+            "teamList"
+          );
+
+
+        teamList.innerHTML = "";
+
+
+        Object.keys(
+          members
+        ).forEach(
+          (userId) => {
+
+
+            const member =
+              data[userId] || {
+
+                name:
+                  members[userId],
+
+                status:
+                  "available",
+
+                syncStarted:
+                  null
+
+              };
+
+
+            const memberDiv =
+              document.createElement(
+                "div"
+              );
+
+
+            memberDiv.className =
+              "member";
+
+
+            /*
+             * Al hacer click,
+             * abrimos su historial.
+             */
+
+            memberDiv.onclick =
+              function() {
+
+                openHistory(
+                  userId
+                );
+
+              };
+
+
+            // ==================================
+            // LADO IZQUIERDO
+            // ==================================
+
+            const left =
+              document.createElement(
+                "div"
+              );
+
+
+            left.className =
+              "member-left";
+
+
+            const name =
+              document.createElement(
+                "div"
+              );
+
+
+            name.className =
+              "member-name";
+
+
+            name.textContent =
+              member.name;
+
+
+            left.appendChild(
+              name
+            );
+
+
+            const historyText =
+              document.createElement(
+                "div"
+              );
+
+
+            historyText.className =
+              "click-history";
+
+
+            historyText.textContent =
+              "Toca para ver historial";
+
+
+            left.appendChild(
+              historyText
+            );
+
+
+            // ==================================
+            // LADO DERECHO
+            // ==================================
+
+            const right =
+              document.createElement(
+                "div"
+              );
+
+
+            right.className =
+              "member-right";
+
+
+            const status =
+              document.createElement(
+                "div"
+              );
+
+
+            status.className =
+              "status " +
+              (
+                member.status ===
+                "syncing"
+
+                  ? "syncing"
+
+                  : "available"
+              );
+
+
+            status.textContent =
+              member.status ===
+              "syncing"
+
+                ? "🟡 Sincronizando"
+
+                : "🟢 Disponible";
+
+
+            right.appendChild(
+              status
+            );
+
+
+            // ==================================
+            // TIMER
+            // ==================================
+
+            if (
+              member.status ===
+                "syncing" &&
+              member.syncStarted
+            ) {
+
+
+              const timer =
+                document.createElement(
+                  "div"
+                );
+
+
+              timer.className =
+                "timer";
+
+
+              const updateTimer =
+                () => {
+
+
+                  const seconds =
+                    Math.floor(
+                      (
+                        Date.now() -
+                        Number(
+                          member.syncStarted
+                        )
+                      ) / 1000
+                    );
+
+
+                  timer.textContent =
+                    `⏱️ ${formatDuration(
+                      Math.max(
+                        0,
+                        seconds
+                      )
+                    )}`;
+
+                };
+
+
+              updateTimer();
+
+
+              /*
+               * Actualizamos el timer
+               * cada segundo.
+               */
+
+              setInterval(
+                updateTimer,
+                1000
+              );
+
+
+              right.appendChild(
+                timer
+              );
+
+            }
+
+
+            memberDiv.appendChild(
+              left
+            );
+
+
+            memberDiv.appendChild(
+              right
+            );
+
+
+            teamList.appendChild(
+              memberDiv
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+    // ==========================================
+    // ABRIR HISTORIAL
+    // ==========================================
+
+    window.openHistory =
+      function(userId) {
+
+
+        selectedHistoryUserId =
+          userId;
+
+
+        document
+          .getElementById(
+            "teamCard"
+          )
+          .classList
+          .add("hidden");
+
+
+        document
+          .getElementById(
+            "historyCard"
+          )
+          .classList
+          .remove("hidden");
+
+
+        document
+          .getElementById(
+            "historyTitle"
+          )
+          .textContent =
+          `📋 Historial — ${members[userId]}`;
+
+
+        loadUserHistory(
+          userId
+        );
+
+      };
+
+
+    // ==========================================
+    // VOLVER AL EQUIPO
+    // ==========================================
+
+    window.showTeam =
+      function() {
+
+
+        selectedHistoryUserId =
+          null;
+
+
+        document
+          .getElementById(
+            "historyCard"
+          )
+          .classList
+          .add("hidden");
+
+
+        document
+          .getElementById(
+            "teamCard"
+          )
+          .classList
+          .remove("hidden");
+
+      };
+
+
+    // ==========================================
+    // CARGAR HISTORIAL DE USUARIO
+    // ==========================================
+
+    function loadUserHistory(
+      userId
+    ) {
+
+
+      /*
+       * Escuchamos History
+       * en tiempo real.
+       */
+
+      onValue(
+        historyRef,
+        (snapshot) => {
+
+
+          const data =
+            snapshot.val() || {};
+
+
+          const historyList =
+            document.getElementById(
+              "historyList"
+            );
+
+
+          historyList.innerHTML = "";
+
+
+          // ====================================
+          // FILTRAR POR USUARIO
+          // ====================================
+
+          const userHistory =
+            Object.values(
+              data
+            ).filter(
+              (entry) =>
+                entry.userId ===
+                userId
+            );
+
+
+          // ====================================
+          // ORDENAR MÁS RECIENTE PRIMERO
+          // ====================================
+
+          userHistory.sort(
+            (a, b) => {
+
+
+              /*
+               * Convertimos la fecha
+               * y hora a timestamp
+               * para ordenar.
+               */
+
+              const aTime =
+                convertEntryToTimestamp(
+                  a
+                );
+
+
+              const bTime =
+                convertEntryToTimestamp(
+                  b
+                );
+
+
+              return bTime - aTime;
+
+            }
+          );
+
+
+          // ====================================
+          // TOTAL
+          // ====================================
+
+          document
+            .getElementById(
+              "totalSyncs"
+            )
+            .textContent =
+            `Total de sincronizaciones: ${userHistory.length}`;
+
+
+          // ====================================
+          // SIN HISTORIAL
+          // ====================================
+
+          if (
+            userHistory.length ===
+            0
+          ) {
+
+
+            historyList.innerHTML = `
+
+              <div class="no-history">
+
+                📭
+
+                <br><br>
+
+                Esta persona todavía
+                no tiene sincronizaciones
+                registradas.
+
+              </div>
+
+            `;
+
+
+            return;
+
+          }
+
+
+          // ====================================
+          // MOSTRAR REGISTROS
+          // ====================================
+
+          userHistory.forEach(
+            (entry) => {
+
+
+              const item =
+                document.createElement(
+                  "div"
+                );
+
+
+              item.className =
+                "history-item";
+
+
+              item.innerHTML = `
+
+                <div class="history-date">
+
+                  📅 ${entry.date}
+
+                </div>
+
+
+                <div class="history-row">
+
+                  <span>
+                    🟡 Inicio
+                  </span>
+
+                  <span>
+                    ${entry.startedAt}
+                  </span>
+
+                </div>
+
+
+                <div class="history-row">
+
+                  <span>
+                    🟢 Final
+                  </span>
+
+                  <span>
+                    ${entry.finishedAt}
+                  </span>
+
+                </div>
+
+
+                <div class="history-row">
+
+                  <span>
+                    ⏱️ Duración
+                  </span>
+
+                  <span
+                    class="history-duration">
+
+                    ${formatDuration(
+                      entry.durationSeconds
+                    )}
+
+                  </span>
+
+                </div>
+
+              `;
+
+
+              historyList.appendChild(
+                item
+              );
+
+            }
+          );
+
+        }
+      );
+
+    }
+
+
+    // ==========================================
+    // CONVERTIR REGISTRO A TIMESTAMP
+    // ==========================================
+
+    function convertEntryToTimestamp(
+      entry
+    ) {
+
+
+      /*
+       * Intentamos convertir
+       * la fecha y hora guardadas.
+       */
+
+      const parts =
+        entry.date.split("/");
+
+
+      if (
+        parts.length !== 3
+      ) {
+
+        return 0;
+
+      }
+
+
+      const day =
+        Number(parts[0]);
+
+
+      const month =
+        Number(parts[1]) - 1;
+
+
+      const year =
+        Number(parts[2]);
+
+
+      const timeParts =
+        entry.startedAt
+          .split(":");
+
+
+      let hour =
+        Number(
+          timeParts[0]
+        );
+
+
+      const minute =
+        Number(
+          timeParts[1] || 0
+        );
+
+
+      const second =
+        Number(
+          timeParts[2] || 0
+        );
+
+
+      /*
+       * Los navegadores pueden
+       * devolver AM/PM dependiendo
+       * de la configuración regional.
+       */
+
+      const date =
+        new Date(
+          year,
+          month,
+          day,
+          hour,
+          minute,
+          second
+        );
+
+
+      return date.getTime();
 
     }
 
@@ -594,296 +1556,50 @@
     // CAMBIAR USUARIO
     // ==========================================
 
-    window.changeUser = function() {
-
-      localStorage.removeItem(
-        "bimUser"
-      );
+    window.changeUser =
+      function() {
 
 
-      currentUserId = null;
-
-      currentUserName = null;
-
-
-      document
-        .getElementById("app")
-        .classList.add("hidden");
-
-
-      document
-        .getElementById("userSelection")
-        .classList.remove("hidden");
-
-
-      document
-        .getElementById("userSelect")
-        .value = "";
-
-    };
-
-
-    // ==========================================
-    // MOSTRAR EQUIPO EN TIEMPO REAL
-    // ==========================================
-
-    onValue(teamRef, (snapshot) => {
-
-      const data =
-        snapshot.val() || {};
-
-
-      const teamList =
-        document.getElementById(
-          "teamList"
+        localStorage.removeItem(
+          "bimUser"
         );
 
 
-      teamList.innerHTML = "";
+        currentUserId =
+          null;
 
 
-      Object.keys(members).forEach(
-        (userId) => {
-
-          const member =
-            data[userId] || {
-
-              name:
-                members[userId],
-
-              status:
-                "available",
-
-              syncStarted:
-                null
-
-            };
+        currentUserName =
+          null;
 
 
-          const div =
-            document.createElement(
-              "div"
-            );
+        document
+          .getElementById(
+            "app"
+          )
+          .classList
+          .add("hidden");
 
 
-          div.className =
-            "member";
+        document
+          .getElementById(
+            "userSelection"
+          )
+          .classList
+          .remove("hidden");
 
 
-          const left =
-            document.createElement(
-              "div"
-            );
+        document
+          .getElementById(
+            "userSelect"
+          )
+          .value = "";
 
-
-          const name =
-            document.createElement(
-              "div"
-            );
-
-
-          name.className =
-            "member-name";
-
-
-          name.textContent =
-            member.name;
-
-
-          left.appendChild(name);
-
-
-          // ==================================
-          // TIMER
-          // ==================================
-
-          if (
-            member.status ===
-              "syncing" &&
-            member.syncStarted
-          ) {
-
-            const timer =
-              document.createElement(
-                "div"
-              );
-
-
-            timer.className =
-              "timer";
-
-
-            const updateTimer =
-              () => {
-
-                const seconds =
-                  Math.floor(
-                    (
-                      Date.now() -
-                      Number(
-                        member.syncStarted
-                      )
-                    ) / 1000
-                  );
-
-
-                timer.textContent =
-                  `⏱️ ${formatDuration(
-                    Math.max(
-                      0,
-                      seconds
-                    )
-                  )}`;
-
-              };
-
-
-            updateTimer();
-
-
-            setInterval(
-              updateTimer,
-              1000
-            );
-
-
-            left.appendChild(timer);
-
-          }
-
-
-          const status =
-            document.createElement(
-              "div"
-            );
-
-
-          status.className =
-            "status " +
-            (
-              member.status ===
-              "syncing"
-                ? "syncing"
-                : "available"
-            );
-
-
-          status.textContent =
-            member.status ===
-            "syncing"
-
-              ? "🟡 Sincronizando"
-
-              : "🟢 Disponible";
-
-
-          div.appendChild(left);
-
-          div.appendChild(status);
-
-
-          teamList.appendChild(div);
-
-        }
-      );
-
-    });
+      };
 
 
     // ==========================================
-    // MOSTRAR HISTORY
-    // ==========================================
-
-    onValue(historyRef, (snapshot) => {
-
-      const data =
-        snapshot.val() || {};
-
-
-      const historyList =
-        document.getElementById(
-          "historyList"
-        );
-
-
-      historyList.innerHTML = "";
-
-
-      const entries =
-        Object.values(data);
-
-
-      // Mostrar los más recientes primero
-
-      entries.reverse();
-
-
-      if (entries.length === 0) {
-
-        historyList.innerHTML = `
-
-          <p style="
-            text-align:center;
-            color:#6b7280;
-          ">
-            Todavía no hay registros.
-          </p>
-
-        `;
-
-        return;
-      }
-
-
-      entries.forEach((entry) => {
-
-        const div =
-          document.createElement(
-            "div"
-          );
-
-
-        div.className =
-          "history-item";
-
-
-        div.innerHTML = `
-
-          <div class="history-user">
-
-            👤 ${entry.user}
-
-          </div>
-
-          <div class="history-info">
-
-            📅 ${entry.date}<br>
-
-            🟡 Inicio:
-            ${entry.startedAt}<br>
-
-            🟢 Final:
-            ${entry.finishedAt}<br>
-
-            ⏱️ Duración:
-            ${formatDuration(
-              entry.durationSeconds
-            )}
-
-          </div>
-
-        `;
-
-
-        historyList.appendChild(div);
-
-      });
-
-    });
-
-
-    // ==========================================
-    // RECUPERAR USUARIO GUARDADO
+    // RECUPERAR USUARIO
     // ==========================================
 
     const savedUser =
@@ -892,11 +1608,15 @@
       );
 
 
-    if (savedUser &&
-        members[savedUser]) {
+    if (
+      savedUser &&
+      members[savedUser]
+    ) {
+
 
       currentUserId =
         savedUser;
+
 
       currentUserName =
         members[savedUser];
@@ -906,20 +1626,27 @@
         .getElementById(
           "userSelection"
         )
-        .classList.add("hidden");
+        .classList
+        .add("hidden");
 
 
       document
-        .getElementById("app")
-        .classList.remove("hidden");
+        .getElementById(
+          "app"
+        )
+        .classList
+        .remove("hidden");
 
 
       document
-        .getElementById("welcome")
+        .getElementById(
+          "welcome"
+        )
         .textContent =
         `Hola, ${currentUserName} 👋`;
 
     }
+
 
   </script>
 
