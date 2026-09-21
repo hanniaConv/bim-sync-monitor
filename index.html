@@ -1,518 +1,320 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIM Sync Monitor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <title>BIM Sync Monitor</title>
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #222;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        header {
-            background: #1f2937;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+    }
 
-        header h1 {
-            font-size: 24px;
-        }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 25px 20px;
+    }
 
-        header p {
-            margin-top: 5px;
-            color: #cbd5e1;
-        }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-        .container {
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 20px;
-        }
+    .header h1 {
+      margin-bottom: 8px;
+      font-size: 28px;
+    }
 
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
+    .header p {
+      margin: 0;
+      color: #6b7280;
+    }
 
-        h2 {
-            margin-bottom: 20px;
-        }
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
 
-        input {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
+    .card h2 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
 
-        button {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+    .user-button {
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #e5e7eb;
+      font-size: 17px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
 
-        .enter-button {
-            background: #2563eb;
-            color: white;
-        }
+    .user-button:hover {
+      background: #d1d5db;
+    }
 
-        .sync-button {
-            background: #f59e0b;
-            color: white;
-        }
+    .hidden {
+      display: none;
+    }
 
-        .finish-button {
-            background: #22c55e;
-            color: white;
-        }
+    .welcome {
+      text-align: center;
+      margin-bottom: 25px;
+    }
 
-        .logout-button {
-            background: #e5e7eb;
-            color: #374151;
-        }
+    .welcome h2 {
+      margin-bottom: 5px;
+    }
 
-        .status {
-            text-align: center;
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 10px;
-            background: #ecfdf5;
-            color: #15803d;
-            font-weight: bold;
-        }
+    .sync-button {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 12px;
+      background: #facc15;
+      color: #111827;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
 
-        .team-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
+    .finish-button {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 12px;
+      background: #22c55e;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-        .person {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #e5e7eb;
-            gap: 10px;
-        }
+    .team {
+      margin-top: 30px;
+    }
 
-        .person:last-child {
-            border-bottom: none;
-        }
+    .team h3 {
+      margin-bottom: 15px;
+    }
 
-        .person-name {
-            font-weight: bold;
-        }
+    .member {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .available {
-            color: #16a34a;
-        }
+    .status {
+      font-size: 14px;
+      font-weight: bold;
+    }
 
-        .syncing {
-            color: #d97706;
-        }
+    .available {
+      color: #16a34a;
+    }
 
-        .hidden {
-            display: none;
-        }
+    .syncing {
+      color: #ca8a04;
+    }
 
-        .welcome {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-    </style>
+    .change-user {
+      display: block;
+      margin: 20px auto 0;
+      background: none;
+      border: none;
+      color: #2563eb;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-    <h1>BIM Sync Monitor</h1>
-    <p>Electrical Project</p>
-</header>
+  <!-- PANTALLA DE SELECCIÓN -->
+  <div id="loginScreen" class="container">
 
-
-<!-- PANTALLA PARA PONER EL NOMBRE -->
-
-<div id="loginScreen" class="container">
+    <div class="header">
+      <h1>BIM Sync Monitor</h1>
+      <p>Electrical Project</p>
+    </div>
 
     <div class="card">
 
-        <h2>👋 Bienvenido</h2>
+      <h2>¿Quién eres?</h2>
 
-        <p style="margin-bottom: 15px;">
-            Escribe tu nombre para entrar al equipo.
-        </p>
+      <button class="user-button" onclick="selectUser('Hannia Marquez')">
+        👩🏻 Hannia Márquez
+      </button>
 
-        <input
-            type="text"
-            id="nameInput"
-            placeholder="Tu nombre"
-            maxlength="30"
-        >
+      <button class="user-button" onclick="selectUser('Ángel Cruz')">
+        👨🏻 Angel Cruz
+      </button>
 
-        <button class="enter-button" onclick="enterTeam()">
-            ENTRAR
-        </button>
+      <button class="user-button" onclick="selectUser('Atonella Tarantini')">
+        👩🏻 Antonella Tarantini
+      </button>
+
+      <button class="user-button" onclick="selectUser('Carlos Ramirez')">
+        👨🏻 Carlos Ramírez
+      </button>
+        
+        <button class="user-button" onclick="selectUser('Arianna Nuñez')">
+        👩🏻 Arianna Nuñez
+      </button>
+        
+        <button class="user-button" onclick="selectUser('Grace Martinez')">
+        👩🏻 Grace Martínez
+      </button>
+        
+        <button class="user-button" onclick="selectUser('Cynthia Cortes')">
+        👩🏻 Cynthia Cortés
+      </button>
+        
+        <button class="user-button" onclick="selectUser('Ximena Arrambide')">
+        👩🏻 Ximena Arrambide
+      </button>
+
+        <button class="user-button" onclick="selectUser('Valeria Garza')">
+        👩🏻 Valeria Garza
+      </button>
+
+        <button class="user-button" onclick="selectUser('Alejandro Ulla')">
+        👨🏻 Alejandro Ulla
+      </button>
+
+        <button class="user-button" onclick="selectUser('Gabriel Martinez')">
+        👨🏻 Gabriel Martínez
+      </button>
+
+        <button class="user-button" onclick="selectUser('Mauricio Mireles')">
+        👨🏻 Mauricio Mireles
+      </button>
 
     </div>
 
-</div>
+  </div>
 
 
-<!-- PANTALLA PRINCIPAL -->
+  <!-- APLICACIÓN -->
+  <div id="appScreen" class="container hidden">
 
-<div id="appScreen" class="container hidden">
+    <div class="header">
+      <h1>BIM Sync Monitor</h1>
+      <p>Electrical Project</p>
+    </div>
 
     <div class="card">
 
-        <div id="welcomeMessage" class="welcome">
-            Hola 👋
+      <div class="welcome">
+        <h2 id="userName"></h2>
+        <p>Selecciona tu estado</p>
+      </div>
+
+      <button class="sync-button">
+        🟡 ESTOY SINCRONIZANDO
+      </button>
+
+      <button class="finish-button">
+        🟢 YA TERMINÉ
+      </button>
+
+      <div class="team">
+
+        <h3>Equipo</h3>
+
+        <div class="member">
+          <span>Hannia</span>
+          <span class="status available">Disponible</span>
         </div>
 
-        <button class="sync-button" onclick="startSync()">
-            🟡 ESTOY SINCRONIZANDO
-        </button>
-
-        <button class="finish-button" onclick="finishSync()">
-            🟢 YA TERMINÉ
-        </button>
-
-        <div id="myStatus" class="status">
-            🟢 Disponible
+        <div class="member">
+          <span>Carlos</span>
+          <span class="status available">Disponible</span>
         </div>
 
-        <button class="logout-button" onclick="logout()">
-            Cambiar nombre
-        </button>
+        <div class="member">
+          <span>Andrea</span>
+          <span class="status available">Disponible</span>
+        </div>
+
+        <div class="member">
+          <span>Luis</span>
+          <span class="status available">Disponible</span>
+        </div>
+
+      </div>
+
+      <button class="change-user" onclick="changeUser()">
+        Cambiar usuario
+      </button>
 
     </div>
 
-
-    <!-- EQUIPO -->
-
-    <div class="card">
-
-        <div class="team-title">
-            👥 Equipo
-        </div>
-
-        <div id="teamList">
-            Cargando equipo...
-        </div>
-
-    </div>
-
-</div>
+  </div>
 
 
-<script type="module">
+  <script>
 
-    import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    function selectUser(name) {
 
-    import {
-        getDatabase,
-        ref,
-        set,
-        onValue,
-        remove
-    }
-    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+      localStorage.setItem("bimUser", name);
 
+      document.getElementById("loginScreen").classList.add("hidden");
 
-    // FIREBASE
+      document.getElementById("appScreen").classList.remove("hidden");
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
-        authDomain: "bim-sync-monitor.firebaseapp.com",
-        databaseURL: "https://bim-sync-monitor-default-rtdb.firebaseio.com",
-        projectId: "bim-sync-monitor",
-        storageBucket: "bim-sync-monitor.firebasestorage.app",
-        messagingSenderId: "853443748101",
-        appId: "1:853443748101:web:c391d643ddd1916aaf176c"
-    };
-
-
-    const app = initializeApp(firebaseConfig);
-
-    const database = getDatabase(app);
-
-
-    // USUARIO ACTUAL
-
-    let currentUser = localStorage.getItem("bimUser");
-
-
-    // MOSTRAR PANTALLA CORRESPONDIENTE
-
-    if (currentUser) {
-
-        showApp();
-
+      document.getElementById("userName").textContent = "Hola, " + name;
     }
 
 
-    // ENTRAR AL EQUIPO
+    function changeUser() {
 
-    window.enterTeam = function() {
+      localStorage.removeItem("bimUser");
 
-        const input =
-            document.getElementById("nameInput");
+      document.getElementById("appScreen").classList.add("hidden");
 
-        const name =
-            input.value.trim();
-
-
-        if (!name) {
-
-            alert("Escribe tu nombre.");
-
-            return;
-        }
-
-
-        currentUser = name;
-
-        localStorage.setItem("bimUser", name);
-
-        showApp();
-
-    };
-
-
-    // MOSTRAR APP
-
-    function showApp() {
-
-        document
-            .getElementById("loginScreen")
-            .classList.add("hidden");
-
-        document
-            .getElementById("appScreen")
-            .classList.remove("hidden");
-
-        document
-            .getElementById("welcomeMessage")
-            .innerHTML =
-            "Hola, " + currentUser + " 👋";
-
-
-        const userRef =
-            ref(database, "team/" + safeKey(currentUser));
-
-
-        set(userRef, {
-
-            name: currentUser,
-
-            status: "available",
-
-            syncStarted: ""
-
-        });
-
+      document.getElementById("loginScreen").classList.remove("hidden");
     }
 
 
-    // CONVERTIR NOMBRE EN UNA CLAVE SEGURA
+    // Mantener al usuario seleccionado
+    window.onload = function() {
 
-    function safeKey(name) {
+      const savedUser = localStorage.getItem("bimUser");
 
-        return name
-            .toLowerCase()
-            .replace(/[.#$[\]]/g, "")
-            .replace(/\s+/g, "_");
+      if (savedUser) {
 
-    }
+        document.getElementById("loginScreen").classList.add("hidden");
 
+        document.getElementById("appScreen").classList.remove("hidden");
 
-    // COMENZAR SINCRONIZACIÓN
-
-    window.startSync = function() {
-
-        const userRef =
-            ref(database, "team/" + safeKey(currentUser));
-
-
-        set(userRef, {
-
-            name: currentUser,
-
-            status: "syncing",
-
-            syncStarted:
-                new Date().toLocaleTimeString()
-
-        });
-
-
-        document
-            .getElementById("myStatus")
-            .innerHTML =
-            "🟡 Sincronizando...";
-
-
-        document
-            .getElementById("myStatus")
-            .style.background =
-            "#fffbeb";
-
-
-        document
-            .getElementById("myStatus")
-            .style.color =
-            "#d97706";
+        document.getElementById("userName").textContent =
+          "Hola, " + savedUser;
+      }
 
     };
 
-
-    // TERMINAR SINCRONIZACIÓN
-
-    window.finishSync = function() {
-
-        const userRef =
-            ref(database, "team/" + safeKey(currentUser));
-
-
-        set(userRef, {
-
-            name: currentUser,
-
-            status: "available",
-
-            syncStarted: ""
-
-        });
-
-
-        document
-            .getElementById("myStatus")
-            .innerHTML =
-            "🟢 Disponible";
-
-
-        document
-            .getElementById("myStatus")
-            .style.background =
-            "#ecfdf5";
-
-
-        document
-            .getElementById("myStatus")
-            .style.color =
-            "#15803d";
-
-    };
-
-
-    // CAMBIAR DE USUARIO
-
-    window.logout = function() {
-
-        localStorage.removeItem("bimUser");
-
-        location.reload();
-
-    };
-
-
-    // ESCUCHAR CAMBIOS DEL EQUIPO
-
-    const teamRef =
-        ref(database, "team");
-
-
-    onValue(teamRef, (snapshot) => {
-
-        const data = snapshot.val();
-
-        const teamList =
-            document.getElementById("teamList");
-
-
-        teamList.innerHTML = "";
-
-
-        if (!data) {
-
-            teamList.innerHTML =
-                "No hay integrantes todavía.";
-
-            return;
-
-        }
-
-
-        Object.values(data).forEach(person => {
-
-            const div =
-                document.createElement("div");
-
-
-            div.className = "person";
-
-
-            if (person.status === "syncing") {
-
-                div.innerHTML = `
-
-                    <span class="person-name">
-                        ${person.name}
-                    </span>
-
-                    <span class="syncing">
-                        🟡 Sincronizando
-                    </span>
-
-                `;
-
-            } else {
-
-                div.innerHTML = `
-
-                    <span class="person-name">
-                        ${person.name}
-                    </span>
-
-                    <span class="available">
-                        🟢 Disponible
-                    </span>
-
-                `;
-
-            }
-
-
-            teamList.appendChild(div);
-
-        });
-
-    });
-
-</script>
+  </script>
 
 </body>
 </html>
