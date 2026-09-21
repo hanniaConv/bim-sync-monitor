@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIM Sync Monitor</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #1f2937;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        header p {
+            margin-top: 5px;
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .user-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .sync-button {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .finish-button {
+            background: #22c55e;
+            color: white;
+        }
+
+        .status {
+            text-align: center;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 10px;
+            background: #ecfdf5;
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .team-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .person {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .person:last-child {
+            border-bottom: none;
+        }
+
+        .person-name {
+            font-weight: bold;
+        }
+
+        .available {
+            color: #16a34a;
+        }
+
+        .syncing {
+            color: #d97706;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>BIM Sync Monitor</h1>
+        <p>Electrical Project</p>
+    </header>
+
+    <div class="container">
+
+        <div class="card">
+
+            <div class="user-name">
+                👤 Hannia
+            </div>
+
+            <button class="sync-button" onclick="startSync()">
+                🟡 ESTOY SINCRONIZANDO
+            </button>
+
+            <button class="finish-button" onclick="finishSync()">
+                🟢 YA TERMINÉ
+            </button>
+
+            <div id="myStatus" class="status">
+                🟢 Disponible
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="team-title">
+                👥 Equipo
+            </div>
+
+            <div class="person">
+                <span class="person-name">Hannia</span>
+                <span id="hanniaStatus" class="available">
+                    🟢 Disponible
+                </span>
+            </div>
+
+            <div class="person">
+                <span class="person-name">Carlos</span>
+                <span class="syncing">
+                    🟡 Sincronizando
+                </span>
+            </div>
+
+            <div class="person">
+                <span class="person-name">Andrea</span>
+                <span class="available">
+                    🟢 Disponible
+                </span>
+            </div>
+
+            <div class="person">
+                <span class="person-name">Luis</span>
+                <span class="available">
+                    🟢 Disponible
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        function startSync() {
+
+            document.getElementById("myStatus").innerHTML =
+                "🟡 Sincronizando...";
+
+            document.getElementById("myStatus").style.background =
+                "#fffbeb";
+
+            document.getElementById("myStatus").style.color =
+                "#d97706";
+
+            document.getElementById("hanniaStatus").innerHTML =
+                "🟡 Sincronizando";
+
+            document.getElementById("hanniaStatus").className =
+                "syncing";
+        }
+
+        function finishSync() {
+
+            document.getElementById("myStatus").innerHTML =
+                "🟢 Disponible";
+
+            document.getElementById("myStatus").style.background =
+                "#ecfdf5";
+
+            document.getElementById("myStatus").style.color =
+                "#15803d";
+
+            document.getElementById("hanniaStatus").innerHTML =
+                "🟢 Disponible";
+
+            document.getElementById("hanniaStatus").className =
+                "available";
+        }
+
+    </script>
+
+</body>
+</html>
