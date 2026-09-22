@@ -1,3139 +1,1231 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BIM Sync Monitor</title>
 
-
   <style>
-
     * {
       box-sizing: border-box;
     }
 
-
     body {
-
       margin: 0;
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+      font-family: Arial, sans-serif;
       background: #f4f6f8;
-
-      color: #222;
-
+      color: #1f2937;
     }
-
 
     header {
-
       background: #1f2937;
-
       color: white;
-
-      padding: 20px;
-
+      padding: 24px;
       text-align: center;
-
     }
-
 
     header h1 {
-
       margin: 0;
-
-      font-size: 25px;
-
+      font-size: 28px;
     }
-
 
     header p {
-
-      margin: 6px 0 0;
-
+      margin: 8px 0 0;
       opacity: 0.8;
-
-      font-size: 14px;
-
     }
-
 
     .container {
-
-      max-width: 1100px;
-
-      margin: 25px auto;
-
-      padding: 0 15px;
-
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
     }
-
 
     .card {
-
       background: white;
-
       border-radius: 14px;
-
-      padding: 20px;
-
+      padding: 22px;
       margin-bottom: 20px;
-
-      box-shadow:
-        0 3px 12px rgba(0,0,0,0.08);
-
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
     }
 
-
-    .hidden {
-
-      display: none !important;
-
-    }
-
-
-    h2 {
-
+    .card h2 {
       margin-top: 0;
-
+      margin-bottom: 18px;
+      font-size: 21px;
     }
-
-
-    /* =========================
-       SELECCIÓN DE USUARIO
-    ========================= */
-
-    .user-grid {
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(
-          auto-fit,
-          minmax(210px, 1fr)
-        );
-
-      gap: 12px;
-
-      margin-top: 20px;
-
-    }
-
-
-    .user-button {
-
-      border: none;
-
-      background: #eef2f7;
-
-      padding: 16px;
-
-      border-radius: 10px;
-
-      cursor: pointer;
-
-      font-size: 15px;
-
-      font-weight: bold;
-
-      transition: 0.2s;
-
-    }
-
-
-    .user-button:hover {
-
-      background: #dbe3ec;
-
-      transform:
-        translateY(-1px);
-
-    }
-
-
-    /* =========================
-       BOTONES
-    ========================= */
-
-    button {
-
-      border: none;
-
-      border-radius: 9px;
-
-      padding: 12px 18px;
-
-      cursor: pointer;
-
-      font-size: 14px;
-
-      font-weight: bold;
-
-      transition: 0.2s;
-
-    }
-
-
-    button:hover {
-
-      opacity: 0.9;
-
-    }
-
-
-    .sync-button {
-
-      background: #facc15;
-
-      color: #111;
-
-    }
-
-
-    .finish-button {
-
-      background: #22c55e;
-
-      color: white;
-
-    }
-
-
-    .fail-button {
-
-      background: #ef4444;
-
-      color: white;
-
-    }
-
-
-    .change-button {
-
-      background: #6b7280;
-
-      color: white;
-
-    }
-
-
-    .back-button {
-
-      background: #374151;
-
-      color: white;
-
-      margin-bottom: 15px;
-
-    }
-
-
-    .external-button {
-
-      background: #f97316;
-
-      color: white;
-
-      width: 100%;
-
-    }
-
-
-    .external-stop-button {
-
-      background: #16a34a;
-
-      color: white;
-
-      width: 100%;
-
-    }
-
-
-    /* =========================
-       USUARIO ACTUAL
-    ========================= */
 
     .current-user {
-
-      background: #eef2ff;
-
-      border-radius: 10px;
-
-      padding: 12px 15px;
-
+      font-size: 18px;
+      font-weight: bold;
       margin-bottom: 15px;
-
     }
 
-
-    .current-user strong {
-
-      color: #3730a3;
-
+    button,
+    select {
+      border: none;
+      border-radius: 8px;
+      padding: 11px 16px;
+      font-size: 14px;
+      cursor: pointer;
     }
 
+    select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      background: white;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
 
     .action-buttons {
-
       display: flex;
-
       flex-wrap: wrap;
-
       gap: 10px;
-
-      margin-top: 15px;
-
     }
 
-
-    /* =========================
-       ALERTA EXTERNA
-    ========================= */
-
-    .external-alert {
-
-      border-left:
-        6px solid #ef4444;
-
-      background:
-        #fff1f2;
-
+    .btn-success {
+      background: #16a34a;
     }
 
-
-    .external-alert.active {
-
-      animation:
-        alertPulse 1.5s infinite;
-
+    .btn-danger {
+      background: #dc2626;
     }
 
-
-    @keyframes alertPulse {
-
-      0% {
-        box-shadow:
-          0 0 0 0
-          rgba(239,68,68,0.25);
-      }
-
-      70% {
-        box-shadow:
-          0 0 0 10px
-          rgba(239,68,68,0);
-      }
-
-      100% {
-        box-shadow:
-          0 0 0 0
-          rgba(239,68,68,0);
-      }
-
+    .btn-secondary {
+      background: #6b7280;
     }
 
-
-    .alert-title {
-
-      color: #dc2626;
-
-      font-size: 20px;
-
-      font-weight: bold;
-
-      margin-bottom: 8px;
-
+    .btn-warning {
+      background: #d97706;
     }
-
-
-    .alert-text {
-
-      color: #7f1d1d;
-
-      margin-bottom: 15px;
-
-    }
-
-
-    .alert-meta {
-
-      font-size: 13px;
-
-      color: #991b1b;
-
-      margin-bottom: 15px;
-
-    }
-
-
-    /* =========================
-       RESUMEN
-    ========================= */
-
-    .summary-title {
-
-      margin-bottom: 12px;
-
-    }
-
-
-    .summary-section {
-
-      margin-bottom: 20px;
-
-    }
-
-
-    .summary-section:last-child {
-
-      margin-bottom: 0;
-
-    }
-
-
-    .summary-label {
-
-      font-size: 13px;
-
-      font-weight: bold;
-
-      color: #6b7280;
-
-      text-transform: uppercase;
-
-      margin-bottom: 8px;
-
-    }
-
 
     .summary-grid {
-
       display: grid;
-
-      grid-template-columns:
-        repeat(2, 1fr);
-
-      gap: 12px;
-
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
     }
 
-
-    .summary-box {
-
+    .summary-item {
       background: #f8fafc;
-
+      padding: 18px;
       border-radius: 10px;
-
-      padding: 16px;
-
-      border:
-        1px solid #e5e7eb;
-
-    }
-
-
-    .summary-number {
-
-      font-size: 25px;
-
-      font-weight: bold;
-
-      margin-top: 5px;
-
-    }
-
-
-    .summary-text {
-
-      font-size: 13px;
-
-      color: #6b7280;
-
-    }
-
-
-    /* =========================
-       RESULTADOS
-    ========================= */
-
-    .result-grid {
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(2, 1fr);
-
-      gap: 12px;
-
-    }
-
-
-    .success-box {
-
-      background: #f0fdf4;
-
-      border:
-        1px solid #bbf7d0;
-
-      border-radius: 10px;
-
-      padding: 15px;
-
-    }
-
-
-    .failed-box {
-
-      background: #fff1f2;
-
-      border:
-        1px solid #fecaca;
-
-      border-radius: 10px;
-
-      padding: 15px;
-
-    }
-
-
-    /* =========================
-       SINCRONIZANDO AHORA
-    ========================= */
-
-    .syncing-section {
-
-      border-left:
-        5px solid #ef4444;
-
-    }
-
-
-    .syncing-list {
-
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 10px;
-
-    }
-
-
-    .syncing-person {
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      background: #fff5f5;
-
-      border:
-        1px solid #fecaca;
-
-      border-radius: 10px;
-
-      padding: 14px 16px;
-
-    }
-
-
-    .syncing-person-info {
-
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 4px;
-
-    }
-
-
-    .syncing-name {
-
-      font-weight: bold;
-
-      font-size: 15px;
-
-    }
-
-
-    .syncing-status {
-
-      font-size: 12px;
-
-      color: #dc2626;
-
-    }
-
-
-    .syncing-time {
-
-      font-size: 18px;
-
-      font-weight: bold;
-
-      color: #dc2626;
-
-      white-space: nowrap;
-
-    }
-
-
-    .nobody-syncing {
-
-      background: #f0fdf4;
-
-      border:
-        1px solid #bbf7d0;
-
-      color: #166534;
-
-      padding: 15px;
-
-      border-radius: 10px;
-
       text-align: center;
-
-      font-size: 14px;
-
     }
 
-
-    /* =========================
-       EQUIPO
-    ========================= */
+    .summary-item strong {
+      display: block;
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
 
     .team-grid {
-
       display: grid;
-
-      grid-template-columns:
-        repeat(
-          auto-fit,
-          minmax(240px, 1fr)
-        );
-
-      gap: 12px;
-
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 15px;
     }
-
 
     .team-member {
-
-      background: #f8fafc;
-
-      border:
-        1px solid #e5e7eb;
-
+      border: 1px solid #e5e7eb;
       border-radius: 12px;
-
-      padding: 15px;
-
+      padding: 18px;
+      background: #fafafa;
       cursor: pointer;
-
-      transition: 0.2s;
-
     }
-
 
     .team-member:hover {
-
-      transform:
-        translateY(-2px);
-
-      box-shadow:
-        0 4px 10px
-        rgba(0,0,0,0.08);
-
+      background: #f3f4f6;
     }
 
-
-    .member-name {
-
+    .team-name {
       font-weight: bold;
-
+      font-size: 17px;
       margin-bottom: 8px;
-
     }
 
-
-    .member-status {
-
-      font-size: 13px;
-
+    .status {
+      font-weight: bold;
+      margin-bottom: 8px;
     }
-
 
     .available {
-
       color: #16a34a;
-
     }
-
 
     .syncing {
+      color: #2563eb;
+    }
 
+    .failed {
       color: #dc2626;
-
-      font-weight: bold;
-
-    }
-
-
-    .member-timer {
-
-      margin-top: 8px;
-
-      font-size: 14px;
-
-      font-weight: bold;
-
-    }
-
-
-    /* =========================
-       HISTORIAL
-    ========================= */
-
-    .history-summary {
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(4, 1fr);
-
-      gap: 12px;
-
-      margin: 15px 0;
-
-    }
-
-
-    .history-box {
-
-      background: #f8fafc;
-
-      border:
-        1px solid #e5e7eb;
-
-      padding: 15px;
-
-      border-radius: 10px;
-
-    }
-
-
-    .history-box strong {
-
-      display: block;
-
-      font-size: 22px;
-
-      margin-top: 5px;
-
-    }
-
-
-    .history-list {
-
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 10px;
-
-    }
-
-
-    .history-item {
-
-      background: #f8fafc;
-
-      border:
-        1px solid #e5e7eb;
-
-      border-radius: 10px;
-
-      padding: 15px;
-
-    }
-
-
-    .history-item.success {
-
-      border-left:
-        4px solid #22c55e;
-
-    }
-
-
-    .history-item.failed {
-
-      border-left:
-        4px solid #ef4444;
-
-    }
-
-
-    .history-date {
-
-      font-weight: bold;
-
-      margin-bottom: 8px;
-
-    }
-
-
-    .history-details {
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
-      gap: 8px;
-
-      font-size: 13px;
-
-    }
-
-
-    .history-detail {
-
-      background: white;
-
-      padding: 9px;
-
-      border-radius: 7px;
-
-    }
-
-
-    .history-detail span {
-
-      display: block;
-
-      color: #6b7280;
-
-      font-size: 11px;
-
-      margin-bottom: 3px;
-
-    }
-
-
-    .history-result {
-
-      margin-top: 10px;
-
-      font-weight: bold;
-
-    }
-
-
-    .history-comment {
-
-      margin-top: 8px;
-
-      padding: 10px;
-
-      background: #fff1f2;
-
-      border-radius: 7px;
-
-      color: #991b1b;
-
-      font-size: 13px;
-
-    }
-
-
-    .no-history {
-
-      background: #f9fafb;
-
-      border:
-        1px solid #e5e7eb;
-
-      border-radius: 10px;
-
-      padding: 20px;
-
-      text-align: center;
-
-      color: #6b7280;
-
-    }
-
-
-    /* =========================
-       MODAL
-    ========================= */
-
-    .modal-overlay {
-
-      position: fixed;
-
-      inset: 0;
-
-      background:
-        rgba(0,0,0,0.45);
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      padding: 20px;
-
-      z-index: 1000;
-
-    }
-
-
-    .modal {
-
-      background: white;
-
-      width: 100%;
-
-      max-width: 450px;
-
-      border-radius: 15px;
-
-      padding: 22px;
-
-      box-shadow:
-        0 10px 30px
-        rgba(0,0,0,0.2);
-
-    }
-
-
-    .modal h3 {
-
-      margin-top: 0;
-
-    }
-
-
-    .modal textarea {
-
-      width: 100%;
-
-      min-height: 100px;
-
-      resize: vertical;
-
-      padding: 12px;
-
-      border:
-        1px solid #d1d5db;
-
-      border-radius: 8px;
-
-      font-family: inherit;
-
-      font-size: 14px;
-
-      margin: 10px 0 15px;
-
-    }
-
-
-    .modal-buttons {
-
-      display: flex;
-
-      gap: 10px;
-
-      justify-content: flex-end;
-
-    }
-
-
-    .cancel-button {
-
-      background: #e5e7eb;
-
-      color: #111827;
-
-    }
-
-
-
-    /* =========================
-       PROMEDIOS Y FILTROS
-    ========================= */
-
-    .average-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 15px;
-    }
-
-    .average-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .average-person {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      border-radius: 9px;
-      padding: 11px 13px;
-    }
-
-    .average-person-name {
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .average-person-value {
-      font-weight: bold;
-      font-size: 14px;
-      white-space: nowrap;
-    }
-
-    .history-filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: end;
-      margin: 15px 0;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .filter-group label {
-      font-size: 12px;
-      font-weight: bold;
-      color: #6b7280;
-    }
-
-    .filter-group select,
-    .filter-group input {
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      padding: 10px;
-      font-family: inherit;
-      font-size: 14px;
-      background: white;
-    }
-
-    .filtered-history-summary {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 15px;
     }
 
     .last-sync {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid #e5e7eb;
-      font-size: 12px;
-      color: #6b7280;
-      line-height: 1.5;
-    }
-
-    .last-sync strong {
-      color: #374151;
-    }
-
-    .no-data {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 9px;
-      padding: 12px;
-      text-align: center;
-      color: #6b7280;
       font-size: 13px;
+      color: #6b7280;
+      margin-top: 6px;
     }
 
-    /* =========================
-       RESPONSIVE
-    ========================= */
-
-    @media (max-width: 700px) {
-
-      .summary-grid {
-
-        grid-template-columns: 1fr;
-
-      }
-
-
-      .result-grid {
-
-        grid-template-columns: 1fr;
-
-      }
-
-
-      .history-summary {
-
-        grid-template-columns:
-          repeat(2, 1fr);
-
-      }
-
-
-      .history-details {
-
-        grid-template-columns: 1fr;
-
-      }
-
+    .duration {
+      font-size: 13px;
+      color: #6b7280;
     }
 
+    .history-item {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 12px 0;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-weight: bold;
+    }
+
+    .history-details {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .external-alert {
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      color: #9a3412;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 18px;
+    }
+
+    .external-alert strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 14px;
+      padding: 25px;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .filter-row select {
+      flex: 1;
+      min-width: 150px;
+      margin-bottom: 0;
+    }
+
+    .filter-row button {
+      background: #6b7280;
+    }
+
+    .person-history-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-duration {
+      font-weight: bold;
+      color: #2563eb;
+    }
 
     @media (max-width: 600px) {
-
-      header h1 {
-
-        font-size: 21px;
-
+      .action-buttons {
+        flex-direction: column;
       }
 
-
-      .action-buttons button {
-
+      button {
         width: 100%;
-
       }
 
-
-      .syncing-person {
-
-        align-items: flex-start;
-
-        gap: 10px;
-
+      .history-header {
+        flex-direction: column;
       }
-
-
-      .syncing-time {
-
-        font-size: 16px;
-
-      }
-
     }
-
   </style>
-
 </head>
-
 
 <body>
 
-
-<header>
-
-  <h1>
-    🔄 BIM Sync Monitor
-  </h1>
-
-  <p>
-    Monitor de sincronización del equipo
-  </p>
-
-</header>
-
-
-<div class="container">
+  <!-- =========================
+       HEADER
+  ========================== -->
+  <header>
+    <h1>🔄 BIM Sync Monitor</h1>
+    <p>Monitor de sincronización del equipo</p>
+  </header>
 
 
   <!-- =========================
-       SELECCIÓN
-  ========================= -->
+       CONTENIDO PRINCIPAL
+  ========================== -->
+  <div class="container">
 
-  <div
-    id="selectionScreen"
-    class="card"
-  >
+    <!-- =========================
+         SELECCIÓN DE USUARIO
+    ========================== -->
+    <div id="userSelection" class="card">
+      <h2>👤 Selecciona tu usuario</h2>
 
-    <h2>
-      👤 Selecciona tu nombre
-    </h2>
+      <select id="userSelect">
+        <option value="">Selecciona tu nombre...</option>
+      </select>
 
-    <p>
-      Selecciona tu nombre para comenzar.
-    </p>
-
-    <div
-      id="userGrid"
-      class="user-grid"
-    ></div>
-
-  </div>
+      <button onclick="selectUser()">
+        Continuar
+      </button>
+    </div>
 
 
-
-  <!-- =========================
-       APLICACIÓN
-  ========================= -->
-
-  <div
-    id="appScreen"
-    class="hidden"
-  >
+    <!-- =========================
+         APP
+    ========================== -->
+    <div id="app" class="hidden">
 
 
-    <!-- USUARIO -->
+      <!-- =========================
+           1. USUARIO
+      ========================== -->
+      <div class="card">
 
-    <div class="card">
+        <h2>👤 Usuario</h2>
 
-      <div class="current-user">
-
-        👤 Usuario actual:
-
-        <strong
-          id="currentUserName"
-        ></strong>
-
-      </div>
-
-
-      <div class="action-buttons">
+        <div id="currentUser" class="current-user">
+          -
+        </div>
 
         <button
-          class="sync-button"
-          onclick="startSync()"
-        >
-          🟡 ESTOY SINCRONIZANDO
-        </button>
-
-
-        <button
-          class="finish-button"
-          onclick="showSuccessModal()"
-        >
-          🟢 YA TERMINÉ
-        </button>
-
-
-        <button
-          class="fail-button"
-          onclick="showFailModal()"
-        >
-          🔴 SINCRONIZACIÓN FALLIDA
-        </button>
-
-
-        <button
-          class="change-button"
-          onclick="changeUser()"
-        >
+          class="btn-secondary"
+          onclick="changeUser()">
           Cambiar usuario
         </button>
 
       </div>
 
-    </div>
 
+      <!-- =========================
+           2. SINCRONIZAR
+      ========================== -->
+      <div class="card">
 
+        <h2>🔄 Sincronizar</h2>
 
-    <!-- =========================
-         ALERTA EQUIPO EXTERNO
-    ========================= -->
+        <div class="action-buttons">
 
-    <div
-      id="externalAlertCard"
-      class="card external-alert hidden"
-    >
+          <button
+            class="btn-success"
+            onclick="startSync()">
+            ESTOY SINCRONIZANDO
+          </button>
 
-      <div class="alert-title">
-        ⚠️ ALERTA DE SINCRONIZACIÓN
-      </div>
+          <button
+            class="btn-secondary"
+            onclick="finishSync(true)">
+            YA TERMINÉ
+          </button>
 
-      <div class="alert-text">
+          <button
+            class="btn-danger"
+            onclick="finishSync(false)">
+            SINCRONIZACIÓN FALLIDA
+          </button>
 
-        Otro equipo está sincronizando.
-
-        <strong>
-          Evita sincronizar tu modelo
-          hasta que termine.
-        </strong>
-
-      </div>
-
-
-      <div
-        id="externalAlertMeta"
-        class="alert-meta"
-      ></div>
-
-
-      <button
-        id="stopExternalAlertButton"
-        class="external-stop-button"
-        onclick="stopExternalSync()"
-      >
-        🟢 YA NO ESTÁN SINCRONIZANDO
-      </button>
-
-    </div>
-
-
-
-    <!-- =========================
-         BOTÓN PARA AVISAR
-    ========================= -->
-
-    <div class="card">
-
-      <h2>
-        ⚠️ ¿Otro equipo está sincronizando?
-      </h2>
-
-      <p
-        style="
-          color:#6b7280;
-          font-size:14px;
-        "
-      >
-        Activa esta alerta para avisar
-        inmediatamente a todo tu equipo.
-      </p>
-
-
-      <button
-        id="externalStartButton"
-        class="external-button"
-        onclick="startExternalSync()"
-      >
-        ⚠️ AVISAR QUE OTRO EQUIPO ESTÁ SINCRONIZANDO
-      </button>
-
-    </div>
-
-
-
-    <!-- =========================
-         RESUMEN
-    ========================= -->
-
-    <div class="card">
-
-      <h2>
-        📊 Resumen
-      </h2>
-
-
-      <!-- HOY -->
-
-      <div class="summary-section">
-
-        <div class="summary-label">
-          Hoy
         </div>
 
 
-        <div class="summary-grid">
+        <!-- SINCRONIZACIÓN EXTERNA -->
+        <div
+          id="externalAlertCard"
+          class="external-alert hidden">
 
-          <div class="summary-box">
+          <strong>
+            ⚠️ Sincronización externa detectada
+          </strong>
 
-            <div class="summary-text">
-              🔄 Sincronizaciones
-            </div>
+          <span id="externalAlertText">
+            -
+          </span>
 
-            <div
-              id="todaySyncCount"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
+        </div>
 
 
-          <div class="summary-box">
+        <div style="margin-top: 15px;">
 
-            <div class="summary-text">
-              ⏱️ Tiempo total sincronizando
-            </div>
-
-            <div
-              id="todayTotalTime"
-              class="summary-number"
-            >
-              0 s
-            </div>
-
-          </div>
+          <button
+            class="btn-warning"
+            onclick="reportExternalSync()">
+            ⚠️ REPORTAR SINCRONIZACIÓN EXTERNA
+          </button>
 
         </div>
 
       </div>
 
 
+      <!-- =========================
+           3. SINCRONIZANDO AHORA
+      ========================== -->
+      <div class="card">
 
-      <!-- RESULTADOS HOY -->
+        <h2>🔵 Sincronizando ahora</h2>
 
-      <div class="summary-section">
-
-        <div class="summary-label">
-          Resultado de hoy
-        </div>
-
-
-        <div class="result-grid">
-
-          <div class="success-box">
-
-            🟢 Exitosas
-
-            <div
-              id="todaySuccessCount"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-
-          <div class="failed-box">
-
-            🔴 Fallidas
-
-            <div
-              id="todayFailedCount"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
+        <div id="currentlySyncing">
+          <p style="color:#6b7280;">
+            Nadie está sincronizando actualmente.
+          </p>
         </div>
 
       </div>
 
 
+      <!-- =========================
+           4. EQUIPO
+      ========================== -->
+      <div class="card">
 
-      <!-- ACUMULADO -->
-
-      <div class="summary-section">
-
-        <div class="summary-label">
-          Acumulado
-        </div>
-
-
-        <div class="summary-grid">
-
-          <div class="summary-box">
-
-            <div class="summary-text">
-              🔄 Sincronizaciones totales
-            </div>
-
-            <div
-              id="totalSyncCount"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-
-          <div class="summary-box">
-
-            <div class="summary-text">
-              ⏱️ Tiempo total sincronizando
-            </div>
-
-            <div
-              id="totalSyncTime"
-              class="summary-number"
-            >
-              0 s
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-    </div>
-
-
-
-
-    <!-- =========================
-         PROMEDIOS
-    ========================= -->
-
-    <div class="card">
-
-      <h2>📈 Promedios</h2>
-
-      <div class="average-grid">
-
-        <div class="summary-box">
-
-          <div class="summary-text">
-            ⏱️ Promedio general de sincronización
-          </div>
-
-          <div
-            id="generalAverageTime"
-            class="summary-number"
-          >
-            0 s
-          </div>
-
-        </div>
-
-        <div class="summary-box">
-
-          <div class="summary-text">
-            📊 Sincronizaciones consideradas
-          </div>
-
-          <div
-            id="generalAverageCount"
-            class="summary-number"
-          >
-            0
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="summary-label">
-        Promedio por persona
-      </div>
-
-      <div
-        id="averageByPerson"
-        class="average-list"
-      ></div>
-
-    </div>
-
-
-    <!-- =========================
-         HISTORIAL GENERAL
-    ========================= -->
-
-    <div class="card">
-
-      <h2>📅 Historial por periodo</h2>
-
-      <p style="color:#6b7280;font-size:14px;">
-        Consulta las sincronizaciones de un día, una semana o un periodo personalizado.
-      </p>
-
-      <div class="history-filter-bar">
-
-        <div class="filter-group">
-          <label for="historyPeriod">Periodo</label>
-
-          <select id="historyPeriod">
-            <option value="today">Hoy</option>
-            <option value="yesterday">Ayer</option>
-            <option value="week">Esta semana</option>
-            <option value="lastWeek">Semana pasada</option>
-            <option value="custom">Día específico</option>
-          </select>
-        </div>
+        <h2>👥 Equipo</h2>
 
         <div
-          id="customDateGroup"
-          class="filter-group hidden"
-        >
-          <label for="historyDate">Día</label>
+          id="teamGrid"
+          class="team-grid">
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           5. HISTORIAL
+      ========================== -->
+      <div class="card">
+
+        <h2>📋 Historial</h2>
+
+        <div class="filter-row">
+
+          <select id="historyPeriod">
+            <option value="today">
+              Hoy
+            </option>
+
+            <option value="week">
+              Esta semana
+            </option>
+
+            <option value="custom">
+              Personalizado
+            </option>
+          </select>
+
           <input
-            id="historyDate"
             type="date"
-          >
+            id="historyStart"
+            class="hidden"
+          />
+
+          <input
+            type="date"
+            id="historyEnd"
+            class="hidden"
+          />
+
+          <button onclick="renderPeriodHistory()">
+            Aplicar
+          </button>
+
+        </div>
+
+        <div id="periodHistory">
+          <p style="color:#6b7280;">
+            No hay registros.
+          </p>
         </div>
 
       </div>
 
-      <div
-        id="periodSummary"
-        class="filtered-history-summary"
-      ></div>
 
-      <div
-        id="periodHistoryList"
-        class="history-list"
-      ></div>
+      <!-- =========================
+           6. RESUMEN
+      ========================== -->
+      <div class="card">
 
-    </div>
+        <h2>📊 Resumen</h2>
 
+        <div class="summary-grid">
 
-    <!-- =========================
-         SINCRONIZANDO AHORA
-    ========================= -->
+          <div class="summary-item">
+            <strong id="totalSyncs">
+              0
+            </strong>
 
-    <div
-      class="card syncing-section"
-    >
-
-      <h2>
-        🔴 Sincronizando ahora
-      </h2>
-
-
-      <div
-        id="syncingList"
-        class="syncing-list"
-      ></div>
-
-    </div>
-
-
-
-    <!-- =========================
-         EQUIPO
-    ========================= -->
-
-    <div
-      id="teamSection"
-      class="card"
-    >
-
-      <h2>
-        👥 Equipo
-      </h2>
-
-      <p
-        style="
-          color:#6b7280;
-          font-size:14px;
-        "
-      >
-        Haz clic en una persona
-        para consultar su historial.
-      </p>
-
-
-      <div
-        id="teamGrid"
-        class="team-grid"
-      ></div>
-
-    </div>
-
-
-
-    <!-- =========================
-         HISTORIAL
-    ========================= -->
-
-    <div
-      id="historySection"
-      class="card hidden"
-    >
-
-      <button
-        class="back-button"
-        onclick="showTeam()"
-      >
-        ← Regresar al equipo
-      </button>
-
-
-      <h2
-        id="historyTitle"
-      >
-        📋 Historial
-      </h2>
-
-
-      <div
-        class="history-summary"
-      >
-
-        <div class="history-box">
-
-          <div class="summary-text">
-            🔄 Total
+            <span>
+              Sincronizaciones
+            </span>
           </div>
 
-          <strong
-            id="personSyncCount"
-          >
-            0
-          </strong>
 
-        </div>
+          <div class="summary-item">
+            <strong id="successfulSyncs">
+              0
+            </strong>
 
-
-        <div class="history-box">
-
-          <div class="summary-text">
-            ⏱️ Tiempo total
+            <span>
+              Exitosas
+            </span>
           </div>
 
-          <strong
-            id="personTotalTime"
-          >
-            0 s
-          </strong>
 
-        </div>
+          <div class="summary-item">
+            <strong id="failedSyncs">
+              0
+            </strong>
 
-
-        <div class="history-box">
-
-          <div class="summary-text">
-            🟢 Exitosas
+            <span>
+              Fallidas
+            </span>
           </div>
 
-          <strong
-            id="personSuccessCount"
-          >
-            0
-          </strong>
 
-        </div>
+          <div class="summary-item">
+            <strong id="activeUsers">
+              0
+            </strong>
 
-
-        <div class="history-box">
-
-          <div class="summary-text">
-            🔴 Fallidas
+            <span>
+              Sincronizando ahora
+            </span>
           </div>
-
-          <strong
-            id="personFailedCount"
-          >
-            0
-          </strong>
 
         </div>
 
       </div>
 
 
+      <!-- =========================
+           7. PROMEDIO
+      ========================== -->
+      <div class="card">
+
+        <h2>📈 Promedio</h2>
+
+        <div class="summary-grid">
+
+          <div class="summary-item">
+
+            <strong id="generalAverage">
+              0 min
+            </strong>
+
+            <span>
+              Promedio general
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <h3 style="margin-top:25px;">
+          Promedio por persona
+        </h3>
+
+        <div id="averageByPerson">
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           HISTORIAL INDIVIDUAL
+           SE MUESTRA AL HACER CLICK
+           EN UNA PERSONA DEL EQUIPO
+      ========================== -->
       <div
-        id="historyList"
-        class="history-list"
-      ></div>
+        id="personHistoryCard"
+        class="card hidden">
+
+        <div class="person-history-title">
+
+          <h2 id="personHistoryTitle">
+            📋 Historial
+          </h2>
+
+          <button
+            class="btn-secondary"
+            onclick="closePersonHistory()">
+            Cerrar
+          </button>
+
+        </div>
+
+        <div id="personHistory">
+        </div>
+
+      </div>
+
 
     </div>
-
   </div>
 
-</div>
 
+  <!-- =========================
+       MODAL
+  ========================== -->
+  <div
+    id="modal"
+    class="modal hidden">
 
+    <div class="modal-content">
 
-<!-- =========================
-     MODAL FALLIDA
-========================= -->
+      <h2 id="modalTitle">
+        -
+      </h2>
 
-<div
-  id="failModal"
-  class="modal-overlay hidden"
->
-
-  <div class="modal">
-
-    <h3>
-      🔴 Sincronización fallida
-    </h3>
-
-    <p>
-      Registra opcionalmente qué ocurrió.
-    </p>
-
-
-    <textarea
-      id="failComment"
-      placeholder="Ejemplo: No se pudo sincronizar porque el modelo se cerró..."
-    ></textarea>
-
-
-    <div class="modal-buttons">
+      <div id="modalBody">
+      </div>
 
       <button
-        class="cancel-button"
-        onclick="closeFailModal()"
-      >
-        Cancelar
-      </button>
-
-
-      <button
-        class="fail-button"
-        onclick="finishSync(false)"
-      >
-        Registrar como fallida
+        class="btn-secondary"
+        onclick="closeModal()">
+        Cerrar
       </button>
 
     </div>
 
   </div>
 
-</div>
 
+  <!-- =========================
+       FIREBASE
+  ========================== -->
 
+  <script type="module">
 
-<!-- =========================
-     MODAL ÉXITO
-========================= -->
-
-<div
-  id="successModal"
-  class="modal-overlay hidden"
->
-
-  <div class="modal">
-
-    <h3>
-      🟢 Sincronización terminada
-    </h3>
-
-    <p>
-      ¿Confirmas que la sincronización
-      terminó correctamente?
-    </p>
-
-
-    <div class="modal-buttons">
-
-      <button
-        class="cancel-button"
-        onclick="closeSuccessModal()"
-      >
-        Cancelar
-      </button>
-
-
-      <button
-        class="finish-button"
-        onclick="finishSync(true)"
-      >
-        Sí, registrar
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-
-<!-- =========================
-     FIREBASE
-========================= -->
-
-<script type="module">
-
-
-  import {
-
-    initializeApp
-
-  } from
+    import {
+      initializeApp
+    }
+    from
     "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 
-  import {
-
-    getDatabase,
-
-    ref,
-
-    set,
-
-    get,
-
-    push,
-
-    onValue,
-
-    serverTimestamp
-
-  } from
+    import {
+      getDatabase,
+      ref,
+      set,
+      push,
+      onValue,
+      get,
+      serverTimestamp
+    }
+    from
     "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
+    // =========================
+    // CONFIGURACIÓN FIREBASE
+    // =========================
 
-  // =========================
-  // FIREBASE CONFIG
-  // =========================
+    const firebaseConfig = {
 
-  const firebaseConfig = {
+      apiKey:
+        "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
 
-    apiKey:
-      "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
+      authDomain:
+        "bim-sync-monitor.firebaseapp.com",
 
-    authDomain:
-      "bim-sync-monitor.firebaseapp.com",
+      databaseURL:
+        "https://bim-sync-monitor-default-rtdb.firebaseio.com",
 
-    databaseURL:
-      "https://bim-sync-monitor-default-rtdb.firebaseio.com",
+      projectId:
+        "bim-sync-monitor",
 
-    projectId:
-      "bim-sync-monitor",
+      storageBucket:
+        "bim-sync-monitor.firebasestorage.app",
 
-    storageBucket:
-      "bim-sync-monitor.firebasestorage.app",
+      messagingSenderId:
+        "853443748101",
 
-    messagingSenderId:
-      "853443748101",
+      appId:
+        "1:853443748101:web:c391d643ddd1916aaf176c"
 
-    appId:
-      "1:853443748101:web:c391d643ddd1916aaf176c"
+    };
 
-  };
 
+    const app =
+      initializeApp(firebaseConfig);
 
+    const db =
+      getDatabase(app);
 
-  const app =
-    initializeApp(firebaseConfig);
 
+    // =========================
+    // REFERENCIAS
+    // =========================
 
-  const db =
-    getDatabase(app);
+    const teamRef =
+      ref(db, "Team");
 
+    const historyRef =
+      ref(db, "History");
 
+    const externalSyncRef =
+      ref(db, "ExternalSync");
 
-  // =========================
-  // REFERENCIAS
-  // =========================
 
-  const teamRef =
-    ref(db, "Team");
+    // =========================
+    // EQUIPO
+    // =========================
 
+    const teamMembers = {
 
-  const historyRef =
-    ref(db, "History");
+      hannia: {
+        name: "Hannia Márquez"
+      },
 
+      angel: {
+        name: "Angel Cruz"
+      },
 
-  const externalSyncRef =
-    ref(db, "ExternalSync");
+      antonella: {
+        name: "Antonella Tarantini"
+      },
 
+      carlos: {
+        name: "Carlos Ramírez"
+      },
 
+      arianna: {
+        name: "Arianna Nuñez"
+      },
 
-  // =========================
-  // MIEMBROS
-  // =========================
+      grace: {
+        name: "Grace Martínez"
+      },
 
-  const members = {
+      cynthia: {
+        name: "Cynthia Cortés"
+      },
 
-    hannia:
-      "Hannia Márquez",
+      ximena: {
+        name: "Ximena Arrambide"
+      },
 
-    angel:
-      "Angel Cruz",
+      valeria: {
+        name: "Valeria Garza"
+      },
 
-    antonella:
-      "Antonella Tarantini",
+      alejandro: {
+        name: "Alejandro Ulla"
+      },
 
-    carlos:
-      "Carlos Ramírez",
+      gabriel: {
+        name: "Gabriel Martínez"
+      },
 
-    arianna:
-      "Arianna Nuñez",
+      mauricio: {
+        name: "Mauricio Mireles"
+      }
 
-    grace:
-      "Grace Martínez",
+    };
 
-    cynthia:
-      "Cynthia Cortés",
 
-    ximena:
-      "Ximena Arrambide",
+    let currentUserId = null;
+    let teamData = {};
+    let historyData = {};
 
-    valeria:
-      "Valeria Garza",
 
-    alejandro:
-      "Alejandro Ulla",
 
-    gabriel:
-      "Gabriel Martínez",
+    // =========================
+    // CARGAR USUARIOS
+    // =========================
 
-    mauricio:
-      "Mauricio Mireles"
+    const userSelect =
+      document.getElementById("userSelect");
 
-  };
 
+    Object.entries(teamMembers)
+      .forEach(([id, user]) => {
 
+        const option =
+          document.createElement("option");
 
-  // =========================
-  // VARIABLES
-  // =========================
+        option.value = id;
+        option.textContent = user.name;
 
-  let currentUserId = null;
+        userSelect.appendChild(option);
 
-  let currentUserName = null;
+      });
 
-  let selectedHistoryUserId = null;
 
-  let historyData = {};
 
-  let teamData = {};
+    // =========================
+    // SELECCIONAR USUARIO
+    // =========================
 
+    window.selectUser = async function () {
 
+      const id =
+        userSelect.value;
 
-  // =========================
-  // ELEMENTOS
-  // =========================
+      if (!id) {
 
-  const selectionScreen =
-    document.getElementById(
-      "selectionScreen"
-    );
+        alert(
+          "Selecciona un usuario."
+        );
 
+        return;
+      }
 
-  const appScreen =
-    document.getElementById(
-      "appScreen"
-    );
 
+      currentUserId = id;
 
-  const userGrid =
-    document.getElementById(
-      "userGrid"
-    );
 
-
-  const currentUserNameElement =
-    document.getElementById(
-      "currentUserName"
-    );
-
-
-  const teamGrid =
-    document.getElementById(
-      "teamGrid"
-    );
-
-
-  const syncingList =
-    document.getElementById(
-      "syncingList"
-    );
-
-
-  const historySection =
-    document.getElementById(
-      "historySection"
-    );
-
-
-  const teamSection =
-    document.getElementById(
-      "teamSection"
-    );
-
-
-
-  // =========================
-  // USUARIOS
-  // =========================
-
-  function renderUserSelection() {
-
-    userGrid.innerHTML = "";
-
-
-    Object.entries(members)
-      .forEach(
-        ([id, name]) => {
-
-          const button =
-            document.createElement(
-              "button"
-            );
-
-
-          button.className =
-            "user-button";
-
-
-          button.textContent =
-            name;
-
-
-          button.onclick =
-            () =>
-              selectUser(
-                id,
-                name
-              );
-
-
-          userGrid.appendChild(
-            button
-          );
-
-        }
-      );
-
-  }
-
-
-
-  // =========================
-  // SELECCIONAR USUARIO
-  // =========================
-
-  async function selectUser(
-    id,
-    name
-  ) {
-
-    currentUserId = id;
-
-    currentUserName = name;
-
-
-    localStorage.setItem(
-      "bimSyncUserId",
-      id
-    );
-
-
-    localStorage.setItem(
-      "bimSyncUserName",
-      name
-    );
-
-
-    currentUserNameElement
-      .textContent =
-      name;
-
-
-    selectionScreen
-      .classList
-      .add("hidden");
-
-
-    appScreen
-      .classList
-      .remove("hidden");
-
-
-
-    const snapshot =
-      await get(
-        ref(
-          db,
-          `Team/${id}`
-        )
+      localStorage.setItem(
+        "bimSyncUser",
+        id
       );
 
 
-    const existingData =
-      snapshot.val();
+      const userRef =
+        ref(db, `Team/${id}`);
 
 
+      const snapshot =
+        await get(userRef);
 
-    if (
-      !existingData ||
-      existingData.status !==
-        "syncing"
-    ) {
 
-      await set(
-        ref(
-          db,
-          `Team/${id}`
-        ),
-        {
+      const existing =
+        snapshot.val();
 
-          name: name,
+
+      if (!existing || existing.status !== "syncing") {
+
+        await set(userRef, {
+
+          name:
+            teamMembers[id].name,
 
           status:
             "available",
 
           syncStarted:
-            null
+            null,
 
-        }
-      );
+          lastSync:
+            existing?.lastSync || null,
 
-    }
+          lastDuration:
+            existing?.lastDuration || null
 
-  }
-
-
-
-  // =========================
-  // INICIAR SYNC
-  // =========================
-
-  async function startSync() {
-
-    if (!currentUserId)
-      return;
-
-
-    await set(
-      ref(
-        db,
-        `Team/${currentUserId}`
-      ),
-      {
-
-        name:
-          currentUserName,
-
-        status:
-          "syncing",
-
-        syncStarted:
-          serverTimestamp()
+        });
 
       }
-    );
-
-  }
 
 
-
-  // =========================
-  // TERMINAR SYNC
-  // =========================
-
-  async function finishSync(
-    successful
-  ) {
-
-    if (!currentUserId)
-      return;
+      document
+        .getElementById("userSelection")
+        .classList.add("hidden");
 
 
-    const userRef =
-      ref(
-        db,
-        `Team/${currentUserId}`
-      );
+      document
+        .getElementById("app")
+        .classList.remove("hidden");
 
 
-    const snapshot =
-      await get(userRef);
-
-
-    const userData =
-      snapshot.val();
-
-
-    if (
-      !userData ||
-      userData.status !==
-        "syncing" ||
-      !userData.syncStarted
-    ) {
-
-      alert(
-        "No tienes una sincronización activa."
-      );
-
-      closeFailModal();
-
-      closeSuccessModal();
-
-      return;
-
-    }
-
-
-
-    const startTimestamp =
-      Number(
-        userData.syncStarted
-      );
-
-
-    const finishTimestamp =
-      Date.now();
-
-
-    const durationSeconds =
-      Math.max(
-        0,
-        Math.floor(
-          (
-            finishTimestamp -
-            startTimestamp
-          ) / 1000
-        )
-      );
-
-
-    const startDate =
-      new Date(
-        startTimestamp
-      );
-
-
-    const finishDate =
-      new Date(
-        finishTimestamp
-      );
-
-
-    let comment = "";
-
-
-    if (!successful) {
-
-      comment =
-        document.getElementById(
-          "failComment"
-        ).value.trim();
-
-    }
-
-
-
-    const historyRecord = {
-
-      userId:
-        currentUserId,
-
-      user:
-        currentUserName,
-
-      date:
-        startDate.toLocaleDateString(
-          "es-MX"
-        ),
-
-      startedAt:
-        startDate.toLocaleTimeString(
-          "es-MX"
-        ),
-
-      finishedAt:
-        finishDate.toLocaleTimeString(
-          "es-MX"
-        ),
-
-      durationSeconds:
-        durationSeconds,
-
-      startTimestamp:
-        startTimestamp,
-
-      finishTimestamp:
-        finishTimestamp,
-
-      result:
-        successful
-          ? "success"
-          : "failed",
-
-      comment:
-        comment
+      updateCurrentUser();
 
     };
 
 
 
-    await push(
-      historyRef,
-      historyRecord
-    );
+    // =========================
+    // CAMBIAR USUARIO
+    // =========================
 
+    window.changeUser = function () {
 
-
-    await set(
-      userRef,
-      {
-
-        name:
-          currentUserName,
-
-        status:
-          "available",
-
-        syncStarted:
-          null
-
-      }
-    );
-
-
-
-    closeFailModal();
-
-    closeSuccessModal();
-
-  }
-
-
-
-  // =========================
-  // MODALES
-  // =========================
-
-  function showFailModal() {
-
-    const modal =
-      document.getElementById(
-        "failModal"
+      localStorage.removeItem(
+        "bimSyncUser"
       );
 
+      location.reload();
 
-    modal.classList.remove(
-      "hidden"
-    );
+    };
 
 
-    document.getElementById(
-      "failComment"
-    ).focus();
 
-  }
+    // =========================
+    // MOSTRAR USUARIO
+    // =========================
 
+    function updateCurrentUser() {
 
-  function closeFailModal() {
-
-    document.getElementById(
-      "failModal"
-    )
-    .classList
-    .add("hidden");
-
-
-    document.getElementById(
-      "failComment"
-    ).value = "";
-
-  }
-
-
-  function showSuccessModal() {
-
-    document.getElementById(
-      "successModal"
-    )
-    .classList
-    .remove("hidden");
-
-  }
-
-
-  function closeSuccessModal() {
-
-    document.getElementById(
-      "successModal"
-    )
-    .classList
-    .add("hidden");
-
-  }
-
-
-
-  // =========================
-  // FORMATEAR TIEMPO
-  // =========================
-
-  function formatDuration(
-    seconds
-  ) {
-
-    seconds =
-      Math.max(
-        0,
-        Math.floor(
-          Number(seconds) || 0
-        )
-      );
-
-
-    const hours =
-      Math.floor(
-        seconds / 3600
-      );
-
-
-    const minutes =
-      Math.floor(
-        (seconds % 3600) / 60
-      );
-
-
-    const secs =
-      seconds % 60;
-
-
-
-    if (hours > 0) {
-
-      return `${hours} h ${minutes} min ${secs} s`;
-
-    }
-
-
-    if (minutes > 0) {
-
-      return `${minutes} min ${secs} s`;
-
-    }
-
-
-    return `${secs} s`;
-
-  }
-
-
-
-  // =========================
-  // TIEMPO ACTUAL
-  // =========================
-
-  function getLiveDuration(
-    startTimestamp
-  ) {
-
-    if (!startTimestamp)
-      return "⏱️ 0 s";
-
-
-    const elapsed =
-      Math.max(
-        0,
-        Math.floor(
-          (
-            Date.now() -
-            Number(startTimestamp)
-          ) / 1000
-        )
-      );
-
-
-    return `⏱️ ${formatDuration(elapsed)}`;
-
-  }
-
-
-
-  // =========================
-  // DATOS DE SINCRONIZACIÓN
-  // =========================
-
-  function getSuccessfulAndFinishedRecords() {
-
-    return Object.values(historyData || {})
-      .filter(entry =>
-        entry &&
-        entry.result === "success" &&
-        Number(entry.durationSeconds) >= 0
-      );
-
-  }
-
-
-  function getLastSyncForUser(userId) {
-
-    const records =
-      getSuccessfulAndFinishedRecords()
-        .filter(entry =>
-          entry.userId === userId
-        )
-        .sort(
-          (a, b) =>
-            (Number(b.finishTimestamp) || 0) -
-            (Number(a.finishTimestamp) || 0)
-        );
-
-    return records[0] || null;
-
-  }
-
-
-  function escapeHtml(value) {
-
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-
-  }
-
-
-  function getDateKey(date) {
-
-    const year =
-      date.getFullYear();
-
-    const month =
-      String(date.getMonth() + 1)
-        .padStart(2, "0");
-
-    const day =
-      String(date.getDate())
-        .padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-
-  }
-
-
-  function getStartOfWeek(date) {
-
-    const result =
-      new Date(date);
-
-    const day =
-      result.getDay();
-
-    const diff =
-      day === 0
-        ? -6
-        : 1 - day;
-
-    result.setHours(0, 0, 0, 0);
-
-    result.setDate(
-      result.getDate() + diff
-    );
-
-    return result;
-
-  }
-
-
-  function getEndOfWeek(date) {
-
-    const result =
-      getStartOfWeek(date);
-
-    result.setDate(
-      result.getDate() + 6
-    );
-
-    result.setHours(
-      23, 59, 59, 999
-    );
-
-    return result;
-
-  }
-
-
-  function getPeriodRecords(period) {
-
-    const now =
-      new Date();
-
-    let start;
-    let end;
-
-    if (period === "today") {
-
-      start =
-        new Date(now);
-
-      start.setHours(0, 0, 0, 0);
-
-      end =
-        new Date(now);
-
-      end.setHours(
-        23, 59, 59, 999
-      );
-
-    } else if (period === "yesterday") {
-
-      start =
-        new Date(now);
-
-      start.setDate(
-        start.getDate() - 1
-      );
-
-      start.setHours(0, 0, 0, 0);
-
-      end =
-        new Date(start);
-
-      end.setHours(
-        23, 59, 59, 999
-      );
-
-    } else if (period === "week") {
-
-      start =
-        getStartOfWeek(now);
-
-      end =
-        getEndOfWeek(now);
-
-    } else if (period === "lastWeek") {
-
-      start =
-        getStartOfWeek(now);
-
-      start.setDate(
-        start.getDate() - 7
-      );
-
-      end =
-        getEndOfWeek(start);
-
-    } else if (period === "custom") {
-
-      const value =
+      const element =
         document.getElementById(
-          "historyDate"
-        ).value;
+          "currentUser"
+        );
 
-      if (!value) {
 
-        return [];
+      if (currentUserId) {
+
+        element.textContent =
+          teamMembers[currentUserId].name;
 
       }
-
-      const parts =
-        value.split("-")
-          .map(Number);
-
-      start =
-        new Date(
-          parts[0],
-          parts[1] - 1,
-          parts[2],
-          0, 0, 0, 0
-        );
-
-      end =
-        new Date(
-          parts[0],
-          parts[1] - 1,
-          parts[2],
-          23, 59, 59, 999
-        );
-
-    } else {
-
-      return [];
 
     }
 
 
-    return Object.values(historyData || {})
-      .filter(entry => {
 
-        const timestamp =
-          Number(entry.finishTimestamp);
+    // =========================
+    // INICIAR SINCRONIZACIÓN
+    // =========================
 
-        return (
-          timestamp >= start.getTime() &&
-          timestamp <= end.getTime()
+    window.startSync = async function () {
+
+      if (!currentUserId) {
+
+        alert(
+          "Primero selecciona tu usuario."
         );
 
-      })
-      .sort(
-        (a, b) =>
-          (Number(b.finishTimestamp) || 0) -
-          (Number(a.finishTimestamp) || 0)
-      );
+        return;
 
-  }
+      }
 
 
-  function renderAverageByPerson() {
+      const userRef =
+        ref(
+          db,
+          `Team/${currentUserId}`
+        );
 
-    const container =
-      document.getElementById(
-        "averageByPerson"
-      );
 
-    container.innerHTML = "";
+      await set(
+        userRef,
+        {
 
-    const records =
-      getSuccessfulAndFinishedRecords();
+          name:
+            teamMembers[currentUserId].name,
 
-    Object.entries(members)
-      .forEach(
-        ([id, name]) => {
+          status:
+            "syncing",
 
-          const personRecords =
-            records.filter(
-              entry =>
-                entry.userId === id
-            );
+          syncStarted:
+            serverTimestamp(),
 
-          const row =
-            document.createElement("div");
+          lastSync:
+            teamData[currentUserId]?.lastSync ||
+            null,
 
-          row.className =
-            "average-person";
-
-          const nameElement =
-            document.createElement("div");
-
-          nameElement.className =
-            "average-person-name";
-
-          nameElement.textContent =
-            name;
-
-          const valueElement =
-            document.createElement("div");
-
-          valueElement.className =
-            "average-person-value";
-
-          if (personRecords.length === 0) {
-
-            valueElement.textContent =
-              "— Sin registros";
-
-          } else {
-
-            const total =
-              personRecords.reduce(
-                (sum, entry) =>
-                  sum +
-                  (Number(entry.durationSeconds) || 0),
-                0
-              );
-
-            const average =
-              Math.round(
-                total /
-                personRecords.length
-              );
-
-            valueElement.textContent =
-              formatDuration(average);
-
-          }
-
-          row.appendChild(
-            nameElement
-          );
-
-          row.appendChild(
-            valueElement
-          );
-
-          container.appendChild(
-            row
-          );
+          lastDuration:
+            teamData[currentUserId]?.lastDuration ||
+            null
 
         }
       );
 
-  }
+    };
 
 
-  function renderPeriodHistory() {
 
-    const period =
-      document.getElementById(
-        "historyPeriod"
-      ).value;
+    // =========================
+    // FINALIZAR SINCRONIZACIÓN
+    // =========================
 
-    const records =
-      getPeriodRecords(period);
+    window.finishSync = async function (
+      successful
+    ) {
 
-    const summary =
-      document.getElementById(
-        "periodSummary"
-      );
+      if (!currentUserId) {
 
-    const list =
-      document.getElementById(
-        "periodHistoryList"
-      );
+        alert(
+          "Primero selecciona tu usuario."
+        );
 
-    let totalSeconds = 0;
-    let successful = 0;
-    let failed = 0;
-
-    records.forEach(
-      entry => {
-
-        totalSeconds +=
-          Number(entry.durationSeconds) || 0;
-
-        if (entry.result === "failed") {
-          failed++;
-        } else {
-          successful++;
-        }
+        return;
 
       }
-    );
 
-    const average =
-      records.length > 0
-        ? Math.round(
-            totalSeconds /
-            records.length
-          )
-        : 0;
 
-    summary.innerHTML = "";
+      const user =
+        teamData[currentUserId];
 
-    [
-      ["🔄 Sincronizaciones", records.length],
-      ["🟢 Exitosas", successful],
-      ["🔴 Fallidas", failed],
-      ["⏱️ Promedio", formatDuration(average)]
-    ].forEach(
-      ([label, value]) => {
 
-        const box =
-          document.createElement("div");
+      if (!user ||
+          user.status !== "syncing") {
 
-        box.className =
-          "history-box";
+        alert(
+          "No tienes una sincronización activa."
+        );
 
-        box.innerHTML =
-          `<div class="summary-text">${label}</div>` +
-          `<strong>${escapeHtml(value)}</strong>`;
-
-        summary.appendChild(box);
+        return;
 
       }
-    );
 
-    list.innerHTML = "";
 
-    if (records.length === 0) {
+      const startTime =
+        user.syncStarted;
 
-      const empty =
-        document.createElement("div");
 
-      empty.className =
-        "no-history";
+      const endTime =
+        Date.now();
 
-      empty.textContent =
-        "No hay sincronizaciones registradas en este periodo.";
 
-      list.appendChild(
-        empty
-      );
+      let duration = 0;
 
-      return;
 
-    }
+      if (startTime) {
 
-    records.forEach(
-      entry => {
-
-        const item =
-          document.createElement("div");
-
-        item.className =
-          "history-item " +
-          (
-            entry.result === "failed"
-              ? "failed"
-              : "success"
-          );
-
-        const date =
-          document.createElement("div");
-
-        date.className =
-          "history-date";
-
-        date.textContent =
-          `📅 ${entry.date} • 👤 ${entry.user}`;
-
-        const details =
-          document.createElement("div");
-
-        details.className =
-          "history-details";
-
-        details.appendChild(
-          createHistoryDetail(
-            "Inicio",
-            entry.startedAt
-          )
-        );
-
-        details.appendChild(
-          createHistoryDetail(
-            "Fin",
-            entry.finishedAt
-          )
-        );
-
-        details.appendChild(
-          createHistoryDetail(
-            "Duración",
-            formatDuration(
-              entry.durationSeconds
-            )
-          )
-        );
-
-        const result =
-          document.createElement("div");
-
-        result.className =
-          "history-result";
-
-        result.textContent =
-          entry.result === "failed"
-            ? "🔴 Sincronización fallida"
-            : "🟢 Sincronización exitosa";
-
-        item.appendChild(date);
-        item.appendChild(details);
-        item.appendChild(result);
-
-        if (
-          entry.result === "failed" &&
-          entry.comment
-        ) {
-
-          const comment =
-            document.createElement("div");
-
-          comment.className =
-            "history-comment";
-
-          comment.textContent =
-            `📝 ${entry.comment}`;
-
-          item.appendChild(
-            comment
-          );
-
-        }
-
-        list.appendChild(
-          item
-        );
+        duration =
+          endTime -
+          startTime;
 
       }
-    );
-
-  }
 
 
-  function initializeHistoryFilters() {
+      const historyEntry = {
 
-    const periodSelect =
-      document.getElementById(
-        "historyPeriod"
-      );
+        userId:
+          currentUserId,
 
-    const dateInput =
-      document.getElementById(
-        "historyDate"
-      );
+        userName:
+          teamMembers[currentUserId].name,
 
-    const customGroup =
-      document.getElementById(
-        "customDateGroup"
-      );
+        startTime:
+          startTime || null,
 
-    const update =
-      () => {
+        endTime:
+          endTime,
 
-        customGroup.classList.toggle(
-          "hidden",
-          periodSelect.value !== "custom"
-        );
+        duration:
+          duration,
 
-        renderPeriodHistory();
+        successful:
+          successful,
+
+        date:
+          new Date(endTime)
+            .toISOString()
+            .split("T")[0]
 
       };
 
-    periodSelect.addEventListener(
-      "change",
-      update
-    );
 
-    dateInput.addEventListener(
-      "change",
-      renderPeriodHistory
-    );
-
-    dateInput.value =
-      getDateKey(new Date());
-
-    update();
-
-  }
+      await push(
+        historyRef,
+        historyEntry
+      );
 
 
-  // =========================
-  // RENDER TEAM
-  // =========================
+      await set(
+        ref(
+          db,
+          `Team/${currentUserId}`
+        ),
+        {
 
-  function renderTeam(
-    data
-  ) {
+          name:
+            teamMembers[currentUserId].name,
 
-    teamData =
-      data || {};
+          status:
+            "available",
+
+          syncStarted:
+            null,
+
+          lastSync:
+            endTime,
+
+          lastDuration:
+            duration
+
+        }
+      );
+
+    };
 
 
-    teamGrid.innerHTML =
-      "";
+
+    // =========================
+    // FORMATEAR DURACIÓN
+    // =========================
+
+    function formatDuration(
+      milliseconds
+    ) {
+
+      if (!milliseconds ||
+          milliseconds < 0) {
+
+        return "0 min";
+
+      }
 
 
-    Object.entries(members)
-      .forEach(
-        ([id, name]) => {
+      const totalSeconds =
+        Math.floor(
+          milliseconds / 1000
+        );
 
-          const memberData =
-            teamData[id] || {
 
-              name:
-                name,
+      const minutes =
+        Math.floor(
+          totalSeconds / 60
+        );
 
-              status:
-                "available",
 
-              syncStarted:
-                null
+      const seconds =
+        totalSeconds % 60;
 
-            };
+
+      if (minutes === 0) {
+
+        return `${seconds}s`;
+
+      }
+
+
+      return `${minutes}m ${seconds}s`;
+
+    }
+
+
+
+    // =========================
+    // DURACIÓN EN VIVO
+    // =========================
+
+    function getLiveDuration(
+      startTime
+    ) {
+
+      if (!startTime) {
+
+        return "0s";
+
+      }
+
+
+      return formatDuration(
+        Date.now() - startTime
+      );
+
+    }
+
+
+
+    // =========================
+    // REGISTROS EXITOSOS
+    // =========================
+
+    function getSuccessfulAndFinishedRecords() {
+
+      return Object.values(
+        historyData || {}
+      ).filter(record =>
+
+        record &&
+        record.successful === true &&
+        record.endTime
+
+      );
+
+    }
+
+
+
+    // =========================
+    // ÚLTIMA SINCRONIZACIÓN
+    // =========================
+
+    function getLastSyncForUser(
+      userId
+    ) {
+
+      const records =
+        getSuccessfulAndFinishedRecords()
+          .filter(
+            record =>
+              record.userId === userId
+          )
+          .sort(
+            (a, b) =>
+              b.endTime - a.endTime
+          );
+
+
+      return records[0] || null;
+
+    }
+
+
+
+    // =========================
+    // RENDER EQUIPO
+    // =========================
+
+    function renderTeam() {
+
+      const container =
+        document.getElementById(
+          "teamGrid"
+        );
+
+
+      container.innerHTML = "";
+
+
+      Object.entries(teamMembers)
+        .forEach(([id, member]) => {
+
+          const data =
+            teamData[id] || {};
 
 
           const card =
-            document.createElement(
-              "div"
-            );
+            document.createElement("div");
 
 
           card.className =
@@ -3141,1396 +1233,1049 @@
 
 
           card.onclick =
-            () =>
-              openHistory(id);
+            () => openHistory(id);
 
 
-
-          const nameElement =
-            document.createElement(
-              "div"
-            );
+          const status =
+            data.status || "available";
 
 
-          nameElement.className =
-            "member-name";
+          let statusText =
+            "Disponible";
 
 
-          nameElement.textContent =
-            name;
+          let statusClass =
+            "available";
 
 
+          if (status === "syncing") {
 
-          const statusElement =
-            document.createElement(
-              "div"
-            );
+            statusText =
+              "🔵 Sincronizando";
 
-
-          statusElement.className =
-            "member-status";
-
-
-
-          const timerElement =
-            document.createElement(
-              "div"
-            );
-
-
-          timerElement.className =
-            "member-timer";
-
-
-
-          if (
-            memberData.status ===
-              "syncing"
-          ) {
-
-            statusElement
-              .classList
-              .add("syncing");
-
-
-            statusElement.textContent =
-              "🔴 Sincronizando";
-
-
-            timerElement.textContent =
-              getLiveDuration(
-                memberData.syncStarted
-              );
-
-          } else {
-
-            statusElement
-              .classList
-              .add("available");
-
-
-            statusElement.textContent =
-              "🟢 Disponible";
-
-
-            timerElement.textContent =
-              "";
+            statusClass =
+              "syncing";
 
           }
 
-
-
-          const lastSyncElement =
-            document.createElement("div");
-
-          lastSyncElement.className =
-            "last-sync";
 
           const lastSync =
             getLastSyncForUser(id);
 
+
+          let lastSyncText =
+            "Sin sincronizaciones";
+
+
+          let lastDurationText =
+            "";
+
+
           if (lastSync) {
 
-            lastSyncElement.innerHTML =
-              `<strong>Última sincronización</strong><br>` +
-              `🕐 ${escapeHtml(lastSync.startedAt)} ` +
-              `• ⏱️ ${escapeHtml(formatDuration(lastSync.durationSeconds))}`;
-
-          } else {
-
-            lastSyncElement.innerHTML =
-              `<strong>Última sincronización</strong><br>` +
-              `— Sin registros —`;
-
-          }
-
-          card.appendChild(
-            nameElement
-          );
+            lastSyncText =
+              `Última sincronización: ${
+                new Date(
+                  lastSync.endTime
+                ).toLocaleString()
+              }`;
 
 
-          card.appendChild(
-            statusElement
-          );
-
-
-          card.appendChild(
-            timerElement
-          );
-
-          card.appendChild(
-            lastSyncElement
-          );
-
-
-          teamGrid.appendChild(
-            card
-          );
-
-        }
-      );
-
-
-    renderCurrentlySyncing(
-      teamData
-    );
-
-  }
-
-
-
-  // =========================
-  // SINCRONIZANDO AHORA
-  // =========================
-
-  function renderCurrentlySyncing(
-    data
-  ) {
-
-    syncingList.innerHTML =
-      "";
-
-
-    const syncingMembers =
-      Object.entries(members)
-
-        .map(
-          ([id, name]) => {
-
-            const memberData =
-              data[id];
-
-
-            if (
-              !memberData ||
-              memberData.status !==
-                "syncing" ||
-              !memberData.syncStarted
-            ) {
-
-              return null;
-
-            }
-
-
-            return {
-
-              id:
-                id,
-
-              name:
-                name,
-
-              syncStarted:
-                Number(
-                  memberData.syncStarted
+            lastDurationText =
+              `Duración: ${
+                formatDuration(
+                  lastSync.duration
                 )
-
-            };
+              }`;
 
           }
-        )
-
-        .filter(Boolean)
-
-        .sort(
-          (a,b) =>
-            a.syncStarted -
-            b.syncStarted
-        );
 
 
+          if (status === "syncing") {
 
-    if (
-      syncingMembers.length ===
-        0
-    ) {
-
-      const empty =
-        document.createElement(
-          "div"
-        );
+            lastSyncText =
+              "Sincronizando ahora";
 
 
-      empty.className =
-        "nobody-syncing";
+            lastDurationText =
+              `<span class="live-duration"
+                data-start="${data.syncStarted || ""}">
+                ${
+                  getLiveDuration(
+                    data.syncStarted
+                  )
+                }
+              </span>`;
+
+          }
 
 
-      empty.textContent =
-        "🟢 Nadie está sincronizando actualmente";
+          card.innerHTML = `
+
+            <div class="team-name">
+              ${member.name}
+            </div>
+
+            <div class="status ${statusClass}">
+              ${statusText}
+            </div>
+
+            <div class="last-sync">
+              ${lastSyncText}
+            </div>
+
+            <div class="duration">
+              ${lastDurationText}
+            </div>
+
+          `;
 
 
-      syncingList.appendChild(
-        empty
-      );
+          container.appendChild(card);
 
-
-      return;
+        });
 
     }
 
 
 
-    syncingMembers.forEach(
-      member => {
+    // =========================
+    // SINCRONIZANDO AHORA
+    // =========================
 
-        const card =
-          document.createElement(
-            "div"
-          );
+    function renderCurrentlySyncing() {
 
-
-        card.className =
-          "syncing-person";
-
-
-        const info =
-          document.createElement(
-            "div"
-          );
-
-
-        info.className =
-          "syncing-person-info";
-
-
-        const name =
-          document.createElement(
-            "div"
-          );
-
-
-        name.className =
-          "syncing-name";
-
-
-        name.textContent =
-          member.name;
-
-
-        const status =
-          document.createElement(
-            "div"
-          );
-
-
-        status.className =
-          "syncing-status";
-
-
-        status.textContent =
-          "🔴 Sincronizando";
-
-
-        const time =
-          document.createElement(
-            "div"
-          );
-
-
-        time.className =
-          "syncing-time";
-
-
-        time.id =
-          `live-${member.id}`;
-
-
-        time.textContent =
-          getLiveDuration(
-            member.syncStarted
-          );
-
-
-        info.appendChild(
-          name
+      const container =
+        document.getElementById(
+          "currentlySyncing"
         );
 
 
-        info.appendChild(
-          status
-        );
+      const activeUsers =
+        Object.entries(teamData)
+          .filter(
+            ([, user]) =>
+              user &&
+              user.status === "syncing"
+          );
 
 
-        card.appendChild(
-          info
-        );
+      container.innerHTML = "";
 
 
-        card.appendChild(
-          time
-        );
+      if (activeUsers.length === 0) {
 
+        container.innerHTML = `
 
-        syncingList.appendChild(
-          card
-        );
+          <p style="color:#6b7280;">
+            Nadie está sincronizando actualmente.
+          </p>
+
+        `;
+
+        return;
 
       }
-    );
-
-  }
 
 
+      activeUsers.forEach(
+        ([id, user]) => {
 
-  // =========================
-  // ACTUALIZAR TIMERS
-  // =========================
-
-  function updateLiveTimers() {
-
-    Object.entries(teamData)
-      .forEach(
-        ([id, memberData]) => {
-
-          if (
-            memberData &&
-            memberData.status ===
-              "syncing" &&
-            memberData.syncStarted
-          ) {
-
-            const element =
-              document.getElementById(
-                `live-${id}`
-              );
+          const div =
+            document.createElement("div");
 
 
-            if (element) {
+          div.className =
+            "history-item";
 
-              element.textContent =
-                getLiveDuration(
-                  memberData.syncStarted
-                );
 
-            }
+          div.innerHTML = `
 
-          }
+            <div class="history-header">
+
+              <span>
+                ${
+                  teamMembers[id]?.name ||
+                  user.name ||
+                  id
+                }
+              </span>
+
+              <span class="live-duration"
+                data-start="${user.syncStarted || ""}">
+                ${
+                  getLiveDuration(
+                    user.syncStarted
+                  )
+                }
+              </span>
+
+            </div>
+
+            <div class="history-details">
+
+              Inicio:
+              ${
+                user.syncStarted
+                  ? new Date(
+                      user.syncStarted
+                    ).toLocaleString()
+                  : "-"
+              }
+
+            </div>
+
+          `;
+
+
+          container.appendChild(div);
 
         }
       );
 
+    }
 
 
-    const cards =
-      teamGrid.querySelectorAll(
-        ".team-member"
-      );
 
+    // =========================
+    // ACTUALIZAR CONTADORES
+    // =========================
 
-    cards.forEach(
-      (card,index) => {
+    function updateLiveTimers() {
 
-        const id =
-          Object.keys(members)[
-            index
-          ];
+      document
+        .querySelectorAll(
+          ".live-duration"
+        )
+        .forEach(element => {
 
-
-        const memberData =
-          teamData[id];
-
-
-        if (
-          memberData &&
-          memberData.status ===
-            "syncing" &&
-          memberData.syncStarted
-        ) {
-
-          const timer =
-            card.querySelector(
-              ".member-timer"
+          const start =
+            Number(
+              element.dataset.start
             );
 
 
-          if (timer) {
+          if (start) {
 
-            timer.textContent =
-              getLiveDuration(
-                memberData.syncStarted
-              );
+            element.textContent =
+              getLiveDuration(start);
 
           }
 
-        }
-
-      }
-    );
-
-
-
-    updateExternalAlertTimer();
-
-  }
-
-
-
-  // =========================
-  // RESUMEN
-  // =========================
-
-  function updateGeneralSummary() {
-
-    const entries =
-      Object.values(
-        historyData
-      );
-
-
-    let totalSeconds = 0;
-
-    let totalSyncs = 0;
-
-    let todaySeconds = 0;
-
-    let todaySyncs = 0;
-
-    let todaySuccess = 0;
-
-    let todayFailed = 0;
-
-
-    const todayString =
-      new Date()
-        .toLocaleDateString(
-          "es-MX"
-        );
-
-
-
-    entries.forEach(
-      entry => {
-
-        const duration =
-          Number(
-            entry.durationSeconds
-          ) || 0;
-
-
-        totalSeconds +=
-          duration;
-
-
-        totalSyncs++;
-
-
-
-        if (
-          entry.date ===
-          todayString
-        ) {
-
-          todaySeconds +=
-            duration;
-
-
-          todaySyncs++;
-
-
-          if (
-            entry.result ===
-              "failed"
-          ) {
-
-            todayFailed++;
-
-          } else {
-
-            todaySuccess++;
-
-          }
-
-        }
-
-      }
-    );
-
-
-
-    document.getElementById(
-      "todaySyncCount"
-    ).textContent =
-      todaySyncs;
-
-
-    document.getElementById(
-      "todayTotalTime"
-    ).textContent =
-      formatDuration(
-        todaySeconds
-      );
-
-
-    document.getElementById(
-      "todaySuccessCount"
-    ).textContent =
-      todaySuccess;
-
-
-    document.getElementById(
-      "todayFailedCount"
-    ).textContent =
-      todayFailed;
-
-
-    document.getElementById(
-      "totalSyncCount"
-    ).textContent =
-      totalSyncs;
-
-
-    document.getElementById(
-      "totalSyncTime"
-    ).textContent =
-      formatDuration(
-        totalSeconds
-      );
-
-    const finishedRecords =
-      getSuccessfulAndFinishedRecords();
-
-    const averageSeconds =
-      finishedRecords.length > 0
-        ? Math.round(
-            finishedRecords.reduce(
-              (sum, entry) =>
-                sum +
-                (Number(entry.durationSeconds) || 0),
-              0
-            ) /
-            finishedRecords.length
-          )
-        : 0;
-
-    document.getElementById(
-      "generalAverageTime"
-    ).textContent =
-      formatDuration(
-        averageSeconds
-      );
-
-    document.getElementById(
-      "generalAverageCount"
-    ).textContent =
-      finishedRecords.length;
-
-    renderAverageByPerson();
-    renderPeriodHistory();
-
-  }
-
-
-
-  // =========================
-  // HISTORIAL
-  // =========================
-
-  function openHistory(
-    userId
-  ) {
-
-    selectedHistoryUserId =
-      userId;
-
-
-    teamSection
-      .classList
-      .add("hidden");
-
-
-    historySection
-      .classList
-      .remove("hidden");
-
-
-    renderUserHistory(
-      userId
-    );
-
-  }
-
-
-
-  function renderUserHistory(
-    userId
-  ) {
-
-    const userName =
-      members[userId] ||
-      "Usuario";
-
-
-    document.getElementById(
-      "historyTitle"
-    ).textContent =
-      `📋 Historial de ${userName}`;
-
-
-
-    const records =
-      Object.values(
-        historyData
-      )
-
-      .filter(
-        entry =>
-          entry.userId ===
-          userId
-      )
-
-      .sort(
-        (a,b) => {
-
-          const timeA =
-            Number(
-              a.startTimestamp
-            ) || 0;
-
-
-          const timeB =
-            Number(
-              b.startTimestamp
-            ) || 0;
-
-
-          return timeB - timeA;
-
-        }
-      );
-
-
-
-    let totalSeconds = 0;
-
-    let successful = 0;
-
-    let failed = 0;
-
-
-
-    records.forEach(
-      entry => {
-
-        totalSeconds +=
-          Number(
-            entry.durationSeconds
-          ) || 0;
-
-
-        if (
-          entry.result ===
-            "failed"
-        ) {
-
-          failed++;
-
-        } else {
-
-          successful++;
-
-        }
-
-      }
-    );
-
-
-
-    document.getElementById(
-      "personSyncCount"
-    ).textContent =
-      records.length;
-
-
-    document.getElementById(
-      "personTotalTime"
-    ).textContent =
-      formatDuration(
-        totalSeconds
-      );
-
-
-    document.getElementById(
-      "personSuccessCount"
-    ).textContent =
-      successful;
-
-
-    document.getElementById(
-      "personFailedCount"
-    ).textContent =
-      failed;
-
-
-
-    const list =
-      document.getElementById(
-        "historyList"
-      );
-
-
-    list.innerHTML =
-      "";
-
-
-
-    if (
-      records.length ===
-        0
-    ) {
-
-      const empty =
-        document.createElement(
-          "div"
-        );
-
-
-      empty.className =
-        "no-history";
-
-
-      empty.textContent =
-        "Esta persona todavía no tiene sincronizaciones registradas.";
-
-
-      list.appendChild(
-        empty
-      );
-
-
-      return;
+        });
 
     }
 
 
 
-    records.forEach(
-      entry => {
+    // =========================
+    // RESUMEN GENERAL
+    // =========================
 
-        const item =
-          document.createElement(
-            "div"
-          );
+    function updateGeneralSummary() {
 
-
-        item.className =
-          "history-item " +
-          (
-            entry.result ===
-              "failed"
-              ? "failed"
-              : "success"
-          );
-
-
-
-        const date =
-          document.createElement(
-            "div"
-          );
-
-
-        date.className =
-          "history-date";
-
-
-        date.textContent =
-          `📅 ${entry.date}`;
-
-
-
-        const details =
-          document.createElement(
-            "div"
-          );
-
-
-        details.className =
-          "history-details";
-
-
-
-        details.appendChild(
-          createHistoryDetail(
-            "Inicio",
-            entry.startedAt
-          )
+      const records =
+        Object.values(
+          historyData || {}
         );
 
 
-        details.appendChild(
-          createHistoryDetail(
-            "Fin",
-            entry.finishedAt
-          )
+      const successful =
+        records.filter(
+          record =>
+            record &&
+            record.successful === true
         );
 
 
-        details.appendChild(
-          createHistoryDetail(
-            "Duración",
-            formatDuration(
-              entry.durationSeconds
-            )
-          )
+      const failed =
+        records.filter(
+          record =>
+            record &&
+            record.successful === false
         );
 
 
+      const active =
+        Object.values(
+          teamData || {}
+        ).filter(
+          user =>
+            user &&
+            user.status === "syncing"
+        );
 
-        const result =
-          document.createElement(
-            "div"
+
+      document
+        .getElementById(
+          "totalSyncs"
+        )
+        .textContent =
+        records.length;
+
+
+      document
+        .getElementById(
+          "successfulSyncs"
+        )
+        .textContent =
+        successful.length;
+
+
+      document
+        .getElementById(
+          "failedSyncs"
+        )
+        .textContent =
+        failed.length;
+
+
+      document
+        .getElementById(
+          "activeUsers"
+        )
+        .textContent =
+        active.length;
+
+
+      updateAverage();
+
+    }
+
+
+
+    // =========================
+    // PROMEDIO
+    // =========================
+
+    function updateAverage() {
+
+      const records =
+        getSuccessfulAndFinishedRecords();
+
+
+      const averageElement =
+        document.getElementById(
+          "generalAverage"
+        );
+
+
+      const personContainer =
+        document.getElementById(
+          "averageByPerson"
+        );
+
+
+      if (records.length === 0) {
+
+        averageElement.textContent =
+          "0 min";
+
+
+        personContainer.innerHTML =
+          `<p style="color:#6b7280;">
+            No hay suficientes registros.
+          </p>`;
+
+        return;
+
+      }
+
+
+      const totalDuration =
+        records.reduce(
+          (sum, record) =>
+            sum +
+            (record.duration || 0),
+          0
+        );
+
+
+      const generalAverage =
+        totalDuration /
+        records.length;
+
+
+      averageElement.textContent =
+        formatDuration(
+          generalAverage
+        );
+
+
+      personContainer.innerHTML = "";
+
+
+      Object.entries(teamMembers)
+        .forEach(
+          ([id, member]) => {
+
+            const personRecords =
+              records.filter(
+                record =>
+                  record.userId === id
+              );
+
+
+            if (
+              personRecords.length === 0
+            ) {
+
+              return;
+
+            }
+
+
+            const total =
+              personRecords.reduce(
+                (sum, record) =>
+                  sum +
+                  (record.duration || 0),
+                0
+              );
+
+
+            const average =
+              total /
+              personRecords.length;
+
+
+            const div =
+              document.createElement(
+                "div"
+              );
+
+
+            div.className =
+              "history-item";
+
+
+            div.innerHTML = `
+
+              <div class="history-header">
+
+                <span>
+                  ${member.name}
+                </span>
+
+                <span>
+                  ${formatDuration(average)}
+                </span>
+
+              </div>
+
+              <div class="history-details">
+
+                ${personRecords.length}
+                sincronización(es)
+
+              </div>
+
+            `;
+
+
+            personContainer
+              .appendChild(div);
+
+          }
+        );
+
+    }
+
+
+
+    // =========================
+    // HISTORIAL POR PERIODO
+    // =========================
+
+    function renderPeriodHistory() {
+
+      const period =
+        document.getElementById(
+          "historyPeriod"
+        ).value;
+
+
+      const container =
+        document.getElementById(
+          "periodHistory"
+        );
+
+
+      let records =
+        getSuccessfulAndFinishedRecords();
+
+
+      const now =
+        new Date();
+
+
+      if (period === "today") {
+
+        const today =
+          now.toISOString()
+            .split("T")[0];
+
+
+        records =
+          records.filter(
+            record =>
+              record.date === today
           );
 
-
-        result.className =
-          "history-result";
+      }
 
 
-        if (
-          entry.result ===
-            "failed"
-        ) {
+      if (period === "week") {
 
-          result.textContent =
-            "🔴 Sincronización fallida";
+        const weekAgo =
+          Date.now() -
+          7 * 24 * 60 * 60 * 1000;
 
-        } else {
 
-          result.textContent =
-            "🟢 Sincronización exitosa";
+        records =
+          records.filter(
+            record =>
+              record.endTime >= weekAgo
+          );
+
+      }
+
+
+      if (period === "custom") {
+
+        const start =
+          document.getElementById(
+            "historyStart"
+          ).value;
+
+
+        const end =
+          document.getElementById(
+            "historyEnd"
+          ).value;
+
+
+        if (start) {
+
+          records =
+            records.filter(
+              record =>
+                record.date >= start
+            );
 
         }
 
 
+        if (end) {
 
-        item.appendChild(
-          date
-        );
+          records =
+            records.filter(
+              record =>
+                record.date <= end
+            );
 
+        }
 
-        item.appendChild(
-          details
-        );
-
-
-        item.appendChild(
-          result
-        );
+      }
 
 
+      records.sort(
+        (a, b) =>
+          b.endTime - a.endTime
+      );
 
-        if (
-          entry.result ===
-            "failed" &&
-          entry.comment
-        ) {
 
-          const comment =
+      container.innerHTML = "";
+
+
+      if (records.length === 0) {
+
+        container.innerHTML = `
+
+          <p style="color:#6b7280;">
+            No hay registros para este periodo.
+          </p>
+
+        `;
+
+        return;
+
+      }
+
+
+      records.forEach(
+        record => {
+
+          const div =
             document.createElement(
               "div"
             );
 
 
-          comment.className =
-            "history-comment";
+          div.className =
+            "history-item";
 
 
-          comment.textContent =
-            `📝 ${entry.comment}`;
+          div.innerHTML = `
+
+            <div class="history-header">
+
+              <span>
+                ${record.userName}
+              </span>
+
+              <span>
+                ${formatDuration(
+                  record.duration
+                )}
+              </span>
+
+            </div>
+
+            <div class="history-details">
+
+              ${new Date(
+                record.endTime
+              ).toLocaleString()}
+
+            </div>
+
+          `;
 
 
-          item.appendChild(
-            comment
+          container.appendChild(div);
+
+        }
+      );
+
+    }
+
+
+
+    // =========================
+    // FILTROS DE HISTORIAL
+    // =========================
+
+    function initializeHistoryFilters() {
+
+      const period =
+        document.getElementById(
+          "historyPeriod"
+        );
+
+
+      const start =
+        document.getElementById(
+          "historyStart"
+        );
+
+
+      const end =
+        document.getElementById(
+          "historyEnd"
+        );
+
+
+      period.addEventListener(
+        "change",
+        () => {
+
+          const custom =
+            period.value === "custom";
+
+
+          start.classList.toggle(
+            "hidden",
+            !custom
           );
+
+
+          end.classList.toggle(
+            "hidden",
+            !custom
+          );
+
+        }
+      );
+
+    }
+
+
+
+    // =========================
+    // HISTORIAL INDIVIDUAL
+    // =========================
+
+    function openHistory(
+      userId
+    ) {
+
+      const teamCard =
+        document.querySelector(
+          "#teamGrid"
+        );
+
+
+      const historyCard =
+        document.getElementById(
+          "personHistoryCard"
+        );
+
+
+      teamCard.parentElement
+        .classList.add("hidden");
+
+
+      historyCard
+        .classList.remove("hidden");
+
+
+      document.getElementById(
+        "personHistoryTitle"
+      ).textContent =
+        `📋 Historial de ${
+          teamMembers[userId].name
+        }`;
+
+
+      renderUserHistory(userId);
+
+    }
+
+
+
+    // =========================
+    // CERRAR HISTORIAL
+    // =========================
+
+    window.closePersonHistory =
+      function () {
+
+        document
+          .getElementById(
+            "personHistoryCard"
+          )
+          .classList.add("hidden");
+
+
+        document
+          .getElementById(
+            "teamGrid"
+          )
+          .parentElement
+          .classList.remove("hidden");
+
+      };
+
+
+
+    // =========================
+    // RENDER HISTORIAL PERSONA
+    // =========================
+
+    function renderUserHistory(
+      userId
+    ) {
+
+      const container =
+        document.getElementById(
+          "personHistory"
+        );
+
+
+      const records =
+        getSuccessfulAndFinishedRecords()
+          .filter(
+            record =>
+              record.userId === userId
+          )
+          .sort(
+            (a, b) =>
+              b.endTime - a.endTime
+          );
+
+
+      container.innerHTML = "";
+
+
+      if (records.length === 0) {
+
+        container.innerHTML = `
+
+          <p style="color:#6b7280;">
+            No hay sincronizaciones registradas.
+          </p>
+
+        `;
+
+        return;
+
+      }
+
+
+      records.forEach(
+        record => {
+
+          const div =
+            document.createElement(
+              "div"
+            );
+
+
+          div.className =
+            "history-item";
+
+
+          div.innerHTML = `
+
+            <div class="history-header">
+
+              <span>
+                ${new Date(
+                  record.endTime
+                ).toLocaleDateString()}
+              </span>
+
+              <span>
+                ${formatDuration(
+                  record.duration
+                )}
+              </span>
+
+            </div>
+
+            <div class="history-details">
+
+              ${new Date(
+                record.endTime
+              ).toLocaleTimeString()}
+
+            </div>
+
+          `;
+
+
+          container.appendChild(div);
+
+        }
+      );
+
+    }
+
+
+
+    // =========================
+    // SINCRONIZACIÓN EXTERNA
+    // =========================
+
+    window.reportExternalSync =
+      async function () {
+
+        if (!currentUserId) {
+
+          alert(
+            "Primero selecciona tu usuario."
+          );
+
+          return;
 
         }
 
 
+        await push(
+          externalSyncRef,
+          {
 
-        list.appendChild(
-          item
+            userId:
+              currentUserId,
+
+            userName:
+              teamMembers[currentUserId].name,
+
+            timestamp:
+              serverTimestamp()
+
+          }
         );
+
+
+        alert(
+          "Sincronización externa reportada."
+        );
+
+      };
+
+
+
+    // =========================
+    // ESCUCHAR TEAM
+    // =========================
+
+    onValue(
+      teamRef,
+      snapshot => {
+
+        teamData =
+          snapshot.val() || {};
+
+
+        renderTeam();
+
+        renderCurrentlySyncing();
+
+        updateGeneralSummary();
 
       }
     );
 
-  }
 
 
+    // =========================
+    // ESCUCHAR HISTORIAL
+    // =========================
 
-  function createHistoryDetail(
-    label,
-    value
-  ) {
+    onValue(
+      historyRef,
+      snapshot => {
 
-    const element =
-      document.createElement(
-        "div"
-      );
-
-
-    element.className =
-      "history-detail";
+        historyData =
+          snapshot.val() || {};
 
 
-    const span =
-      document.createElement(
-        "span"
-      );
+        renderPeriodHistory();
 
+        updateAverage();
 
-    span.textContent =
-      label;
+        updateGeneralSummary();
 
-
-    const strong =
-      document.createElement(
-        "strong"
-      );
-
-
-    strong.textContent =
-      value || "-";
-
-
-    element.appendChild(
-      span
+      }
     );
 
 
-    element.appendChild(
-      strong
-    );
 
+    // =========================
+    // ESCUCHAR SINCRONIZACIONES
+    // EXTERNAS
+    // =========================
 
-    return element;
-
-  }
-
-
-
-  // =========================
-  // ALERTA EXTERNA
-  // =========================
-
-  async function startExternalSync() {
-
-    if (!currentUserId) {
-
-      alert(
-        "Primero selecciona tu usuario."
-      );
-
-      return;
-
-    }
-
-
-    await set(
+    onValue(
       externalSyncRef,
-      {
+      snapshot => {
 
-        active:
-          true,
+        const data =
+          snapshot.val() || {};
 
-        reportedBy:
-          currentUserId,
 
-        reportedByName:
-          currentUserName,
+        const entries =
+          Object.values(data);
 
-        startedAt:
-          serverTimestamp()
+
+        if (entries.length === 0) {
+
+          document
+            .getElementById(
+              "externalAlertCard"
+            )
+            .classList.add("hidden");
+
+          return;
+
+        }
+
+
+        const latest =
+          entries
+            .sort(
+              (a, b) =>
+                (b.timestamp || 0) -
+                (a.timestamp || 0)
+            )[0];
+
+
+        if (
+          latest &&
+          latest.userId !== currentUserId
+        ) {
+
+          const alertCard =
+            document.getElementById(
+              "externalAlertCard"
+            );
+
+
+          alertCard
+            .classList
+            .remove("hidden");
+
+
+          document
+            .getElementById(
+              "externalAlertText"
+            )
+            .textContent =
+            `${
+              latest.userName
+            } realizó una sincronización externa.`;
+
+        }
 
       }
     );
 
-  }
 
 
+    // =========================
+    // AUTO LOGIN
+    // =========================
 
-  async function stopExternalSync() {
-
-    await set(
-      externalSyncRef,
-      {
-
-        active:
-          false,
-
-        reportedBy:
-          null,
-
-        reportedByName:
-          null,
-
-        startedAt:
-          null
-
-      }
-    );
-
-  }
-
-
-
-  // =========================
-  // MOSTRAR ALERTA EXTERNA
-  // =========================
-
-  function renderExternalAlert(
-    data
-  ) {
-
-    const card =
-      document.getElementById(
-        "externalAlertCard"
+    const savedUser =
+      localStorage.getItem(
+        "bimSyncUser"
       );
 
 
-    const meta =
-      document.getElementById(
-        "externalAlertMeta"
-      );
+    if (savedUser &&
+        teamMembers[savedUser]) {
+
+      userSelect.value =
+        savedUser;
 
 
-    if (
-      !data ||
-      data.active !== true
-    ) {
-
-      card.classList.add(
-        "hidden"
-      );
-
-
-      card.classList.remove(
-        "active"
-      );
-
-
-      return;
+      selectUser();
 
     }
 
 
 
-    card.classList.remove(
-      "hidden"
+    // =========================
+    // ACTUALIZACIÓN EN VIVO
+    // =========================
+
+    setInterval(
+      () => {
+
+        updateLiveTimers();
+
+      },
+      1000
     );
 
 
-    card.classList.add(
-      "active"
-    );
+    // =========================
+    // INICIALIZAR FILTROS
+    // =========================
 
+    initializeHistoryFilters();
 
 
-    let text =
-      "Alerta activada";
+    // =========================
+    // EXPONER FUNCIONES
+    // =========================
 
+    window.renderPeriodHistory =
+      renderPeriodHistory;
 
-    if (
-      data.reportedByName
-    ) {
-
-      text =
-        `Avisado por ${data.reportedByName}`;
-
-    }
-
-
-
-    if (
-      data.startedAt
-    ) {
-
-      const elapsed =
-        Math.max(
-          0,
-          Math.floor(
-            (
-              Date.now() -
-              Number(
-                data.startedAt
-              )
-            ) / 1000
-          )
-        );
-
-
-      text +=
-        ` • Hace ${formatDuration(elapsed)}`;
-
-    }
-
-
-
-    meta.textContent =
-      text;
-
-  }
-
-
-
-  function updateExternalAlertTimer() {
-
-    /*
-      Firebase actualizará la alerta
-      cuando cambie. Aquí solo
-      actualizamos el texto de tiempo.
-    */
-
-    if (
-      window.currentExternalSyncData
-    ) {
-
-      renderExternalAlert(
-        window.currentExternalSyncData
-      );
-
-    }
-
-  }
-
-
-
-  // =========================
-  // FIREBASE TEAM
-  // =========================
-
-  onValue(
-    teamRef,
-    snapshot => {
-
-      const data =
-        snapshot.val() || {};
-
-
-      teamData =
-        data;
-
-
-      renderTeam(
-        data
-      );
-
-    }
-  );
-
-
-
-  // =========================
-  // FIREBASE HISTORY
-  // =========================
-
-  onValue(
-    historyRef,
-    snapshot => {
-
-      historyData =
-        snapshot.val() || {};
-
-
-      updateGeneralSummary();
-      renderTeam(teamData);
-
-
-
-      if (
-        selectedHistoryUserId
-      ) {
-
-        renderUserHistory(
-          selectedHistoryUserId
-        );
-
-      }
-
-    }
-  );
-
-
-
-  // =========================
-  // FIREBASE EXTERNAL SYNC
-  // =========================
-
-  onValue(
-    externalSyncRef,
-    snapshot => {
-
-      const data =
-        snapshot.val();
-
-
-      window.currentExternalSyncData =
-        data || null;
-
-
-      renderExternalAlert(
-        data
-      );
-
-    }
-  );
-
-
-
-  // =========================
-  // TEMPORIZADOR
-  // =========================
-
-  setInterval(
-    updateLiveTimers,
-    1000
-  );
-
-
-
-  // =========================
-  // CAMBIAR USUARIO
-  // =========================
-
-  function changeUser() {
-
-    localStorage.removeItem(
-      "bimSyncUserId"
-    );
-
-
-    localStorage.removeItem(
-      "bimSyncUserName"
-    );
-
-
-    currentUserId =
-      null;
-
-
-    currentUserName =
-      null;
-
-
-    appScreen
-      .classList
-      .add("hidden");
-
-
-    selectionScreen
-      .classList
-      .remove("hidden");
-
-  }
-
-
-
-  // =========================
-  // REGRESAR
-  // =========================
-
-  function showTeam() {
-
-    historySection
-      .classList
-      .add("hidden");
-
-
-    teamSection
-      .classList
-      .remove("hidden");
-
-
-    selectedHistoryUserId =
-      null;
-
-  }
-
-
-
-  // =========================
-  // INICIO
-  // =========================
-
-  renderUserSelection();
-
-
-
-  const savedUserId =
-    localStorage.getItem(
-      "bimSyncUserId"
-    );
-
-
-  const savedUserName =
-    localStorage.getItem(
-      "bimSyncUserName"
-    );
-
-
-
-  if (
-    savedUserId &&
-    savedUserName &&
-    members[savedUserId]
-  ) {
-
-    selectUser(
-      savedUserId,
-      savedUserName
-    );
-
-  }
-
-
-
-  // =========================
-  // FUNCIONES GLOBALES
-  // =========================
-
-  window.startSync =
-    startSync;
-
-
-  window.finishSync =
-    finishSync;
-
-
-  window.showFailModal =
-    showFailModal;
-
-
-  window.closeFailModal =
-    closeFailModal;
-
-
-  window.showSuccessModal =
-    showSuccessModal;
-
-
-  window.closeSuccessModal =
-    closeSuccessModal;
-
-
-  window.startExternalSync =
-    startExternalSync;
-
-
-  window.stopExternalSync =
-    stopExternalSync;
-
-
-  window.changeUser =
-    changeUser;
-
-
-  window.showTeam =
-    showTeam;
-
-</script>
-
+  </script>
 
 </body>
-
 </html>
