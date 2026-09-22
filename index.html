@@ -975,6 +975,106 @@
     }
 
 
+
+    /* =========================
+       PROMEDIOS Y FILTROS
+    ========================= */
+
+    .average-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .average-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .average-person {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 9px;
+      padding: 11px 13px;
+    }
+
+    .average-person-name {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .average-person-value {
+      font-weight: bold;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .history-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: end;
+      margin: 15px 0;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .filter-group label {
+      font-size: 12px;
+      font-weight: bold;
+      color: #6b7280;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      background: white;
+    }
+
+    .filtered-history-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .last-sync {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .last-sync strong {
+      color: #374151;
+    }
+
+    .no-data {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 9px;
+      padding: 12px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
     /* =========================
        RESPONSIVE
     ========================= */
@@ -1387,6 +1487,113 @@
 
     </div>
 
+
+
+
+    <!-- =========================
+         PROMEDIOS
+    ========================= -->
+
+    <div class="card">
+
+      <h2>📈 Promedios</h2>
+
+      <div class="average-grid">
+
+        <div class="summary-box">
+
+          <div class="summary-text">
+            ⏱️ Promedio general de sincronización
+          </div>
+
+          <div
+            id="generalAverageTime"
+            class="summary-number"
+          >
+            0 s
+          </div>
+
+        </div>
+
+        <div class="summary-box">
+
+          <div class="summary-text">
+            📊 Sincronizaciones consideradas
+          </div>
+
+          <div
+            id="generalAverageCount"
+            class="summary-number"
+          >
+            0
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="summary-label">
+        Promedio por persona
+      </div>
+
+      <div
+        id="averageByPerson"
+        class="average-list"
+      ></div>
+
+    </div>
+
+
+    <!-- =========================
+         HISTORIAL GENERAL
+    ========================= -->
+
+    <div class="card">
+
+      <h2>📅 Historial por periodo</h2>
+
+      <p style="color:#6b7280;font-size:14px;">
+        Consulta las sincronizaciones de un día, una semana o un periodo personalizado.
+      </p>
+
+      <div class="history-filter-bar">
+
+        <div class="filter-group">
+          <label for="historyPeriod">Periodo</label>
+
+          <select id="historyPeriod">
+            <option value="today">Hoy</option>
+            <option value="yesterday">Ayer</option>
+            <option value="week">Esta semana</option>
+            <option value="lastWeek">Semana pasada</option>
+            <option value="custom">Día específico</option>
+          </select>
+        </div>
+
+        <div
+          id="customDateGroup"
+          class="filter-group hidden"
+        >
+          <label for="historyDate">Día</label>
+          <input
+            id="historyDate"
+            type="date"
+          >
+        </div>
+
+      </div>
+
+      <div
+        id="periodSummary"
+        class="filtered-history-summary"
+      ></div>
+
+      <div
+        id="periodHistoryList"
+        class="history-list"
+      ></div>
+
+    </div>
 
 
     <!-- =========================
@@ -2338,6 +2545,557 @@
 
 
   // =========================
+  // DATOS DE SINCRONIZACIÓN
+  // =========================
+
+  function getSuccessfulAndFinishedRecords() {
+
+    return Object.values(historyData || {})
+      .filter(entry =>
+        entry &&
+        entry.result === "success" &&
+        Number(entry.durationSeconds) >= 0
+      );
+
+  }
+
+
+  function getLastSyncForUser(userId) {
+
+    const records =
+      getSuccessfulAndFinishedRecords()
+        .filter(entry =>
+          entry.userId === userId
+        )
+        .sort(
+          (a, b) =>
+            (Number(b.finishTimestamp) || 0) -
+            (Number(a.finishTimestamp) || 0)
+        );
+
+    return records[0] || null;
+
+  }
+
+
+  function escapeHtml(value) {
+
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  function getDateKey(date) {
+
+    const year =
+      date.getFullYear();
+
+    const month =
+      String(date.getMonth() + 1)
+        .padStart(2, "0");
+
+    const day =
+      String(date.getDate())
+        .padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+
+  }
+
+
+  function getStartOfWeek(date) {
+
+    const result =
+      new Date(date);
+
+    const day =
+      result.getDay();
+
+    const diff =
+      day === 0
+        ? -6
+        : 1 - day;
+
+    result.setHours(0, 0, 0, 0);
+
+    result.setDate(
+      result.getDate() + diff
+    );
+
+    return result;
+
+  }
+
+
+  function getEndOfWeek(date) {
+
+    const result =
+      getStartOfWeek(date);
+
+    result.setDate(
+      result.getDate() + 6
+    );
+
+    result.setHours(
+      23, 59, 59, 999
+    );
+
+    return result;
+
+  }
+
+
+  function getPeriodRecords(period) {
+
+    const now =
+      new Date();
+
+    let start;
+    let end;
+
+    if (period === "today") {
+
+      start =
+        new Date(now);
+
+      start.setHours(0, 0, 0, 0);
+
+      end =
+        new Date(now);
+
+      end.setHours(
+        23, 59, 59, 999
+      );
+
+    } else if (period === "yesterday") {
+
+      start =
+        new Date(now);
+
+      start.setDate(
+        start.getDate() - 1
+      );
+
+      start.setHours(0, 0, 0, 0);
+
+      end =
+        new Date(start);
+
+      end.setHours(
+        23, 59, 59, 999
+      );
+
+    } else if (period === "week") {
+
+      start =
+        getStartOfWeek(now);
+
+      end =
+        getEndOfWeek(now);
+
+    } else if (period === "lastWeek") {
+
+      start =
+        getStartOfWeek(now);
+
+      start.setDate(
+        start.getDate() - 7
+      );
+
+      end =
+        getEndOfWeek(start);
+
+    } else if (period === "custom") {
+
+      const value =
+        document.getElementById(
+          "historyDate"
+        ).value;
+
+      if (!value) {
+
+        return [];
+
+      }
+
+      const parts =
+        value.split("-")
+          .map(Number);
+
+      start =
+        new Date(
+          parts[0],
+          parts[1] - 1,
+          parts[2],
+          0, 0, 0, 0
+        );
+
+      end =
+        new Date(
+          parts[0],
+          parts[1] - 1,
+          parts[2],
+          23, 59, 59, 999
+        );
+
+    } else {
+
+      return [];
+
+    }
+
+
+    return Object.values(historyData || {})
+      .filter(entry => {
+
+        const timestamp =
+          Number(entry.finishTimestamp);
+
+        return (
+          timestamp >= start.getTime() &&
+          timestamp <= end.getTime()
+        );
+
+      })
+      .sort(
+        (a, b) =>
+          (Number(b.finishTimestamp) || 0) -
+          (Number(a.finishTimestamp) || 0)
+      );
+
+  }
+
+
+  function renderAverageByPerson() {
+
+    const container =
+      document.getElementById(
+        "averageByPerson"
+      );
+
+    container.innerHTML = "";
+
+    const records =
+      getSuccessfulAndFinishedRecords();
+
+    Object.entries(members)
+      .forEach(
+        ([id, name]) => {
+
+          const personRecords =
+            records.filter(
+              entry =>
+                entry.userId === id
+            );
+
+          const row =
+            document.createElement("div");
+
+          row.className =
+            "average-person";
+
+          const nameElement =
+            document.createElement("div");
+
+          nameElement.className =
+            "average-person-name";
+
+          nameElement.textContent =
+            name;
+
+          const valueElement =
+            document.createElement("div");
+
+          valueElement.className =
+            "average-person-value";
+
+          if (personRecords.length === 0) {
+
+            valueElement.textContent =
+              "— Sin registros";
+
+          } else {
+
+            const total =
+              personRecords.reduce(
+                (sum, entry) =>
+                  sum +
+                  (Number(entry.durationSeconds) || 0),
+                0
+              );
+
+            const average =
+              Math.round(
+                total /
+                personRecords.length
+              );
+
+            valueElement.textContent =
+              formatDuration(average);
+
+          }
+
+          row.appendChild(
+            nameElement
+          );
+
+          row.appendChild(
+            valueElement
+          );
+
+          container.appendChild(
+            row
+          );
+
+        }
+      );
+
+  }
+
+
+  function renderPeriodHistory() {
+
+    const period =
+      document.getElementById(
+        "historyPeriod"
+      ).value;
+
+    const records =
+      getPeriodRecords(period);
+
+    const summary =
+      document.getElementById(
+        "periodSummary"
+      );
+
+    const list =
+      document.getElementById(
+        "periodHistoryList"
+      );
+
+    let totalSeconds = 0;
+    let successful = 0;
+    let failed = 0;
+
+    records.forEach(
+      entry => {
+
+        totalSeconds +=
+          Number(entry.durationSeconds) || 0;
+
+        if (entry.result === "failed") {
+          failed++;
+        } else {
+          successful++;
+        }
+
+      }
+    );
+
+    const average =
+      records.length > 0
+        ? Math.round(
+            totalSeconds /
+            records.length
+          )
+        : 0;
+
+    summary.innerHTML = "";
+
+    [
+      ["🔄 Sincronizaciones", records.length],
+      ["🟢 Exitosas", successful],
+      ["🔴 Fallidas", failed],
+      ["⏱️ Promedio", formatDuration(average)]
+    ].forEach(
+      ([label, value]) => {
+
+        const box =
+          document.createElement("div");
+
+        box.className =
+          "history-box";
+
+        box.innerHTML =
+          `<div class="summary-text">${label}</div>` +
+          `<strong>${escapeHtml(value)}</strong>`;
+
+        summary.appendChild(box);
+
+      }
+    );
+
+    list.innerHTML = "";
+
+    if (records.length === 0) {
+
+      const empty =
+        document.createElement("div");
+
+      empty.className =
+        "no-history";
+
+      empty.textContent =
+        "No hay sincronizaciones registradas en este periodo.";
+
+      list.appendChild(
+        empty
+      );
+
+      return;
+
+    }
+
+    records.forEach(
+      entry => {
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "history-item " +
+          (
+            entry.result === "failed"
+              ? "failed"
+              : "success"
+          );
+
+        const date =
+          document.createElement("div");
+
+        date.className =
+          "history-date";
+
+        date.textContent =
+          `📅 ${entry.date} • 👤 ${entry.user}`;
+
+        const details =
+          document.createElement("div");
+
+        details.className =
+          "history-details";
+
+        details.appendChild(
+          createHistoryDetail(
+            "Inicio",
+            entry.startedAt
+          )
+        );
+
+        details.appendChild(
+          createHistoryDetail(
+            "Fin",
+            entry.finishedAt
+          )
+        );
+
+        details.appendChild(
+          createHistoryDetail(
+            "Duración",
+            formatDuration(
+              entry.durationSeconds
+            )
+          )
+        );
+
+        const result =
+          document.createElement("div");
+
+        result.className =
+          "history-result";
+
+        result.textContent =
+          entry.result === "failed"
+            ? "🔴 Sincronización fallida"
+            : "🟢 Sincronización exitosa";
+
+        item.appendChild(date);
+        item.appendChild(details);
+        item.appendChild(result);
+
+        if (
+          entry.result === "failed" &&
+          entry.comment
+        ) {
+
+          const comment =
+            document.createElement("div");
+
+          comment.className =
+            "history-comment";
+
+          comment.textContent =
+            `📝 ${entry.comment}`;
+
+          item.appendChild(
+            comment
+          );
+
+        }
+
+        list.appendChild(
+          item
+        );
+
+      }
+    );
+
+  }
+
+
+  function initializeHistoryFilters() {
+
+    const periodSelect =
+      document.getElementById(
+        "historyPeriod"
+      );
+
+    const dateInput =
+      document.getElementById(
+        "historyDate"
+      );
+
+    const customGroup =
+      document.getElementById(
+        "customDateGroup"
+      );
+
+    const update =
+      () => {
+
+        customGroup.classList.toggle(
+          "hidden",
+          periodSelect.value !== "custom"
+        );
+
+        renderPeriodHistory();
+
+      };
+
+    periodSelect.addEventListener(
+      "change",
+      update
+    );
+
+    dateInput.addEventListener(
+      "change",
+      renderPeriodHistory
+    );
+
+    dateInput.value =
+      getDateKey(new Date());
+
+    update();
+
+  }
+
+
+  // =========================
   // RENDER TEAM
   // =========================
 
@@ -2462,6 +3220,30 @@
 
 
 
+          const lastSyncElement =
+            document.createElement("div");
+
+          lastSyncElement.className =
+            "last-sync";
+
+          const lastSync =
+            getLastSyncForUser(id);
+
+          if (lastSync) {
+
+            lastSyncElement.innerHTML =
+              `<strong>Última sincronización</strong><br>` +
+              `🕐 ${escapeHtml(lastSync.startedAt)} ` +
+              `• ⏱️ ${escapeHtml(formatDuration(lastSync.durationSeconds))}`;
+
+          } else {
+
+            lastSyncElement.innerHTML =
+              `<strong>Última sincronización</strong><br>` +
+              `— Sin registros —`;
+
+          }
+
           card.appendChild(
             nameElement
           );
@@ -2474,6 +3256,10 @@
 
           card.appendChild(
             timerElement
+          );
+
+          card.appendChild(
+            lastSyncElement
           );
 
 
@@ -2900,6 +3686,37 @@
       formatDuration(
         totalSeconds
       );
+
+    const finishedRecords =
+      getSuccessfulAndFinishedRecords();
+
+    const averageSeconds =
+      finishedRecords.length > 0
+        ? Math.round(
+            finishedRecords.reduce(
+              (sum, entry) =>
+                sum +
+                (Number(entry.durationSeconds) || 0),
+              0
+            ) /
+            finishedRecords.length
+          )
+        : 0;
+
+    document.getElementById(
+      "generalAverageTime"
+    ).textContent =
+      formatDuration(
+        averageSeconds
+      );
+
+    document.getElementById(
+      "generalAverageCount"
+    ).textContent =
+      finishedRecords.length;
+
+    renderAverageByPerson();
+    renderPeriodHistory();
 
   }
 
@@ -3517,6 +4334,7 @@
 
 
       updateGeneralSummary();
+      renderTeam(teamData);
 
 
 
