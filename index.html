@@ -8,427 +8,1784 @@
   <title>BIM Sync Monitor</title>
 
   <style>
+
+    /* =========================================================
+       RESET
+    ========================================================= */
+
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      color: #1f2937;
+      min-height: 100vh;
+
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      color: #e5e7eb;
+
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(37, 99, 235, 0.14),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 85% 20%,
+          rgba(14, 165, 233, 0.08),
+          transparent 25%
+        ),
+        #090d14;
+
+      overflow-x: hidden;
     }
+
+    body::before {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+
+      opacity: 0.16;
+
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,0.035) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,0.035) 1px,
+          transparent 1px
+        );
+
+      background-size: 45px 45px;
+
+      mask-image:
+        linear-gradient(
+          to bottom,
+          black,
+          transparent 85%
+        );
+
+      z-index: -1;
+    }
+
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
 
     header {
-      background: #1f2937;
-      color: white;
-      padding: 24px;
-      text-align: center;
+
+      position: sticky;
+      top: 0;
+
+      z-index: 50;
+
+      padding: 18px 28px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      border-bottom:
+        1px solid rgba(255,255,255,0.07);
+
+      background:
+        rgba(9,13,20,0.78);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
-    header h1 {
+    .brand {
+
+      display: flex;
+      align-items: center;
+      gap: 13px;
+
+    }
+
+    .brand-icon {
+
+      width: 42px;
+      height: 42px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 12px;
+
+      font-size: 20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #2563eb,
+          #0ea5e9
+        );
+
+      box-shadow:
+        0 0 25px rgba(37,99,235,0.28);
+
+    }
+
+    .brand-text h1 {
+
       margin: 0;
-      font-size: 28px;
+
+      font-size: 18px;
+      font-weight: 700;
+
+      letter-spacing: -0.3px;
+
     }
 
-    header p {
-      margin: 8px 0 0;
-      opacity: 0.8;
+    .brand-text p {
+
+      margin: 2px 0 0;
+
+      font-size: 11px;
+
+      color: #7f8a9a;
+
+      letter-spacing: 0.3px;
+
     }
+
+    .system-status {
+
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 8px 12px;
+
+      border-radius: 999px;
+
+      background:
+        rgba(16,185,129,0.08);
+
+      border:
+        1px solid rgba(16,185,129,0.16);
+
+      color: #86efac;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      letter-spacing: 0.7px;
+
+    }
+
+    .system-dot {
+
+      width: 7px;
+      height: 7px;
+
+      border-radius: 50%;
+
+      background: #22c55e;
+
+      box-shadow:
+        0 0 10px #22c55e;
+
+    }
+
+
+    /* =========================================================
+       MAIN
+    ========================================================= */
 
     .container {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 20px;
+
+      width: min(1400px, calc(100% - 40px));
+
+      margin: 0 auto;
+
+      padding: 34px 0 70px;
+
     }
 
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+
+    .hero {
+
+      display: flex;
+
+      justify-content: space-between;
+      align-items: flex-end;
+
+      gap: 30px;
+
+      margin-bottom: 28px;
+
+    }
+
+    .hero h2 {
+
+      margin: 0 0 8px;
+
+      font-size: clamp(28px, 4vw, 42px);
+
+      line-height: 1.05;
+
+      letter-spacing: -1.8px;
+
+      color: #f8fafc;
+
+    }
+
+    .hero p {
+
+      margin: 0;
+
+      color: #7f8a9a;
+
+      font-size: 14px;
+
+    }
+
+    .hero-line {
+
+      width: 90px;
+      height: 3px;
+
+      margin-top: 18px;
+
+      border-radius: 10px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #2563eb,
+          #38bdf8,
+          transparent
+        );
+
+    }
+
+
+    /* =========================================================
+       CARDS
+    ========================================================= */
+
     .card {
-      background: white;
-      border-radius: 14px;
-      padding: 22px;
+
+      position: relative;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(20,27,39,0.92),
+          rgba(13,18,27,0.92)
+        );
+
+      border:
+        1px solid rgba(255,255,255,0.07);
+
+      border-radius: 20px;
+
+      padding: 24px;
+
       margin-bottom: 20px;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+
+      box-shadow:
+        0 15px 45px rgba(0,0,0,0.20);
+
+      overflow: hidden;
+
+    }
+
+    .card::before {
+
+      content: "";
+
+      position: absolute;
+
+      top: 0;
+      left: 0;
+      right: 0;
+
+      height: 1px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(96,165,250,0.35),
+          transparent
+        );
+
     }
 
     .card h2 {
-      margin-top: 0;
+
+      margin: 0 0 18px;
+
+      color: #f1f5f9;
+
+      font-size: 17px;
+
+      letter-spacing: -0.2px;
+
+    }
+
+    .section-label {
+
       margin-bottom: 18px;
-      font-size: 21px;
+
+      color: #64748b;
+
+      font-size: 10px;
+
+      text-transform: uppercase;
+
+      letter-spacing: 1.5px;
+
+      font-weight: 700;
+
     }
 
-    .current-user {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 15px;
+
+    /* =========================================================
+       USER SELECTION
+    ========================================================= */
+
+    #userSelection {
+
+      max-width: 560px;
+
+      margin: 100px auto;
+
+      text-align: center;
+
+      padding: 38px;
+
     }
 
-    button,
-    select {
-      border: none;
-      border-radius: 8px;
-      padding: 11px 16px;
-      font-size: 14px;
-      cursor: pointer;
+    #userSelection h2 {
+
+      font-size: 25px;
+
+      margin-bottom: 25px;
+
     }
 
-    select {
+    #userSelection::after {
+
+      content: "BIM • REVIT • TEAM SYNC";
+
+      display: block;
+
+      margin-top: 22px;
+
+      color: #475569;
+
+      font-size: 10px;
+
+      letter-spacing: 2px;
+
+    }
+
+
+    /* =========================================================
+       SELECT
+    ========================================================= */
+
+    select,
+    input {
+
       width: 100%;
-      border: 1px solid #d1d5db;
-      background: white;
-      margin-bottom: 15px;
+
+      border:
+        1px solid rgba(255,255,255,0.08);
+
+      border-radius: 11px;
+
+      padding: 13px 14px;
+
+      font-size: 14px;
+
+      color: #e5e7eb;
+
+      background:
+        rgba(255,255,255,0.035);
+
+      outline: none;
+
+      transition: 0.2s;
+
     }
+
+    select:focus,
+    input:focus {
+
+      border-color:
+        rgba(59,130,246,0.65);
+
+      box-shadow:
+        0 0 0 3px rgba(37,99,235,0.10);
+
+    }
+
+    option {
+
+      color: #111827;
+
+    }
+
+
+    /* =========================================================
+       BUTTONS
+    ========================================================= */
 
     button {
-      background: #2563eb;
+
+      border: none;
+
+      border-radius: 10px;
+
+      padding: 12px 17px;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      letter-spacing: 0.15px;
+
+      cursor: pointer;
+
       color: white;
+
+      background: #2563eb;
+
+      transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        opacity 0.2s;
+
     }
 
     button:hover {
-      opacity: 0.9;
+
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 8px 20px rgba(0,0,0,0.22);
+
     }
 
-    .action-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+    button:active {
+
+      transform: translateY(0);
+
     }
 
     .btn-success {
-      background: #16a34a;
+
+      background:
+        linear-gradient(
+          135deg,
+          #16a34a,
+          #22c55e
+        );
+
     }
 
     .btn-danger {
-      background: #dc2626;
+
+      background:
+        linear-gradient(
+          135deg,
+          #dc2626,
+          #ef4444
+        );
+
     }
 
     .btn-secondary {
-      background: #6b7280;
+
+      background:
+        rgba(255,255,255,0.07);
+
+      border:
+        1px solid rgba(255,255,255,0.07);
+
+      color: #cbd5e1;
+
     }
 
     .btn-warning {
-      background: #d97706;
+
+      background:
+        linear-gradient(
+          135deg,
+          #d97706,
+          #f59e0b
+        );
+
     }
 
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
+    .btn-primary {
+
+      background:
+        linear-gradient(
+          135deg,
+          #2563eb,
+          #0ea5e9
+        );
+
+      box-shadow:
+        0 8px 24px rgba(37,99,235,0.18);
+
     }
 
-    .summary-item {
-      background: #f8fafc;
-      padding: 18px;
-      border-radius: 10px;
-      text-align: center;
-    }
 
-    .summary-item strong {
-      display: block;
-      font-size: 25px;
-      margin-bottom: 5px;
-    }
+    /* =========================================================
+       USER CARD
+    ========================================================= */
 
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-    }
+    .user-panel {
 
-    .team-member {
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 18px;
-      background: #fafafa;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .team-member:hover {
-      background: #f3f4f6;
-      transform: translateY(-1px);
-    }
-
-    .team-name {
-      font-weight: bold;
-      font-size: 17px;
-      margin-bottom: 8px;
-    }
-
-    .status {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .available {
-      color: #16a34a;
-    }
-
-    .syncing {
-      color: #2563eb;
-    }
-
-    .failed {
-      color: #dc2626;
-    }
-
-    .sync-info {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid #e5e7eb;
-      font-size: 13px;
-      color: #4b5563;
-      line-height: 1.7;
-    }
-
-    .sync-info strong {
-      color: #1f2937;
-    }
-
-    .last-sync {
-      margin-top: 12px;
-      padding: 12px;
-      background: #f8fafc;
-      border-radius: 9px;
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    .last-sync-title {
-      font-weight: bold;
-      color: #1f2937;
-      margin-bottom: 4px;
-    }
-
-    .current-sync {
-      margin-top: 10px;
-      padding: 12px;
-      background: #eff6ff;
-      border-radius: 9px;
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    .history-item {
-      border-bottom: 1px solid #e5e7eb;
-      padding: 12px 0;
-    }
-
-    .history-item:last-child {
-      border-bottom: none;
-    }
-
-    .history-header {
       display: flex;
+
       justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-weight: bold;
+
+      align-items: center;
+
+      gap: 20px;
+
     }
 
-    .history-details {
-      margin-top: 5px;
-      font-size: 13px;
-      color: #6b7280;
-      line-height: 1.6;
+    .user-info {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 14px;
+
     }
+
+    .avatar {
+
+      width: 46px;
+      height: 46px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 14px;
+
+      color: white;
+
+      font-weight: 800;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1d4ed8,
+          #0ea5e9
+        );
+
+      box-shadow:
+        0 7px 25px rgba(37,99,235,0.2);
+
+    }
+
+    .current-user {
+
+      font-size: 17px;
+
+      font-weight: 700;
+
+      color: #f8fafc;
+
+    }
+
+    .user-role {
+
+      margin-top: 3px;
+
+      font-size: 11px;
+
+      color: #64748b;
+
+    }
+
+
+    /* =========================================================
+       ACTIONS
+    ========================================================= */
+
+    .action-buttons {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 12px;
+
+    }
+
+    .action-button {
+
+      min-height: 76px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: flex-start;
+
+      justify-content: center;
+
+      gap: 6px;
+
+      padding: 15px 18px;
+
+      text-align: left;
+
+    }
+
+    .action-icon {
+
+      font-size: 17px;
+
+    }
+
+    .action-title {
+
+      font-size: 12px;
+
+    }
+
+    .action-description {
+
+      font-size: 10px;
+
+      font-weight: 500;
+
+      color: rgba(255,255,255,0.62);
+
+    }
+
+
+    /* =========================================================
+       EXTERNAL ALERT
+    ========================================================= */
 
     .external-alert {
-      background: #fff7ed;
-      border: 1px solid #fdba74;
-      color: #9a3412;
-      border-radius: 10px;
-      padding: 15px;
-      margin-top: 18px;
+
+      margin-top: 15px;
+
+      padding: 14px 16px;
+
+      border-radius: 12px;
+
+      background:
+        rgba(245,158,11,0.07);
+
+      border:
+        1px solid rgba(245,158,11,0.18);
+
+      color: #fbbf24;
+
+      font-size: 12px;
+
+      line-height: 1.6;
+
     }
 
     .external-alert strong {
+
       display: block;
-      margin-bottom: 5px;
+
+      margin-bottom: 2px;
+
     }
 
-    .hidden {
-      display: none !important;
+
+    /* =========================================================
+       CURRENT SYNC
+    ========================================================= */
+
+    .syncing-now {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
+
+      gap: 12px;
+
     }
 
-    .filter-row {
+    .live-sync-card {
+
+      padding: 17px;
+
+      border-radius: 14px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(37,99,235,0.11),
+          rgba(14,165,233,0.035)
+        );
+
+      border:
+        1px solid rgba(59,130,246,0.16);
+
+    }
+
+    .live-top {
+
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
 
-    .filter-row select {
-      flex: 1;
-      min-width: 150px;
-      margin-bottom: 0;
-    }
-
-    .filter-row input {
-      padding: 11px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-
-    .filter-row button {
-      background: #6b7280;
-    }
-
-    .person-history-title {
-      display: flex;
       justify-content: space-between;
+
       align-items: center;
+
       gap: 10px;
+
+      margin-bottom: 12px;
+
+    }
+
+    .live-name {
+
+      font-weight: 700;
+
+      font-size: 13px;
+
+    }
+
+    .live-badge {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      color: #60a5fa;
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.7px;
+
+    }
+
+    .pulse {
+
+      width: 7px;
+      height: 7px;
+
+      border-radius: 50%;
+
+      background: #3b82f6;
+
+      box-shadow:
+        0 0 0 0 rgba(59,130,246,0.6);
+
+      animation:
+        pulse 1.7s infinite;
+
+    }
+
+    @keyframes pulse {
+
+      0% {
+        box-shadow:
+          0 0 0 0 rgba(59,130,246,0.6);
+      }
+
+      70% {
+        box-shadow:
+          0 0 0 8px rgba(59,130,246,0);
+      }
+
+      100% {
+        box-shadow:
+          0 0 0 0 rgba(59,130,246,0);
+      }
+
     }
 
     .live-duration {
-      font-weight: bold;
-      color: #2563eb;
+
+      color: #60a5fa;
+
+      font-size: 18px;
+
+      font-weight: 800;
+
+      font-variant-numeric:
+        tabular-nums;
+
     }
 
-    .see-more-container {
-      text-align: center;
-      margin-top: 15px;
+    .live-details {
+
+      color: #64748b;
+
+      font-size: 11px;
+
     }
 
-    .see-more-button {
-      background: #6b7280;
+
+    /* =========================================================
+       TEAM
+    ========================================================= */
+
+    .team-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(270px, 1fr)
+        );
+
+      gap: 14px;
+
     }
 
-    .day-group-title {
-      font-size: 14px;
-      font-weight: bold;
-      margin-top: 18px;
-      margin-bottom: 5px;
-      color: #374151;
+    .team-member {
+
+      position: relative;
+
+      padding: 18px;
+
+      border-radius: 16px;
+
+      background:
+        rgba(255,255,255,0.025);
+
+      border:
+        1px solid rgba(255,255,255,0.065);
+
+      cursor: pointer;
+
+      transition:
+        transform 0.2s,
+        background 0.2s,
+        border 0.2s;
+
+    }
+
+    .team-member:hover {
+
+      transform: translateY(-3px);
+
+      background:
+        rgba(255,255,255,0.045);
+
+      border-color:
+        rgba(96,165,250,0.25);
+
+    }
+
+    .team-header {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 11px;
+
+      margin-bottom: 13px;
+
+    }
+
+    .team-avatar {
+
+      width: 38px;
+      height: 38px;
+
+      flex-shrink: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 11px;
+
+      font-size: 12px;
+
+      font-weight: 800;
+
+      color: #bfdbfe;
+
+      background:
+        rgba(37,99,235,0.13);
+
+      border:
+        1px solid rgba(59,130,246,0.15);
+
+    }
+
+    .team-name {
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+      color: #f1f5f9;
+
+    }
+
+    .status {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.5px;
+
+    }
+
+    .available {
+
+      color: #4ade80;
+
+    }
+
+    .syncing {
+
+      color: #60a5fa;
+
+    }
+
+    .failed {
+
+      color: #f87171;
+
+    }
+
+    .status-dot {
+
+      width: 6px;
+      height: 6px;
+
+      border-radius: 50%;
+
+    }
+
+    .status-dot.available-dot {
+
+      background: #22c55e;
+
+    }
+
+    .status-dot.syncing-dot {
+
+      background: #3b82f6;
+
+      box-shadow:
+        0 0 8px rgba(59,130,246,0.8);
+
+    }
+
+    .current-sync {
+
+      margin-top: 12px;
+
+      padding: 12px;
+
+      border-radius: 10px;
+
+      background:
+        rgba(37,99,235,0.08);
+
+      border:
+        1px solid rgba(59,130,246,0.12);
+
+      font-size: 11px;
+
+      color: #94a3b8;
+
+      line-height: 1.7;
+
+    }
+
+    .last-sync {
+
+      margin-top: 12px;
+
+      padding: 12px;
+
+      border-radius: 10px;
+
+      background:
+        rgba(255,255,255,0.025);
+
+      border:
+        1px solid rgba(255,255,255,0.045);
+
+      font-size: 10px;
+
+      color: #64748b;
+
+      line-height: 1.75;
+
+    }
+
+    .last-sync-title {
+
+      color: #cbd5e1;
+
+      font-size: 10px;
+
+      font-weight: 800;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.7px;
+
+      margin-bottom: 4px;
+
+    }
+
+    .last-sync strong {
+
+      color: #cbd5e1;
+
+    }
+
+
+    /* =========================================================
+       HISTORY
+    ========================================================= */
+
+    .history-item {
+
+      position: relative;
+
+      padding: 15px 0 15px 18px;
+
+      border-bottom:
+        1px solid rgba(255,255,255,0.055);
+
+    }
+
+    .history-item::before {
+
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+
+      top: 22px;
+
+      width: 6px;
+      height: 6px;
+
+      border-radius: 50%;
+
+      background: #3b82f6;
+
+      box-shadow:
+        0 0 10px rgba(59,130,246,0.4);
+
+    }
+
+    .history-item:last-child {
+
+      border-bottom: none;
+
+    }
+
+    .history-header {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      color: #e2e8f0;
+
+    }
+
+    .history-details {
+
+      margin-top: 6px;
+
+      font-size: 11px;
+
+      color: #64748b;
+
+      line-height: 1.7;
+
     }
 
     .result-success {
-      color: #16a34a;
-      font-weight: bold;
+
+      color: #4ade80;
+
     }
 
     .result-failed {
-      color: #dc2626;
-      font-weight: bold;
+
+      color: #f87171;
+
     }
 
-    @media (max-width: 600px) {
+    .day-group-title {
+
+      margin-top: 20px;
+
+      margin-bottom: 5px;
+
+      padding-left: 18px;
+
+      color: #60a5fa;
+
+      font-size: 10px;
+
+      font-weight: 800;
+
+      text-transform: uppercase;
+
+      letter-spacing: 1px;
+
+    }
+
+
+    /* =========================================================
+       FILTERS
+    ========================================================= */
+
+    .filter-row {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr 1fr auto;
+
+      gap: 10px;
+
+      margin-bottom: 18px;
+
+    }
+
+    .filter-row select,
+    .filter-row input {
+
+      margin: 0;
+
+    }
+
+
+    /* =========================================================
+       SUMMARY
+    ========================================================= */
+
+    .summary-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(170px, 1fr)
+        );
+
+      gap: 12px;
+
+    }
+
+    .summary-item {
+
+      position: relative;
+
+      padding: 19px;
+
+      border-radius: 15px;
+
+      background:
+        rgba(255,255,255,0.025);
+
+      border:
+        1px solid rgba(255,255,255,0.055);
+
+      overflow: hidden;
+
+    }
+
+    .summary-item::after {
+
+      content: "";
+
+      position: absolute;
+
+      width: 70px;
+      height: 70px;
+
+      right: -30px;
+      bottom: -35px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(37,99,235,0.10);
+
+      filter: blur(5px);
+
+    }
+
+    .summary-item strong {
+
+      display: block;
+
+      margin-bottom: 5px;
+
+      font-size: 27px;
+
+      color: #f8fafc;
+
+      letter-spacing: -1px;
+
+    }
+
+    .summary-item span {
+
+      color: #64748b;
+
+      font-size: 10px;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.8px;
+
+    }
+
+
+    /* =========================================================
+       AVERAGE
+    ========================================================= */
+
+    #averageByPerson h3 {
+
+      margin: 20px 0 13px;
+
+      font-size: 12px;
+
+      color: #94a3b8;
+
+      text-transform: uppercase;
+
+      letter-spacing: 1px;
+
+    }
+
+    .see-more-container {
+
+      text-align: center;
+
+      margin-top: 15px;
+
+    }
+
+    .see-more-button {
+
+      background:
+        rgba(255,255,255,0.06);
+
+      color: #94a3b8;
+
+    }
+
+
+    /* =========================================================
+       PERSON HISTORY
+    ========================================================= */
+
+    .person-history-title {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      margin-bottom: 10px;
+
+    }
+
+    .person-history-title h2 {
+
+      margin: 0;
+
+    }
+
+
+    /* =========================================================
+       EMPTY STATES
+    ========================================================= */
+
+    .empty-state {
+
+      padding: 28px 15px;
+
+      text-align: center;
+
+      color: #64748b;
+
+      font-size: 12px;
+
+    }
+
+
+    /* =========================================================
+       HIDDEN
+    ========================================================= */
+
+    .hidden {
+
+      display: none !important;
+
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 900px) {
+
       .action-buttons {
-        flex-direction: column;
-      }
 
-      button {
-        width: 100%;
-      }
+        grid-template-columns:
+          1fr;
 
-      .history-header {
-        flex-direction: column;
       }
 
       .filter-row {
-        flex-direction: column;
+
+        grid-template-columns:
+          1fr 1fr;
+
       }
 
-      .filter-row select,
-      .filter-row input,
-      .filter-row button {
-        width: 100%;
-      }
     }
+
+    @media (max-width: 650px) {
+
+      header {
+
+        padding: 14px 18px;
+
+      }
+
+      .system-status {
+
+        display: none;
+
+      }
+
+      .container {
+
+        width:
+          calc(100% - 24px);
+
+        padding-top: 20px;
+
+      }
+
+      .hero {
+
+        display: block;
+
+      }
+
+      .hero h2 {
+
+        font-size: 30px;
+
+      }
+
+      .card {
+
+        padding: 18px;
+
+        border-radius: 17px;
+
+      }
+
+      .user-panel {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+      }
+
+      .filter-row {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+      .filter-row button {
+
+        width: 100%;
+
+      }
+
+      #userSelection {
+
+        margin: 50px auto;
+
+        padding: 25px 20px;
+
+      }
+
+      #userSelection button {
+
+        width: 100%;
+
+      }
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
+
+  <!-- =======================================================
+       HEADER
+  ======================================================== -->
+
   <header>
-    <h1>🔄 BIM Sync Monitor</h1>
-    <p>Monitor de sincronización del equipo</p>
+
+    <div class="brand">
+
+      <div class="brand-icon">
+        ↻
+      </div>
+
+      <div class="brand-text">
+
+        <h1>
+          BIM Sync Monitor
+        </h1>
+
+        <p>
+          Team synchronization dashboard
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="system-status">
+
+      <span class="system-dot"></span>
+
+      SYSTEM ONLINE
+
+    </div>
+
   </header>
 
-  <div class="container">
 
-    <!-- =========================
-         SELECCIÓN DE USUARIO
-    ========================== -->
+  <main class="container">
 
-    <div id="userSelection" class="card">
 
-      <h2>👤 Selecciona tu usuario</h2>
+    <!-- =====================================================
+         USER SELECTION
+    ====================================================== -->
+
+    <div
+      id="userSelection"
+      class="card">
+
+      <div class="section-label">
+        BIM SYNC MONITOR
+      </div>
+
+      <h2>
+        Selecciona tu usuario
+      </h2>
 
       <select id="userSelect">
-        <option value="">Selecciona tu nombre...</option>
 
-        <option value="hannia">Hannia Márquez</option>
-        <option value="angel">Angel Cruz</option>
-        <option value="antonella">Antonella Tarantini</option>
-        <option value="carlos">Carlos Ramírez</option>
-        <option value="arianna">Arianna Nuñez</option>
-        <option value="grace">Grace Martínez</option>
-        <option value="cynthia">Cynthia Cortés</option>
-        <option value="ximena">Ximena Arrambide</option>
-        <option value="valeria">Valeria Garza</option>
-        <option value="alejandro">Alejandro Ulla</option>
-        <option value="gabriel">Gabriel Martínez</option>
-        <option value="mauricio">Mauricio Mireles</option>
+        <option value="">
+          Selecciona tu nombre...
+        </option>
+
+        <option value="hannia">
+          Hannia Márquez
+        </option>
+
+        <option value="angel">
+          Angel Cruz
+        </option>
+
+        <option value="antonella">
+          Antonella Tarantini
+        </option>
+
+        <option value="carlos">
+          Carlos Ramírez
+        </option>
+
+        <option value="arianna">
+          Arianna Nuñez
+        </option>
+
+        <option value="grace">
+          Grace Martínez
+        </option>
+
+        <option value="cynthia">
+          Cynthia Cortés
+        </option>
+
+        <option value="ximena">
+          Ximena Arrambide
+        </option>
+
+        <option value="valeria">
+          Valeria Garza
+        </option>
+
+        <option value="alejandro">
+          Alejandro Ulla
+        </option>
+
+        <option value="gabriel">
+          Gabriel Martínez
+        </option>
+
+        <option value="mauricio">
+          Mauricio Mireles
+        </option>
+
       </select>
 
-      <button id="continueButton">
-        Continuar
+      <button
+        id="continueButton"
+        class="btn-primary">
+
+        Entrar al dashboard
+
       </button>
 
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================================
          APP
-    ========================== -->
+    ====================================================== -->
 
-    <div id="app" class="hidden">
+    <div
+      id="app"
+      class="hidden">
 
-      <!-- USUARIO -->
+
+      <!-- ===================================================
+           HERO
+      ==================================================== -->
+
+      <section class="hero">
+
+        <div>
+
+          <div class="section-label">
+            BIM TEAM / LIVE MONITOR
+          </div>
+
+          <h2>
+            Sincronización<br>
+            en tiempo real.
+          </h2>
+
+          <p>
+            Monitorea el estado de sincronización
+            de tu equipo BIM.
+          </p>
+
+          <div class="hero-line"></div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           USER
+      ==================================================== -->
 
       <div class="card">
 
-        <h2>👤 Usuario</h2>
+        <div class="user-panel">
 
-        <div id="currentUser" class="current-user">
-          -
+          <div class="user-info">
+
+            <div
+              id="userAvatar"
+              class="avatar">
+
+              HM
+
+            </div>
+
+            <div>
+
+              <div
+                id="currentUser"
+                class="current-user">
+
+                -
+
+              </div>
+
+              <div class="user-role">
+
+                BIM Team Member
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <button
+            class="btn-secondary"
+            id="changeUserButton">
+
+            Cambiar usuario
+
+          </button>
+
         </div>
-
-        <button
-          class="btn-secondary"
-          id="changeUserButton">
-          Cambiar usuario
-        </button>
 
       </div>
 
 
-      <!-- SINCRONIZAR -->
+      <!-- ===================================================
+           ACTIONS
+      ==================================================== -->
 
       <div class="card">
 
-        <h2>🔄 Sincronizar</h2>
+        <div class="section-label">
+          SYNC CONTROL
+        </div>
+
+        <h2>
+          Control de sincronización
+        </h2>
 
         <div class="action-buttons">
 
           <button
-            class="btn-success"
+            class="btn-success action-button"
             id="startSyncButton">
-            ESTOY SINCRONIZANDO
+
+            <span class="action-icon">
+              ↻
+            </span>
+
+            <span class="action-title">
+              ESTOY SINCRONIZANDO
+            </span>
+
+            <span class="action-description">
+              Iniciar contador
+            </span>
+
           </button>
 
+
           <button
-            class="btn-secondary"
+            class="btn-primary action-button"
             id="finishSyncButton">
-            YA TERMINÉ
+
+            <span class="action-icon">
+              ✓
+            </span>
+
+            <span class="action-title">
+              YA TERMINÉ
+            </span>
+
+            <span class="action-description">
+              Guardar sincronización
+            </span>
+
           </button>
 
+
           <button
-            class="btn-danger"
+            class="btn-danger action-button"
             id="failedSyncButton">
-            SINCRONIZACIÓN FALLIDA
+
+            <span class="action-icon">
+              !
+            </span>
+
+            <span class="action-title">
+              SINCRONIZACIÓN FALLIDA
+            </span>
+
+            <span class="action-description">
+              Registrar incidencia
+            </span>
+
           </button>
 
         </div>
@@ -439,7 +1796,7 @@
           class="external-alert hidden">
 
           <strong>
-            ⚠️ Sincronización externa detectada
+            ⚠ Sincronización externa detectada
           </strong>
 
           <span id="externalAlertText">
@@ -449,12 +1806,14 @@
         </div>
 
 
-        <div style="margin-top:15px;">
+        <div style="margin-top:14px;">
 
           <button
             class="btn-warning"
             id="externalSyncButton">
-            ⚠️ REPORTAR SINCRONIZACIÓN EXTERNA
+
+            ⚠ Reportar sincronización externa
+
           </button>
 
         </div>
@@ -462,28 +1821,44 @@
       </div>
 
 
-      <!-- SINCRONIZANDO AHORA -->
+      <!-- ===================================================
+           CURRENTLY SYNCING
+      ==================================================== -->
 
       <div class="card">
 
-        <h2>🔵 Sincronizando ahora</h2>
+        <div class="section-label">
+          LIVE STATUS
+        </div>
+
+        <h2>
+          Sincronizando ahora
+        </h2>
 
         <div id="currentlySyncing">
 
-          <p style="color:#6b7280;">
+          <div class="empty-state">
             Nadie está sincronizando actualmente.
-          </p>
+          </div>
 
         </div>
 
       </div>
 
 
-      <!-- EQUIPO -->
+      <!-- ===================================================
+           TEAM
+      ==================================================== -->
 
       <div class="card">
 
-        <h2>👥 Equipo</h2>
+        <div class="section-label">
+          TEAM OVERVIEW
+        </div>
+
+        <h2>
+          Equipo
+        </h2>
 
         <div
           id="teamGrid"
@@ -493,7 +1868,9 @@
       </div>
 
 
-      <!-- HISTORIAL INDIVIDUAL -->
+      <!-- ===================================================
+           PERSON HISTORY
+      ==================================================== -->
 
       <div
         id="personHistoryCard"
@@ -502,13 +1879,15 @@
         <div class="person-history-title">
 
           <h2 id="personHistoryTitle">
-            📋 Historial
+            Historial
           </h2>
 
           <button
             class="btn-secondary"
             id="closePersonHistoryButton">
+
             Cerrar
+
           </button>
 
         </div>
@@ -518,11 +1897,19 @@
       </div>
 
 
-      <!-- HISTORIAL GENERAL -->
+      <!-- ===================================================
+           GENERAL HISTORY
+      ==================================================== -->
 
       <div class="card">
 
-        <h2>📋 Historial</h2>
+        <div class="section-label">
+          ACTIVITY LOG
+        </div>
+
+        <h2>
+          Historial general
+        </h2>
 
         <div class="filter-row">
 
@@ -556,28 +1943,40 @@
             id="historyEnd"
             class="hidden">
 
-          <button id="applyHistoryButton">
+          <button
+            id="applyHistoryButton"
+            class="btn-primary">
+
             Aplicar
+
           </button>
 
         </div>
 
         <div id="periodHistory">
 
-          <p style="color:#6b7280;">
+          <div class="empty-state">
             No hay registros.
-          </p>
+          </div>
 
         </div>
 
       </div>
 
 
-      <!-- RESUMEN -->
+      <!-- ===================================================
+           SUMMARY
+      ==================================================== -->
 
       <div class="card">
 
-        <h2>📊 Resumen</h2>
+        <div class="section-label">
+          DATA OVERVIEW
+        </div>
+
+        <h2>
+          Resumen
+        </h2>
 
         <div class="summary-grid">
 
@@ -634,11 +2033,19 @@
       </div>
 
 
-      <!-- PROMEDIO -->
+      <!-- ===================================================
+           AVERAGE
+      ==================================================== -->
 
       <div class="card">
 
-        <h2>📈 Promedio</h2>
+        <div class="section-label">
+          PERFORMANCE
+        </div>
+
+        <h2>
+          Promedio
+        </h2>
 
         <div class="summary-grid">
 
@@ -663,20 +2070,28 @@
 
       </div>
 
+
     </div>
 
-  </div>
+  </main>
 
 
-  <!-- =========================
-       FIREBASE + JAVASCRIPT
-  ========================== -->
+  <!-- =======================================================
+       FIREBASE + APP
+  ======================================================== -->
 
   <script type="module">
 
+
+    /* =======================================================
+       FIREBASE
+    ======================================================== */
+
     import {
       initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    } from
+    "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 
     import {
       getDatabase,
@@ -686,56 +2101,117 @@
       onValue,
       get,
       serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+    } from
+    "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
-
-    /* =========================
-       FIREBASE
-    ========================== */
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
-      authDomain: "bim-sync-monitor.firebaseapp.com",
-      databaseURL: "https://bim-sync-monitor-default-rtdb.firebaseio.com",
-      projectId: "bim-sync-monitor",
-      storageBucket: "bim-sync-monitor.firebasestorage.app",
-      messagingSenderId: "853443748101",
-      appId: "1:853443748101:web:c391d643ddd1916aaf176c"
+
+      apiKey:
+        "AIzaSyBgVpHHLmQN53E765Veab_cddpd63lJDfA",
+
+      authDomain:
+        "bim-sync-monitor.firebaseapp.com",
+
+      databaseURL:
+        "https://bim-sync-monitor-default-rtdb.firebaseio.com",
+
+      projectId:
+        "bim-sync-monitor",
+
+      storageBucket:
+        "bim-sync-monitor.firebasestorage.app",
+
+      messagingSenderId:
+        "853443748101",
+
+      appId:
+        "1:853443748101:web:c391d643ddd1916aaf176c"
+
     };
 
 
-    const appFirebase = initializeApp(firebaseConfig);
-
-    const db = getDatabase(appFirebase);
-
-    const teamRef = ref(db, "Team");
-
-    const historyRef = ref(db, "History");
-
-    const externalSyncRef = ref(db, "ExternalSync");
+    const appFirebase =
+      initializeApp(
+        firebaseConfig
+      );
 
 
-    /* =========================
-       EQUIPO
-    ========================== */
+    const db =
+      getDatabase(
+        appFirebase
+      );
+
+
+    const teamRef =
+      ref(
+        db,
+        "Team"
+      );
+
+
+    const historyRef =
+      ref(
+        db,
+        "History"
+      );
+
+
+    const externalSyncRef =
+      ref(
+        db,
+        "ExternalSync"
+      );
+
+
+    /* =======================================================
+       TEAM
+    ======================================================== */
 
     const teamMembers = {
 
-      hannia: "Hannia Márquez",
-      angel: "Angel Cruz",
-      antonella: "Antonella Tarantini",
-      carlos: "Carlos Ramírez",
-      arianna: "Arianna Nuñez",
-      grace: "Grace Martínez",
-      cynthia: "Cynthia Cortés",
-      ximena: "Ximena Arrambide",
-      valeria: "Valeria Garza",
-      alejandro: "Alejandro Ulla",
-      gabriel: "Gabriel Martínez",
-      mauricio: "Mauricio Mireles"
+      hannia:
+        "Hannia Márquez",
+
+      angel:
+        "Angel Cruz",
+
+      antonella:
+        "Antonella Tarantini",
+
+      carlos:
+        "Carlos Ramírez",
+
+      arianna:
+        "Arianna Nuñez",
+
+      grace:
+        "Grace Martínez",
+
+      cynthia:
+        "Cynthia Cortés",
+
+      ximena:
+        "Ximena Arrambide",
+
+      valeria:
+        "Valeria Garza",
+
+      alejandro:
+        "Alejandro Ulla",
+
+      gabriel:
+        "Gabriel Martínez",
+
+      mauricio:
+        "Mauricio Mireles"
 
     };
 
+
+    /* =======================================================
+       STATE
+    ======================================================== */
 
     let currentUserId = null;
 
@@ -750,138 +2226,176 @@
     let showAllAverages = false;
 
 
-    /* =========================
-       ELEMENTOS
-    ========================== */
+    /* =======================================================
+       DOM
+    ======================================================== */
 
     const userSelect =
-      document.getElementById("userSelect");
+      document.getElementById(
+        "userSelect"
+      );
+
 
     const userSelection =
-      document.getElementById("userSelection");
+      document.getElementById(
+        "userSelection"
+      );
+
 
     const appContainer =
-      document.getElementById("app");
+      document.getElementById(
+        "app"
+      );
+
 
     const currentUser =
-      document.getElementById("currentUser");
+      document.getElementById(
+        "currentUser"
+      );
 
 
-    /* =========================
-       FORMATO DE TIEMPO
-    ========================== */
+    /* =======================================================
+       FORMATTERS
+    ======================================================== */
 
-    function formatDuration(milliseconds) {
+    function formatDuration(
+      milliseconds
+    ) {
 
-      if (!milliseconds || milliseconds < 0) {
+      if (
+        !milliseconds ||
+        milliseconds < 0
+      ) {
+
         return "0:00";
+
       }
 
+
       const totalSeconds =
-        Math.floor(milliseconds / 1000);
+        Math.floor(
+          milliseconds / 1000
+        );
+
 
       const hours =
-        Math.floor(totalSeconds / 3600);
+        Math.floor(
+          totalSeconds / 3600
+        );
+
 
       const minutes =
-        Math.floor((totalSeconds % 3600) / 60);
+        Math.floor(
+          (totalSeconds % 3600) / 60
+        );
+
 
       const seconds =
         totalSeconds % 60;
+
 
       if (hours > 0) {
 
         return (
           hours +
           ":" +
-          String(minutes).padStart(2, "0") +
+          String(minutes)
+            .padStart(2, "0") +
           ":" +
-          String(seconds).padStart(2, "0")
+          String(seconds)
+            .padStart(2, "0")
         );
 
       }
 
+
       return (
         minutes +
         ":" +
-        String(seconds).padStart(2, "0")
+        String(seconds)
+          .padStart(2, "0")
       );
+
     }
 
 
-    function formatTime(timestamp) {
+    function formatTime(
+      timestamp
+    ) {
 
       if (!timestamp) {
         return "-";
       }
+
 
       return new Date(timestamp)
         .toLocaleTimeString(
           "es-MX",
           {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit"
+            hour:
+              "2-digit",
+
+            minute:
+              "2-digit",
+
+            second:
+              "2-digit"
           }
         );
+
     }
 
 
-    function formatDate(timestamp) {
+    function formatDate(
+      timestamp
+    ) {
 
       if (!timestamp) {
         return "-";
       }
+
 
       return new Date(timestamp)
         .toLocaleDateString(
           "es-MX",
           {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
+            day:
+              "2-digit",
+
+            month:
+              "2-digit",
+
+            year:
+              "numeric"
           }
         );
+
     }
 
 
-    function formatDateTime(timestamp) {
+    function getLocalDateString(
+      timestamp
+    ) {
 
-      if (!timestamp) {
-        return "-";
-      }
+      const date =
+        new Date(timestamp);
 
-      return new Date(timestamp)
-        .toLocaleString(
-          "es-MX",
-          {
-            dateStyle: "short",
-            timeStyle: "short"
-          }
-        );
-    }
-
-
-    /* =========================
-       FECHA LOCAL
-    ========================== */
-
-    function getLocalDateString(timestamp) {
-
-      const date = new Date(timestamp);
 
       const year =
         date.getFullYear();
+
 
       const month =
         String(
           date.getMonth() + 1
         ).padStart(2, "0");
 
+
       const day =
         String(
           date.getDate()
         ).padStart(2, "0");
+
 
       return (
         year +
@@ -890,6 +2404,7 @@
         "-" +
         day
       );
+
     }
 
 
@@ -904,11 +2419,14 @@
 
     function getYesterdayString() {
 
-      const date = new Date();
+      const date =
+        new Date();
+
 
       date.setDate(
         date.getDate() - 1
       );
+
 
       return getLocalDateString(
         date.getTime()
@@ -917,25 +2435,27 @@
     }
 
 
-    /* =========================
-       SEMANA ACTUAL
-       LUNES → DOMINGO
-    ========================== */
-
     function getStartOfWeek() {
 
-      const date = new Date();
+      const date =
+        new Date();
 
-      const day = date.getDay();
+
+      const day =
+        date.getDay();
+
 
       const difference =
         day === 0
           ? -6
           : 1 - day;
 
+
       date.setDate(
-        date.getDate() + difference
+        date.getDate() +
+        difference
       );
+
 
       date.setHours(
         0,
@@ -944,6 +2464,7 @@
         0
       );
 
+
       return date.getTime();
 
     }
@@ -951,7 +2472,9 @@
 
     function getEndOfToday() {
 
-      const date = new Date();
+      const date =
+        new Date();
+
 
       date.setHours(
         23,
@@ -960,23 +2483,25 @@
         999
       );
 
+
       return date.getTime();
 
     }
 
 
-    /* =========================
-       REGISTROS
-    ========================== */
+    /* =======================================================
+       RECORDS
+    ======================================================== */
 
     function getFinishedRecords() {
 
       return Object.values(
         historyData || {}
       )
-        .filter(record =>
-          record &&
-          record.endTime
+        .filter(
+          record =>
+            record &&
+            record.endTime
         );
 
     }
@@ -985,25 +2510,30 @@
     function getSuccessfulRecords() {
 
       return getFinishedRecords()
-        .filter(record =>
-          record.successful === true
+        .filter(
+          record =>
+            record.successful === true
         );
 
     }
 
 
-    function getLastCompletedSyncForUser(userId) {
+    function getLastCompletedSyncForUser(
+      userId
+    ) {
 
       const records =
         getFinishedRecords()
-          .filter(record =>
-            record.userId === userId
+          .filter(
+            record =>
+              record.userId === userId
           )
           .sort(
             (a, b) =>
               (b.endTime || 0) -
               (a.endTime || 0)
           );
+
 
       return records.length
         ? records[0]
@@ -1012,14 +2542,37 @@
     }
 
 
-    /* =========================
-       CONTINUAR
-    ========================== */
+    /* =======================================================
+       INITIALS
+    ======================================================== */
+
+    function getInitials(
+      name
+    ) {
+
+      return name
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(
+          word =>
+            word.charAt(0)
+              .toUpperCase()
+        )
+        .join("");
+
+    }
+
+
+    /* =======================================================
+       SELECT USER
+    ======================================================== */
 
     async function selectUser() {
 
       const selectedUser =
         userSelect.value;
+
 
       if (!selectedUser) {
 
@@ -1028,6 +2581,7 @@
         );
 
         return;
+
       }
 
 
@@ -1041,14 +2595,10 @@
       );
 
 
-      /*
-       * CAMBIAMOS DE PANTALLA
-       * INMEDIATAMENTE.
-       */
-
       userSelection.classList.add(
         "hidden"
       );
+
 
       appContainer.classList.remove(
         "hidden"
@@ -1057,6 +2607,14 @@
 
       currentUser.textContent =
         teamMembers[selectedUser];
+
+
+      document.getElementById(
+        "userAvatar"
+      ).textContent =
+        getInitials(
+          teamMembers[selectedUser]
+        );
 
 
       renderTeam();
@@ -1069,54 +2627,12 @@
 
       renderPeriodHistory();
 
-
-      /*
-       * Después consultamos Firebase
-       * para saber si ya estaba
-       * sincronizando.
-       */
-
-      try {
-
-        const userRef =
-          ref(
-            db,
-            "Team/" + selectedUser
-          );
-
-        const snapshot =
-          await get(userRef);
-
-        const existing =
-          snapshot.val();
-
-
-        if (
-          existing &&
-          existing.status === "syncing"
-        ) {
-
-          console.log(
-            "Usuario ya estaba sincronizando."
-          );
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Error al consultar usuario:",
-          error
-        );
-
-      }
-
     }
 
 
-    /* =========================
-       CAMBIAR USUARIO
-    ========================== */
+    /* =======================================================
+       CHANGE USER
+    ======================================================== */
 
     function changeUser() {
 
@@ -1124,9 +2640,11 @@
         "hidden"
       );
 
+
       userSelection.classList.remove(
         "hidden"
       );
+
 
       userSelect.value =
         currentUserId || "";
@@ -1134,9 +2652,9 @@
     }
 
 
-    /* =========================
-       INICIAR SINCRONIZACIÓN
-    ========================== */
+    /* =======================================================
+       START SYNC
+    ======================================================== */
 
     async function startSync() {
 
@@ -1147,6 +2665,7 @@
         );
 
         return;
+
       }
 
 
@@ -1164,6 +2683,7 @@
         );
 
         return;
+
       }
 
 
@@ -1172,9 +2692,11 @@
         await set(
           ref(
             db,
-            "Team/" + currentUserId
+            "Team/" +
+            currentUserId
           ),
           {
+
             name:
               teamMembers[currentUserId],
 
@@ -1185,23 +2707,31 @@
               serverTimestamp(),
 
             lastSync:
-              existingUser?.lastSync || null,
+              existingUser?.lastSync ||
+              null,
 
             lastDuration:
-              existingUser?.lastDuration || null,
+              existingUser?.lastDuration ||
+              null,
 
             lastStartTime:
-              existingUser?.lastStartTime || null,
+              existingUser?.lastStartTime ||
+              null,
 
             lastEndTime:
-              existingUser?.lastEndTime || null,
+              existingUser?.lastEndTime ||
+              null,
 
             lastSuccessful:
-              existingUser?.lastSuccessful ?? null
+              existingUser?.lastSuccessful ??
+              null
+
           }
         );
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.error(
           error
@@ -1216,11 +2746,13 @@
     }
 
 
-    /* =========================
-       TERMINAR
-    ========================== */
+    /* =======================================================
+       FINISH SYNC
+    ======================================================== */
 
-    async function finishSync(successful) {
+    async function finishSync(
+      successful
+    ) {
 
       if (!currentUserId) {
 
@@ -1229,6 +2761,7 @@
         );
 
         return;
+
       }
 
 
@@ -1246,7 +2779,8 @@
 
 
       const duration =
-        endTime - startTime;
+        endTime -
+        startTime;
 
 
       const historyRecord = {
@@ -1270,7 +2804,9 @@
           successful,
 
         date:
-          getLocalDateString(endTime)
+          getLocalDateString(
+            endTime
+          )
 
       };
 
@@ -1286,7 +2822,8 @@
         await set(
           ref(
             db,
-            "Team/" + currentUserId
+            "Team/" +
+            currentUserId
           ),
           {
 
@@ -1317,8 +2854,9 @@
           }
         );
 
+      }
 
-      } catch (error) {
+      catch (error) {
 
         console.error(
           error
@@ -1333,9 +2871,9 @@
     }
 
 
-    /* =========================
-       RENDER EQUIPO
-    ========================== */
+    /* =======================================================
+       RENDER TEAM
+    ======================================================== */
 
     function renderTeam() {
 
@@ -1362,47 +2900,77 @@
               "div"
             );
 
+
           card.className =
             "team-member";
 
 
           card.addEventListener(
             "click",
-            () => openHistory(id)
+            () =>
+              openHistory(id)
           );
 
 
+          const isSyncing =
+            data.status === "syncing";
+
+
+          const initials =
+            getInitials(name);
+
+
           const status =
-            data.status === "syncing"
-              ? "🔵 Sincronizando"
-              : "🟢 Disponible";
+            isSyncing
+              ? "Sincronizando"
+              : "Disponible";
 
 
           const statusClass =
-            data.status === "syncing"
+            isSyncing
               ? "syncing"
               : "available";
 
 
+          const dotClass =
+            isSyncing
+              ? "syncing-dot"
+              : "available-dot";
+
+
           let html = `
 
-            <div class="team-name">
-              ${name}
-            </div>
+            <div class="team-header">
 
-            <div class="status ${statusClass}">
-              ${status}
+              <div class="team-avatar">
+                ${initials}
+              </div>
+
+              <div>
+
+                <div class="team-name">
+                  ${name}
+                </div>
+
+                <div class="status ${statusClass}">
+
+                  <span
+                    class="status-dot ${dotClass}">
+                  </span>
+
+                  ${status}
+
+                </div>
+
+              </div>
+
             </div>
 
           `;
 
 
-          /*
-           * SINCRONIZACIÓN ACTUAL
-           */
-
           if (
-            data.status === "syncing" &&
+            isSyncing &&
             data.syncStarted
           ) {
 
@@ -1417,18 +2985,23 @@
                 <br>
 
                 Inicio:
-                ${formatTime(data.syncStarted)}
+                ${formatTime(
+                  data.syncStarted
+                )}
 
                 <br>
 
                 Tiempo transcurrido:
+
                 <span
                   class="live-duration"
                   data-start="${data.syncStarted}">
+
                   ${formatDuration(
                     Date.now() -
                     data.syncStarted
                   )}
+
                 </span>
 
               </div>
@@ -1437,11 +3010,6 @@
 
           }
 
-
-          /*
-           * ÚLTIMA SINCRONIZACIÓN
-           * NUNCA SE QUITA
-           */
 
           const lastSync =
             getLastCompletedSyncForUser(
@@ -1456,50 +3024,68 @@
               <div class="last-sync">
 
                 <div class="last-sync-title">
+
                   Última sincronización
+
                 </div>
 
                 Fecha:
-                ${formatDate(lastSync.endTime)}
+                ${formatDate(
+                  lastSync.endTime
+                )}
 
                 <br>
 
                 Inicio:
-                ${formatTime(lastSync.startTime)}
+                ${formatTime(
+                  lastSync.startTime
+                )}
 
                 <br>
 
                 Finalizó:
-                ${formatTime(lastSync.endTime)}
+                ${formatTime(
+                  lastSync.endTime
+                )}
 
                 <br>
 
                 Duración:
+
                 <strong>
-                  ${formatDuration(lastSync.duration)}
+                  ${formatDuration(
+                    lastSync.duration
+                  )}
                 </strong>
 
                 <br>
 
                 Resultado:
+
                 ${
                   lastSync.successful
-                    ? '<span class="result-success">Exitosa</span>'
-                    : '<span class="result-failed">Fallida</span>'
+                    ?
+                    '<span class="result-success">Exitosa</span>'
+                    :
+                    '<span class="result-failed">Fallida</span>'
                 }
 
               </div>
 
             `;
 
-          } else {
+          }
+
+          else {
 
             html += `
 
               <div class="last-sync">
 
                 <div class="last-sync-title">
+
                   Última sincronización
+
                 </div>
 
                 Sin sincronizaciones registradas.
@@ -1528,9 +3114,9 @@
     }
 
 
-    /* =========================
-       SINCRONIZANDO AHORA
-    ========================== */
+    /* =======================================================
+       CURRENT SYNC
+    ======================================================== */
 
     function renderCurrentSyncs() {
 
@@ -1555,9 +3141,11 @@
 
         container.innerHTML = `
 
-          <p style="color:#6b7280;">
+          <div class="empty-state">
+
             Nadie está sincronizando actualmente.
-          </p>
+
+          </div>
 
         `;
 
@@ -1569,6 +3157,16 @@
       container.innerHTML = "";
 
 
+      const wrapper =
+        document.createElement(
+          "div"
+        );
+
+
+      wrapper.className =
+        "syncing-now";
+
+
       syncingUsers.forEach(
         ([id, data]) => {
 
@@ -1577,51 +3175,77 @@
               "div"
             );
 
+
           item.className =
-            "history-item";
+            "live-sync-card";
+
+
+          const start =
+            data.syncStarted ||
+            Date.now();
 
 
           item.innerHTML = `
 
-            <div class="history-header">
+            <div class="live-top">
 
-              <span>
-                🔵 ${teamMembers[id]}
-              </span>
+              <div class="live-name">
 
-              <span class="live-duration"
-                data-start="${data.syncStarted || Date.now()}">
-                ${formatDuration(
-                  Date.now() -
-                  (data.syncStarted || Date.now())
-                )}
-              </span>
+                ${teamMembers[id]}
+
+              </div>
+
+              <div class="live-badge">
+
+                <span class="pulse"></span>
+
+                LIVE
+
+              </div>
 
             </div>
 
-            <div class="history-details">
+            <div
+              class="live-duration"
+              data-start="${start}">
 
-              Inicio:
-              ${formatTime(data.syncStarted)}
+              ${formatDuration(
+                Date.now() -
+                start
+              )}
+
+            </div>
+
+            <div class="live-details">
+
+              Inició a las
+              ${formatTime(
+                data.syncStarted
+              )}
 
             </div>
 
           `;
 
 
-          container.appendChild(
+          wrapper.appendChild(
             item
           );
 
         }
       );
 
+
+      container.appendChild(
+        wrapper
+      );
+
     }
 
 
-    /* =========================
-       TEMPORIZADORES
-    ========================== */
+    /* =======================================================
+       LIVE TIMERS
+    ======================================================== */
 
     function updateLiveTimers() {
 
@@ -1645,7 +3269,8 @@
 
             element.textContent =
               formatDuration(
-                Date.now() - start
+                Date.now() -
+                start
               );
 
           }
@@ -1671,11 +3296,13 @@
     }
 
 
-    /* =========================
-       HISTORIAL INDIVIDUAL
-    ========================== */
+    /* =======================================================
+       PERSON HISTORY
+    ======================================================== */
 
-    function openHistory(userId) {
+    function openHistory(
+      userId
+    ) {
 
       const card =
         document.getElementById(
@@ -1696,7 +3323,7 @@
 
 
       title.textContent =
-        "📋 Historial de " +
+        "Historial de " +
         teamMembers[userId];
 
 
@@ -1717,13 +3344,17 @@
 
         container.innerHTML = `
 
-          <p style="color:#6b7280;">
+          <div class="empty-state">
+
             No hay registros para esta persona.
-          </p>
+
+          </div>
 
         `;
 
-      } else {
+      }
+
+      else {
 
         container.innerHTML = "";
 
@@ -1746,41 +3377,55 @@
               <div class="history-header">
 
                 <span>
-                  ${formatDate(record.endTime)}
+                  ${formatDate(
+                    record.endTime
+                  )}
                 </span>
 
                 <span
                   class="${
                     record.successful
-                      ? "result-success"
-                      : "result-failed"
+                      ?
+                      "result-success"
+                      :
+                      "result-failed"
                   }">
 
                   ${
                     record.successful
-                      ? "Exitosa"
-                      : "Fallida"
+                      ?
+                      "Exitosa"
+                      :
+                      "Fallida"
                   }
 
                 </span>
 
               </div>
 
+
               <div class="history-details">
 
                 Inicio:
-                ${formatTime(record.startTime)}
+                ${formatTime(
+                  record.startTime
+                )}
 
                 <br>
 
                 Finalizó:
-                ${formatTime(record.endTime)}
+                ${formatTime(
+                  record.endTime
+                )}
 
                 <br>
 
                 Duración:
+
                 <strong>
-                  ${formatDuration(record.duration)}
+                  ${formatDuration(
+                    record.duration
+                  )}
                 </strong>
 
               </div>
@@ -1797,15 +3442,6 @@
 
       }
 
-
-      /*
-       * SE MUESTRA EN SU LUGAR:
-       *
-       * Sincronizando ahora
-       * Equipo
-       * Historial individual
-       * Historial general
-       */
 
       card.classList.remove(
         "hidden"
@@ -1827,9 +3463,9 @@
     }
 
 
-    /* =========================
-       HISTORIAL GENERAL
-    ========================== */
+    /* =======================================================
+       PERIOD HISTORY
+    ======================================================== */
 
     function renderPeriodHistory() {
 
@@ -1857,7 +3493,9 @@
         getYesterdayString();
 
 
-      if (period === "today") {
+      if (
+        period === "today"
+      ) {
 
         records =
           records.filter(
@@ -1900,8 +3538,10 @@
         records =
           records.filter(
             record =>
-              record.endTime >= weekStart &&
-              record.endTime <= endToday
+              record.endTime >=
+                weekStart &&
+              record.endTime <=
+                endToday
           );
 
       }
@@ -1923,13 +3563,18 @@
           ).value;
 
 
-        if (!start || !end) {
+        if (
+          !start ||
+          !end
+        ) {
 
           container.innerHTML = `
 
-            <p style="color:#6b7280;">
+            <div class="empty-state">
+
               Selecciona una fecha inicial y final.
-            </p>
+
+            </div>
 
           `;
 
@@ -1946,6 +3591,7 @@
                 getLocalDateString(
                   record.endTime
                 );
+
 
               return (
                 date >= start &&
@@ -1969,9 +3615,11 @@
 
         container.innerHTML = `
 
-          <p style="color:#6b7280;">
+          <div class="empty-state">
+
             No hay registros para este periodo.
-          </p>
+
+          </div>
 
         `;
 
@@ -1989,13 +3637,9 @@
       records.forEach(
         record => {
 
-          /*
-           * EN ESTA SEMANA
-           * SEPARA HOY, AYER
-           * Y LOS DÍAS ANTERIORES.
-           */
-
-          if (period === "week") {
+          if (
+            period === "week"
+          ) {
 
             const dateKey =
               getLocalDateString(
@@ -2057,40 +3701,54 @@
               <span
                 class="${
                   record.successful
-                    ? "result-success"
-                    : "result-failed"
+                    ?
+                    "result-success"
+                    :
+                    "result-failed"
                 }">
 
                 ${
                   record.successful
-                    ? "Exitosa"
-                    : "Fallida"
+                    ?
+                    "Exitosa"
+                    :
+                    "Fallida"
                 }
 
               </span>
 
             </div>
 
+
             <div class="history-details">
 
               Fecha:
-              ${formatDate(record.endTime)}
+              ${formatDate(
+                record.endTime
+              )}
 
               <br>
 
               Inicio:
-              ${formatTime(record.startTime)}
+              ${formatTime(
+                record.startTime
+              )}
 
               <br>
 
               Finalizó:
-              ${formatTime(record.endTime)}
+              ${formatTime(
+                record.endTime
+              )}
 
               <br>
 
               Duración:
+
               <strong>
-                ${formatDuration(record.duration)}
+                ${formatDuration(
+                  record.duration
+                )}
               </strong>
 
             </div>
@@ -2108,7 +3766,13 @@
     }
 
 
-    function getDayLabel(timestamp) {
+    /* =======================================================
+       DAY LABEL
+    ======================================================== */
+
+    function getDayLabel(
+      timestamp
+    ) {
 
       const date =
         new Date(timestamp);
@@ -2170,18 +3834,23 @@
       return date.toLocaleDateString(
         "es-MX",
         {
-          weekday: "long",
-          day: "numeric",
-          month: "long"
+          weekday:
+            "long",
+
+          day:
+            "numeric",
+
+          month:
+            "long"
         }
       );
 
     }
 
 
-    /* =========================
-       RESUMEN
-    ========================== */
+    /* =======================================================
+       SUMMARY
+    ======================================================== */
 
     function renderSummary() {
 
@@ -2241,9 +3910,9 @@
     }
 
 
-    /* =========================
-       PROMEDIO
-    ========================== */
+    /* =======================================================
+       AVERAGE
+    ======================================================== */
 
     function updateAverage() {
 
@@ -2271,10 +3940,12 @@
 
         personContainer.innerHTML = `
 
-          <p style="color:#6b7280;">
+          <div class="empty-state">
+
             No hay suficientes registros
             para calcular promedios.
-          </p>
+
+          </div>
 
         `;
 
@@ -2282,10 +3953,6 @@
 
       }
 
-
-      /*
-       * PROMEDIO GENERAL
-       */
 
       const totalDuration =
         records.reduce(
@@ -2309,29 +3976,30 @@
         );
 
 
-      /*
-       * PROMEDIO POR PERSONA
-       */
-
       const byPerson = {};
 
 
       records.forEach(
         record => {
 
-          if (!byPerson[record.userId]) {
+          if (
+            !byPerson[record.userId]
+          ) {
 
-            byPerson[record.userId] = [];
+            byPerson[
+              record.userId
+            ] = [];
 
           }
 
 
-          byPerson[record.userId]
-            .push(
-              Number(
-                record.duration || 0
-              )
-            );
+          byPerson[
+            record.userId
+          ].push(
+            Number(
+              record.duration || 0
+            )
+          );
 
         }
       );
@@ -2404,7 +4072,9 @@
           item.innerHTML = `
 
             <strong>
-              ${formatDuration(average)}
+              ${formatDuration(
+                average
+              )}
             </strong>
 
             <span>
@@ -2422,11 +4092,9 @@
       );
 
 
-      /*
-       * VER MÁS
-       */
-
-      if (people.length > 3) {
+      if (
+        people.length > 3
+      ) {
 
         const buttonContainer =
           document.createElement(
@@ -2461,6 +4129,7 @@
             showAllAverages =
               !showAllAverages;
 
+
             updateAverage();
 
           }
@@ -2481,9 +4150,9 @@
     }
 
 
-    /* =========================
-       SINCRONIZACIÓN EXTERNA
-    ========================== */
+    /* =======================================================
+       EXTERNAL SYNC
+    ======================================================== */
 
     async function reportExternalSync() {
 
@@ -2519,7 +4188,9 @@
           record
         );
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.error(
           error
@@ -2533,6 +4204,10 @@
 
     }
 
+
+    /* =======================================================
+       EXTERNAL ALERT
+    ======================================================== */
 
     function renderExternalAlert() {
 
@@ -2585,9 +4260,9 @@
     }
 
 
-    /* =========================
+    /* =======================================================
        FIREBASE LISTENERS
-    ========================== */
+    ======================================================== */
 
     onValue(
       teamRef,
@@ -2666,9 +4341,9 @@
     );
 
 
-    /* =========================
-       FILTRO PERSONALIZADO
-    ========================== */
+    /* =======================================================
+       FILTER CHANGE
+    ======================================================== */
 
     document
       .getElementById(
@@ -2708,7 +4383,9 @@
               "hidden"
             );
 
-          } else {
+          }
+
+          else {
 
             start.classList.add(
               "hidden"
@@ -2724,9 +4401,9 @@
       );
 
 
-    /* =========================
-       BOTONES
-    ========================== */
+    /* =======================================================
+       BUTTON EVENTS
+    ======================================================== */
 
     document
       .getElementById(
@@ -2810,9 +4487,9 @@
       );
 
 
-    /* =========================
-       AUTO LOGIN
-    ========================== */
+    /* =======================================================
+       SAVED USER
+    ======================================================== */
 
     const savedUser =
       localStorage.getItem(
@@ -2831,9 +4508,9 @@
     }
 
 
-    /*
-     * PRIMERA RENDERIZACIÓN
-     */
+    /* =======================================================
+       INITIAL RENDER
+    ======================================================== */
 
     renderTeam();
 
