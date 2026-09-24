@@ -2056,7 +2056,7 @@
             </strong>
 
             <span>
-              Overall Average
+              Overall Average (min)
             </span>
 
           </div>
@@ -3911,242 +3911,297 @@
 
 
     /* =======================================================
-       AVERAGE
-    ======================================================== */
+   AVERAGE
+======================================================== */
 
-    function updateAverage() {
+function formatAverageDuration(milliseconds) {
 
-      const records =
-        getSuccessfulRecords();
+  if (!milliseconds || milliseconds < 0) {
+    return "0 sec";
+  }
 
+  const totalSeconds =
+    Math.floor(milliseconds / 1000);
 
-      const generalElement =
-        document.getElementById(
-          "generalAverage"
-        );
+  const hours =
+    Math.floor(totalSeconds / 3600);
 
+  const minutes =
+    Math.floor(
+      (totalSeconds % 3600) / 60
+    );
 
-      const personContainer =
-        document.getElementById(
-          "averageByPerson"
-        );
-
-
-      if (!records.length) {
-
-        generalElement.textContent =
-          "0:00";
+  const seconds =
+    totalSeconds % 60;
 
 
-        personContainer.innerHTML = `
+  if (hours > 0) {
 
-          <div class="empty-state">
+    return (
+      hours +
+      " hr " +
+      minutes +
+      " min " +
+      seconds +
+      " sec"
+    );
 
-            Not enough records to calculate averages.
+  }
 
-          </div>
 
-        `;
+  if (minutes > 0) {
 
-        return;
+    return (
+      minutes +
+      " min " +
+      seconds +
+      " sec"
+    );
+
+  }
+
+
+  return (
+    seconds +
+    " sec"
+  );
+
+}
+
+
+function updateAverage() {
+
+  const records =
+    getSuccessfulRecords();
+
+
+  const generalElement =
+    document.getElementById(
+      "generalAverage"
+    );
+
+
+  const personContainer =
+    document.getElementById(
+      "averageByPerson"
+    );
+
+
+  if (!records.length) {
+
+    generalElement.textContent =
+      "0 sec";
+
+
+    personContainer.innerHTML = `
+
+      <div class="empty-state">
+
+        Not enough records to calculate averages.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const totalDuration =
+    records.reduce(
+      (total, record) =>
+        total +
+        Number(
+          record.duration || 0
+        ),
+      0
+    );
+
+
+  const generalAverage =
+    totalDuration /
+    records.length;
+
+
+  generalElement.textContent =
+    formatAverageDuration(
+      generalAverage
+    );
+
+
+  const byPerson = {};
+
+
+  records.forEach(
+    record => {
+
+      if (
+        !byPerson[record.userId]
+      ) {
+
+        byPerson[
+          record.userId
+        ] = [];
 
       }
 
 
-      const totalDuration =
-        records.reduce(
-          (total, record) =>
-            total +
-            Number(
-              record.duration || 0
-            ),
+      byPerson[
+        record.userId
+      ].push(
+        Number(
+          record.duration || 0
+        )
+      );
+
+    }
+  );
+
+
+  personContainer.innerHTML = `
+
+    <h3>
+      Average by Person
+    </h3>
+
+    <div
+      id="averagePersonList"
+      class="summary-grid">
+    </div>
+
+  `;
+
+
+  const list =
+    document.getElementById(
+      "averagePersonList"
+    );
+
+
+  const people =
+    Object.entries(
+      byPerson
+    );
+
+
+  people.forEach(
+    ([userId, durations], index) => {
+
+      const total =
+        durations.reduce(
+          (a, b) =>
+            a + b,
           0
         );
 
 
-      const generalAverage =
-        totalDuration /
-        records.length;
+      const average =
+        total /
+        durations.length;
 
 
-      generalElement.textContent =
-        formatDuration(
-          generalAverage
+      const item =
+        document.createElement(
+          "div"
         );
 
 
-      const byPerson = {};
-
-
-      records.forEach(
-        record => {
-
-          if (
-            !byPerson[record.userId]
-          ) {
-
-            byPerson[
-              record.userId
-            ] = [];
-
-          }
-
-
-          byPerson[
-            record.userId
-          ].push(
-            Number(
-              record.duration || 0
-            )
-          );
-
-        }
-      );
-
-
-      personContainer.innerHTML = `
-
-        <h3>
-          Average by Person
-        </h3>
-
-        <div
-          id="averagePersonList"
-          class="summary-grid">
-        </div>
-
-      `;
-
-
-      const list =
-        document.getElementById(
-          "averagePersonList"
-        );
-
-
-      const people =
-        Object.entries(
-          byPerson
-        );
-
-
-      people.forEach(
-        ([userId, durations], index) => {
-
-          const total =
-            durations.reduce(
-              (a, b) =>
-                a + b,
-              0
-            );
-
-
-          const average =
-            total /
-            durations.length;
-
-
-          const item =
-            document.createElement(
-              "div"
-            );
-
-
-          item.className =
-            "summary-item";
-
-
-          if (
-            index >= 3 &&
-            !showAllAverages
-          ) {
-
-            item.classList.add(
-              "hidden"
-            );
-
-          }
-
-
-          item.innerHTML = `
-
-            <strong>
-              ${formatDuration(
-                average
-              )}
-            </strong>
-
-            <span>
-              ${teamMembers[userId]}
-            </span>
-
-          `;
-
-
-          list.appendChild(
-            item
-          );
-
-        }
-      );
+      item.className =
+        "summary-item";
 
 
       if (
-        people.length > 3
+        index >= 3 &&
+        !showAllAverages
       ) {
 
-        const buttonContainer =
-          document.createElement(
-            "div"
-          );
-
-
-        buttonContainer.className =
-          "see-more-container";
-
-
-        const button =
-          document.createElement(
-            "button"
-          );
-
-
-        button.className =
-          "see-more-button";
-
-
-        button.textContent =
-          showAllAverages
-            ? "Show less"
-            : "Show more";
-
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            showAllAverages =
-              !showAllAverages;
-
-
-            updateAverage();
-
-          }
-        );
-
-
-        buttonContainer.appendChild(
-          button
-        );
-
-
-        personContainer.appendChild(
-          buttonContainer
+        item.classList.add(
+          "hidden"
         );
 
       }
 
+
+      item.innerHTML = `
+
+        <strong>
+          ${formatAverageDuration(
+            average
+          )}
+        </strong>
+
+        <span>
+          ${teamMembers[userId]}
+        </span>
+
+      `;
+
+
+      list.appendChild(
+        item
+      );
+
     }
+  );
+
+
+  if (
+    people.length > 3
+  ) {
+
+    const buttonContainer =
+      document.createElement(
+        "div"
+      );
+
+
+    buttonContainer.className =
+      "see-more-container";
+
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+
+    button.className =
+      "see-more-button";
+
+
+    button.textContent =
+      showAllAverages
+        ? "Show less"
+        : "Show more";
+
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        showAllAverages =
+          !showAllAverages;
+
+
+        updateAverage();
+
+      }
+    );
+
+
+    buttonContainer.appendChild(
+      button
+    );
+
+
+    personContainer.appendChild(
+      buttonContainer
+    );
+
+  }
+
+}
 
 
     /* =======================================================
