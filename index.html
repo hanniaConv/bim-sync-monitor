@@ -3474,6 +3474,247 @@
         .join("");
 
     }
+    
+    /* =======================================================
+       ANTONELLA - WAITING LIST ORDER CONTROL
+       ADDITIONAL CODE - DO NOT REMOVE EXISTING CODE
+    ======================================================== */
+
+    // Ordenar la lista respetando el orden manual guardado en Firebase.
+    // Si todavía no existe un orden manual, conserva el orden original.
+
+    getWaitingListEntries = function () {
+
+      return Object.entries(
+        waitingListData || {}
+      )
+        .filter(
+          ([, entry]) =>
+            entry &&
+            entry.userId
+        )
+        .sort(
+          (a, b) => {
+
+            const orderA =
+              Number.isFinite(Number(a[1].queueOrder)) &&
+              a[1].queueOrder !== undefined &&
+              a[1].queueOrder !== null
+                ? Number(a[1].queueOrder)
+                : Infinity;
+
+            const orderB =
+              Number.isFinite(Number(b[1].queueOrder)) &&
+              b[1].queueOrder !== undefined &&
+              b[1].queueOrder !== null
+                ? Number(b[1].queueOrder)
+                : Infinity;
+
+            if (orderA !== orderB) {
+              return orderA - orderB;
+            }
+
+            const timeA = Number(
+              a[1].joinedAt ||
+              a[1].clientJoinedAt ||
+              0
+            );
+
+            const timeB = Number(
+              b[1].joinedAt ||
+              b[1].clientJoinedAt ||
+              0
+            );
+
+            if (timeA !== timeB) {
+              return timeA - timeB;
+            }
+
+            return a[0].localeCompare(b[0]);
+          }
+        );
+    };
+
+
+    // Guardar el nuevo orden en Firebase.
+
+    async function moveWaitingPerson(
+      currentIndex,
+      direction
+    ) {
+
+      // Solo Antonella puede cambiar el orden desde la interfaz.
+
+      if (currentUserId !== "antonella") {
+        alert(
+          "Only Antonella can change the waiting list order."
+        );
+        return;
+      }
+
+      const entries = getWaitingListEntries();
+
+      const newIndex =
+        currentIndex + direction;
+
+      if (
+        newIndex < 0 ||
+        newIndex >= entries.length
+      ) {
+        return;
+      }
+
+      // Intercambiar las posiciones de las dos personas.
+
+      const reorderedEntries = [...entries];
+
+      [
+        reorderedEntries[currentIndex],
+        reorderedEntries[newIndex]
+      ] = [
+        reorderedEntries[newIndex],
+        reorderedEntries[currentIndex]
+      ];
+
+      try {
+
+        // Guardar el orden completo para que todos lo vean.
+
+        await Promise.all(
+          reorderedEntries.map(
+            ([key, entry], index) =>
+              set(
+                ref(
+                  db,
+                  "WaitingList/" + key
+                ),
+                {
+                  ...entry,
+                  queueOrder: index
+                }
+              )
+          )
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Could not reorder the waiting list:",
+          error
+        );
+
+        alert(
+          "Could not save the new waiting list order."
+        );
+
+      }
+    }
+
+
+    // Añadir controles sin modificar el renderizado original.
+
+    const originalRenderWaitingList =
+      renderWaitingList;
+
+    renderWaitingList = function () {
+
+      // Ejecutar primero la función original.
+
+      originalRenderWaitingList();
+
+      // Ocultar los controles para todos excepto Antonella.
+
+      if (currentUserId !== "antonella") {
+        return;
+      }
+
+      const items = [
+        ...document.querySelectorAll(
+          "#waitingList .waiting-item"
+        )
+      ];
+
+      items.forEach(
+        (item, index) => {
+
+          const controls =
+            document.createElement("div");
+
+          controls.style.display = "flex";
+          controls.style.flexDirection = "column";
+          controls.style.gap = "5px";
+          controls.style.flexShrink = "0";
+
+          // Botón para subir una posición.
+
+          const upButton =
+            document.createElement("button");
+
+          upButton.type = "button";
+          upButton.textContent = "▲";
+          upButton.title = "Move up";
+          upButton.setAttribute(
+            "aria-label",
+            "Move person up"
+          );
+
+          upButton.style.padding = "6px 10px";
+          upButton.style.fontSize = "11px";
+          upButton.style.borderRadius = "7px";
+
+          upButton.disabled = index === 0;
+
+          if (index === 0) {
+            upButton.style.opacity = "0.3";
+            upButton.style.cursor = "not-allowed";
+          }
+
+          upButton.addEventListener(
+            "click",
+            () => moveWaitingPerson(index, -1)
+          );
+
+          // Botón para bajar una posición.
+
+          const downButton =
+            document.createElement("button");
+
+          downButton.type = "button";
+          downButton.textContent = "▼";
+          downButton.title = "Move down";
+          downButton.setAttribute(
+            "aria-label",
+            "Move person down"
+          );
+
+          downButton.style.padding = "6px 10px";
+          downButton.style.fontSize = "11px";
+          downButton.style.borderRadius = "7px";
+
+          downButton.disabled =
+            index === items.length - 1;
+
+          if (index === items.length - 1) {
+            downButton.style.opacity = "0.3";
+            downButton.style.cursor = "not-allowed";
+          }
+
+          downButton.addEventListener(
+            "click",
+            () => moveWaitingPerson(index, 1)
+          );
+
+          controls.appendChild(upButton);
+          controls.appendChild(downButton);
+
+          item.appendChild(controls);
+
+        }
+      );
+
+    };
 
 
     /* =======================================================
